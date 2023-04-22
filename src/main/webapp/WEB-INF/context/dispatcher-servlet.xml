@@ -1,0 +1,57 @@
+<beans xmlns="http://www.springframework.org/schema/beans"
+
+	xmlns:context="http://www.springframework.org/schema/context"
+
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+
+	xmlns:mvc="http://www.springframework.org/schema/mvc"
+
+	xsi:schemaLocation="
+
+        http://www.springframework.org/schema/beans
+
+        http://www.springframework.org/schema/beans/spring-beans.xsd
+
+        http://www.springframework.org/schema/mvc
+
+        http://www.springframework.org/schema/mvc/spring-mvc.xsd
+
+        http://www.springframework.org/schema/context
+
+              http://www.springframework.org/schema/context/spring-context.xsd">
+
+	<!-- Biết @Controller nằm ở package nào (dùng để phân biệt các controller 
+		với nhau) -->
+	<context:component-scan
+		base-package="com.laptrinhjavaweb.controller, com.laptrinhjavaweb.api" />
+	<!-- API cũng là controller -->
+
+
+	<!-- Khai báo cái này để sử các @Annotation -->
+	<mvc:annotation-driven />
+
+	<!-- Khi vào ModelAndView, trả về prefix & suffix cho file -->
+	<bean
+		class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+
+		<!-- định nghĩa prefix là /WEB-INF/views/ -->
+		<property name="prefix" value="/WEB-INF/views/" />
+
+		<!-- định nghĩa suffix (đuôi file) là .jsp -->
+		<property name="suffix" value=".jsp" />
+
+	</bean>
+
+	<bean id="multipartResolver"
+		class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+		<!-- one of the properties available; the maximum file size in bytes -->
+		<property name="maxUploadSize" value="1500000" /> <!-- Giới hạng upload file là: 1.500.000 bytes -->
+	</bean>
+
+	<!-- Trỏ <c:url> vào file template: <c:url>/template -->
+	<mvc:resources mapping="/template/**"
+		location="/template/" />
+	
+	
+	
+</beans>
