@@ -17,9 +17,6 @@ public class CommentAPI {
 	// doPost
 	@PostMapping("api/comment")
 	public CommentDTO createComment(@RequestBody CommentDTO commentDTO) { // khai báo để Map kiểu JSon -> kiểu NewDT
-		if(commentDTO.getParentId() == null) {
-			commentDTO.setParentId(-1);
-		}
 		return commentService.save(commentDTO);
 	}
 	
