@@ -8,8 +8,8 @@ import org.springframework.web.bind.annotation.RestController;
 import com.laptrinhjavaweb.dto.UserDTO;
 import com.laptrinhjavaweb.service.IUserService;
 
-@RestController(value = "newAPIOfWeb")
-public class NewAPI {
+@RestController(value = "signupAPIOfWeb")
+public class SignupAPI {
 		
 	@Autowired
 	private IUserService userService;

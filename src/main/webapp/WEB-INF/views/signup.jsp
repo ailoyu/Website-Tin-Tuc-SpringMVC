@@ -4,6 +4,7 @@
 <c:url var="newAPI" value="/api/account" />
 <c:url var="newURL" value="/dang-nhap" />
 <c:url var="registerURL" value="/dang-ky"/>
+<c:url var="validateURL" value="/thong-bao" />
 <!DOCTYPE html>
 <html>
 <head>
@@ -108,18 +109,26 @@
 		}
 
 		$('#submit').click(function(e) {
+			matKhau = document.getElementById("password").value;
+			matKhauNhapLai = document.getElementById("matKhauNhapLai").value;
+			
 			e.preventDefault(); // Nếu ko có, sẽ mặc định submit vào url hiện tại đang đứng
-			// cần truyền vào url: /api/new
+			
+			if (matKhau != matKhauNhapLai) {
+				window.location.href = "${registerURL}?&message=confirm_password";			
+			} else{
+				// cần truyền vào url: /api/new
+				var formData = $('#formSubmit').serializeArray(); // các dữ liệu dc nhập (thay thế ở trên)
+				var data = {};
 
-			var formData = $('#formSubmit').serializeArray(); // các dữ liệu dc nhập (thay thế ở trên)
-			var data = {};
+				// Chạy vòng lặp bỏ dữ liệu từ formData vào data
+				$.each(formData, function(i, v) {
+					data["" + v.name + ""] = v.value;
+				});
 
-			// Chạy vòng lặp bỏ dữ liệu từ formData vào data
-			$.each(formData, function(i, v) {
-				data["" + v.name + ""] = v.value;
-			});
-
-			addNew(data);
+				addNew(data);
+			}
+			
 
 		});
 
@@ -131,7 +140,7 @@
 				data : JSON.stringify(data), // parse từ JavaScript Object -> JSON 
 				dataType : 'json', // nhận kiểu json từ server -> client
 				success : function(result) {
-					window.location.href = "${newURL}?&message=register_success";
+					window.location.href = "${validateURL}";
 				},
 				error : function(error) {
 					window.location.href = "${registerURL}?&message=error_system";

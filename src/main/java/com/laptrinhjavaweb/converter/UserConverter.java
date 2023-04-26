@@ -1,5 +1,8 @@
 package com.laptrinhjavaweb.converter;
 
+import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
+
 import org.springframework.stereotype.Component;
 
 import com.laptrinhjavaweb.dto.UserDTO;
@@ -16,6 +19,8 @@ public class UserConverter {
 		result.setUserName(dto.getUserName());
 		result.setEmail(dto.getEmail());
 		result.setStatus(dto.getStatus());
+		result.setVerificationCode(dto.getVerificationCode());
+		result.setValidTime(dto.getValidTime());
 		
 		
 		return result;
@@ -24,13 +29,20 @@ public class UserConverter {
 	public UserDTO toDTO(UserEntity dto) {
 		UserDTO result = new UserDTO();
 		
+		if(dto.getId() != null) {
+			result.setId(dto.getId());
+		}
 		result.setFullName(dto.getFullName());
 		result.setPassword(dto.getPassword());
 		result.setUserName(dto.getUserName());
 		result.setEmail(dto.getEmail());
 		result.setStatus(dto.getStatus());
-		
-		
+		result.setVerificationCode(dto.getVerificationCode());
+		if(dto.getValidTime() != null) {
+			SimpleDateFormat sm = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+			Timestamp valueOf = Timestamp.valueOf(sm.format(dto.getValidTime()));
+			result.setValidTime(valueOf);
+		}
 		return result;
 	}
 	

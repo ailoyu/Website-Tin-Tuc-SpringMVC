@@ -6,4 +6,5 @@ import com.laptrinhjavaweb.entity.UserEntity;
 
 public interface UserRepository extends JpaRepository<UserEntity, Long> {
 	UserEntity findOneByUserNameAndStatus(String username, int status);
+	UserEntity findOneByUserName(String username);
 }

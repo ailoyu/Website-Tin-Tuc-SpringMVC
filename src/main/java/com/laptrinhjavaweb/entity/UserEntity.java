@@ -1,6 +1,7 @@
 package com.laptrinhjavaweb.entity;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import javax.persistence.Column;
@@ -30,6 +31,14 @@ public class UserEntity extends BaseEntity {
 	
 	@Column(name = "email")
 	private String email;
+	
+	@Column(name = "verification_code")
+	private String verificationCode;
+	
+	@Column(name = "valid_time")
+	private Date validTime;
+	
+	
 	
 	// Bảng trung gian tên "user_role", lấy userid và roleid (Chỉ cần bỏ user, ko cần bỏ bên role)
 	@ManyToMany(fetch = FetchType.LAZY)
@@ -94,6 +103,22 @@ public class UserEntity extends BaseEntity {
 
 	public void setEmail(String email) {
 		this.email = email;
+	}
+
+	public String getVerificationCode() {
+		return verificationCode;
+	}
+
+	public void setVerificationCode(String verificationCode) {
+		this.verificationCode = verificationCode;
+	}
+
+	public Date getValidTime() {
+		return validTime;
+	}
+
+	public void setValidTime(Date validTime) {
+		this.validTime = validTime;
 	}
 	
 }

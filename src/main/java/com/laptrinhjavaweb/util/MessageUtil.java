@@ -32,6 +32,15 @@ public class MessageUtil {
 		} else if(message.equals("register_fail")) {
 			result.put("message", SystemConstant.REGISTER_FAIL);
 			result.put("alert", "danger");
+		} else if(message.equals("incorrect_username_password")) {
+			result.put("message", SystemConstant.INCORRECT_USERNAME_PASSWORD);
+			result.put("alert", "danger");
+		} else if(message.equals("invalid_account")) {
+			result.put("message", SystemConstant.INVALID_ACCOUNT);
+			result.put("alert", "danger");
+		} else if(message.equals("confirm_password")) {
+			result.put("message", SystemConstant.CONFIRM_PASSWORD);
+			result.put("alert", "danger");
 		}
 
 		return result;

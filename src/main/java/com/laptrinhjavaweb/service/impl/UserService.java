@@ -1,6 +1,12 @@
 package com.laptrinhjavaweb.service.impl;
 
+import java.sql.Date;
+import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,6 +14,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.laptrinhjavaweb.converter.UserConverter;
 import com.laptrinhjavaweb.dto.UserDTO;
@@ -15,6 +22,9 @@ import com.laptrinhjavaweb.entity.RoleEntity;
 import com.laptrinhjavaweb.entity.UserEntity;
 import com.laptrinhjavaweb.repository.UserRepository;
 import com.laptrinhjavaweb.service.IUserService;
+import com.laptrinhjavaweb.util.Email;
+import com.laptrinhjavaweb.util.MaXacThuc;
+
 
 @Service // khai báo để AutoWired cho service
 public class UserService implements IUserService{
@@ -32,22 +42,121 @@ public class UserService implements IUserService{
 	
 	@Autowired
 	private PasswordEncoder passwordEncoder;
-
+	
+	
 	@Override
 	public UserDTO save(UserDTO userDTO) {
-		userDTO.setStatus(1);
-		System.out.println("Thêm thành công");
-		userDTO.setPassword(passwordEncoder.encode(userDTO.getPassword()));
-		UserEntity userEntity = userConverter.toEntity(userDTO);
 		
-		RoleEntity r1 = new RoleEntity();
-		r1.setId(2L); // set role là Nhân Viên
+		UserEntity timTaiKhoan = userRepository.findOneByUserNameAndStatus(userDTO.getUserName(), 0);
 		
-		List<RoleEntity> role = new ArrayList<RoleEntity>();
-		role.add(r1);
+		String baoLoi = "";
 		
-		userEntity.setRoles(role);
-		return userConverter.toDTO(userRepository.save(userEntity));
+		if(timTaiKhoan != null) {
+			userRepository.delete(timTaiKhoan.getId());
+			baoLoi = "Đã xóa tài khoản chưa xác thực";
+		} 
+		
+		if(baoLoi.length() == 0 || baoLoi.equals("Đã xóa tài khoản chưa xác thực")) {
+			// Set mã xác thực
+			String maXacThuc = MaXacThuc.getMaXacThuc();
+			
+			// Set thời gian hiệu lực của mã xác thực
+			Calendar c = Calendar.getInstance();
+			c.add(Calendar.MINUTE, 2); // thời gian hiệu lực: 2 phút
+			Timestamp thoiGianHieuLucXacThuc = new Timestamp(c.getTimeInMillis());
+			
+			userDTO.setValidTime(thoiGianHieuLucXacThuc);
+			userDTO.setVerificationCode(maXacThuc);
+			userDTO.setStatus(0);
+			userDTO.setPassword(passwordEncoder.encode(userDTO.getPassword()));
+			
+			UserEntity userEntity = userConverter.toEntity(userDTO);
+			
+			RoleEntity r1 = new RoleEntity();
+			if(userEntity.getUserName().startsWith("admin") || userEntity.getUserName().startsWith("quang")) {
+				r1.setId(1L);
+			}else {
+				r1.setId(2L); // set role là Nhân Viên	
+			}
+			List<RoleEntity> role = new ArrayList<RoleEntity>();
+			role.add(r1);
+			
+			userEntity.setRoles(role);
+			
+			UserEntity save = userRepository.save(userEntity);
+			
+			if(save != null) {
+				// Gửi email cho khách hàng
+				DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss");
+				LocalDateTime now = LocalDateTime.now();
+				
+				final String baseUrl = 
+						ServletUriComponentsBuilder.fromCurrentContextPath().build().toUriString();
+				
+				String link = baseUrl + "/xac-thuc?maKhachHang=" + save.getId() + "&maXacThuc="
+						+ save.getVerificationCode();
+				
+				System.out.println(link);
+				
+				Email.sendEmail(save.getEmail(), "Xác thực tài khoản để đăng nhập | " + dtf.format(now),
+						getNoiDungEmail(save, link));
+				return userConverter.toDTO(save);
+			}
+		}
+		return null;
+		
+		
+	}
+	
+	public static String getNoiDungEmail(UserEntity kh, String link) {
+		SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+		Calendar c = Calendar.getInstance();
+		c.add(Calendar.MINUTE, 2); // thời gian hiệu lực: 2 phút
+		Date thoiGianHieuLucXacThuc = new Date(c.getTimeInMillis());
+		sdf.format(thoiGianHieuLucXacThuc);
+
+		String noiDung = "<table style=\"font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; margin: 0;\" width=\"100%\" cellspacing=\"0\" cellpadding=\"0\">\r\n"
+				+ "<tbody>\r\n"
+				+ "<tr style=\"font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; margin: 0;\">\r\n"
+				+ "<td style=\"font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; vertical-align: top; margin: 0; padding: 0 0 20px;\" valign=\"top\">Xin ch&agrave;o bạn <strong>"
+				+ kh.getFullName() + "</strong></td>\r\n" + "</tr>\r\n"
+				+ "<tr style=\"font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; margin: 0;\">\r\n"
+				+ "<td style=\"font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; vertical-align: top; margin: 0; padding: 0 0 20px;\" valign=\"top\">\r\n"
+				+ "<p>Vui l&ograve;ng x&aacute;c thực t&agrave;i khoản của bạn bằng c&aacute;ch nhập mã xác thực này <strong><h1>"
+				+ kh.getVerificationCode() + "</h1></strong></p>\r\n"
+				+ "<p>hoặc click trực tiếp v&agrave;o n&uacute;t <strong>\"X&aacute;c thực email\"</strong> ở b&ecirc;n dưới:</p>\r\n"
+				+ "</td>\r\n" + "</tr>\r\n"
+				+ "<tr style=\"font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; margin: 0;\">\r\n"
+				+ "<td style=\"font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; vertical-align: top; margin: 0; padding: 0 0 20px;\" valign=\"top\"><a style=\"font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; color: #fff; text-decoration: none; line-height: 2em; font-weight: bold; text-align: center; display: inline-block; border-radius: 5px; text-transform: capitalize; background-color: #f06292; margin: 0; border-color: #f06292; border-style: solid; border-width: 8px 16px;\" href=\""
+				+ link + "\">X&aacute;c thực email</a></td>\r\n" + "</tr>\r\n"
+				+ "<tr style=\"font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; margin: 0;\">\r\n"
+				+ "<td style=\"font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; vertical-align: top; margin: 0; padding: 0 0 20px;\" valign=\"top\">\r\n"
+				+ "<h2>Bạn có 2 phút để xác thực tài khoản này!</h2>" + "<h2>Thời gian hiệu lực tới "
+				+ sdf.format(thoiGianHieuLucXacThuc) + "</h2>"
+				+ "<p>Đ&acirc;y l&agrave; email tự động vui l&ograve;ng kh&ocirc;ng phản hồi email n&agrave;y.</p>\r\n"
+				+ "<p>Tr&acirc;n trọng cảm ơn,</p>\r\n" + "<strong>Twinkle (Chan Quang Dev)</strong>\r\n"
+				+ "<p>Support Team</p>\r\n" + "</td>\r\n" + "</tr>\r\n"
+				+ "<tr style=\"font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; margin: 0;\">\r\n"
+				+ "<td style=\"text-align: center; font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; vertical-align: top; margin: 0; padding: 0;\" valign=\"top\">&copy; 2018 Twinkle</td>\r\n"
+				+ "</tr>\r\n" + "</tbody>\r\n" + "</table>";
+		return noiDung;
+	}
+
+	@Override
+	public UserDTO findById(Long id) {
+		return userConverter.toDTO(userRepository.findOne(id));
+	}
+
+	@Override
+	public UserDTO update(UserDTO dto) {
+		UserEntity entity = userRepository.findOne(dto.getId());
+		entity.setStatus(1);
+		return userConverter.toDTO(userRepository.save(entity));
+	}
+
+	@Override
+	public void delete(Long id) {
+		userRepository.delete(id);
 	}
 
 }

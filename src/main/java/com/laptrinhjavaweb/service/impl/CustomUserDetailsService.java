@@ -11,7 +11,6 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
-import com.laptrinhjavaweb.constant.SystemConstant;
 import com.laptrinhjavaweb.dto.MyUser;
 import com.laptrinhjavaweb.entity.RoleEntity;
 import com.laptrinhjavaweb.entity.UserEntity;
@@ -26,11 +25,11 @@ public class CustomUserDetailsService implements UserDetailsService{
 	@Override
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 		// Chỉ cần username, vì password xử lý ngầm
-		UserEntity userEntity = userRepository.findOneByUserNameAndStatus(username, SystemConstant.ACTIVE_STATUS);
+		UserEntity userEntity = userRepository.findOneByUserNameAndStatus(username, 1);
 		
 		// Authentication
 		if(userEntity == null) { // Đăng nhập thất bại (username or password sai!)
-			throw new UsernameNotFoundException(SystemConstant.INCORRECT_USERNAME_PASSWORD);
+			return null;
 		}else { // Authorization
 			// Lấy role của userEntity add vào authorities	
 			List<GrantedAuthority> authorities = new ArrayList<GrantedAuthority>();
@@ -50,6 +49,7 @@ public class CustomUserDetailsService implements UserDetailsService{
 			myUser.setEmail(userEntity.getEmail());
 			myUser.setPassword(userEntity.getPassword());
 			myUser.setUsername(userEntity.getUserName());
+			myUser.setStatus(userEntity.getStatus());
 			
 			return myUser;//MyUser extends User(mà User implement UserDetails)=> myUser cx thuộc kiểu UserDetails
 		}

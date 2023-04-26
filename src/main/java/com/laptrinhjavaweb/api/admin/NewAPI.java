@@ -19,15 +19,12 @@ public class NewAPI {
 		// doPost
 		@PostMapping("api/new")
 		public NewDTO createNew(@RequestBody NewDTO newDTO) { // khai báo để Map kiểu JSon -> kiểu NewDT
-			
-			System.out.println("Thêm thành công");
 			return newService.save(newDTO);
 		}
 		
 		// doPut
 		@PutMapping("api/new")
 		public NewDTO updateNew(@RequestBody NewDTO updateNew) { // khai báo để Map kiểu JSon -> kiểu NewDTO
-			System.out.println("Update thành công");
 			return newService.save(updateNew);
 		}
 		

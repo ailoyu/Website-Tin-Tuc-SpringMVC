@@ -18,13 +18,14 @@ public class MyUser extends User { // Custom lại User để thêm fullName
 	private String username;
 	private String password;
 	private String email;
+	private int status;
+	
+	public void setFullName(String fullName) {
+		this.fullName = fullName;
+	}
 	
 	public String getFullName() {
 		return fullName;
-	}
-
-	public void setFullName(String fullName) {
-		this.fullName = fullName;
 	}
 
 	public String getUserName() {
@@ -62,7 +63,13 @@ public class MyUser extends User { // Custom lại User để thêm fullName
 	public void setId(Long id) {
 		this.id = id;
 	}
-	
-	
-	
+
+	public int getStatus() {
+		return status;
+	}
+
+	public void setStatus(int status) {
+		this.status = status;
+	}
+
 }

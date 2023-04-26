@@ -3,9 +3,6 @@ package com.laptrinhjavaweb.dto;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.laptrinhjavaweb.entity.NewEntity;
-import com.laptrinhjavaweb.entity.UserEntity;
-
 public class CommentDTO extends AbstractDTO<CommentDTO> {
 
 	private String content;

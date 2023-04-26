@@ -1,5 +1,6 @@
 package com.laptrinhjavaweb.controller.web;
 
+import java.sql.Date;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -19,9 +20,11 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.laptrinhjavaweb.dto.CommentDTO;
 import com.laptrinhjavaweb.dto.NewDTO;
+import com.laptrinhjavaweb.dto.UserDTO;
 import com.laptrinhjavaweb.service.ICategoryService;
 import com.laptrinhjavaweb.service.ICommentService;
 import com.laptrinhjavaweb.service.INewService;
+import com.laptrinhjavaweb.service.IUserService;
 import com.laptrinhjavaweb.util.MessageUtil;
 
 @Controller(value = "homeControllerOfWeb") // controller của thằng spring mvc
@@ -32,6 +35,8 @@ public class HomeController {
 
 	@Autowired
 	private INewService newService;
+	
+	@Autowired IUserService userService;
 
 	// Request Mapping: nhận đường link url, dùng method: get
 	@RequestMapping(value = "/trang-chu", method = RequestMethod.GET)
@@ -168,6 +173,45 @@ public class HomeController {
 		}
 		return new ModelAndView("redirect:/trang-chu");
 	}
-
+	
+	@RequestMapping(value = "/xac-thuc", method = RequestMethod.GET)
+	public ModelAndView xacThuc(@RequestParam(value = "maKhachHang", required = false) Long id,
+								@RequestParam(value = "maXacThuc", required = false) String maXacThuc) {
+		
+		UserDTO userDTO = userService.findById(id);
+		
+		String message = "";
+		
+		if(userDTO != null) {
+			// Kiểm tra mã xác thực nhập vào có giống trong mã xac thuc trong dtbase kh?
+			if(userDTO.getVerificationCode().equals(maXacThuc)) {
+				// Kiểm tra xem mã xác thực còn hiệu lực hay không?
+				java.sql.Date now = new Date(System.currentTimeMillis());
+				if(now.before(userDTO.getValidTime())) {
+					userDTO.setStatus(1);
+					userService.update(userDTO);
+					message = "Xác thực thành công";
+				} else {
+					message = "Hết thời gian xác thực, vui lòng đăng ký lại!";
+					userService.delete(userDTO.getId());
+				}
+			}else {
+				message = "Mã xác thực không khớp !";
+			}
+		} else {
+			message = "Tài khoản không tồn tại";
+		}
+		ModelAndView mav = new ModelAndView("validation");
+		mav.addObject("message", message);
+		
+		return mav;
+	}
+	
+	@RequestMapping(value = "/thong-bao", method = RequestMethod.GET)
+	public ModelAndView thongBao() {
+		ModelAndView mav = new ModelAndView("validation");
+		return mav;
+	}
+	
 	
 }

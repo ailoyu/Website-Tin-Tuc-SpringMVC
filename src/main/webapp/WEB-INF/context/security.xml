@@ -25,7 +25,8 @@
                      password-parameter="j_password"
                      login-processing-url="/j_spring_security_check" 
                      authentication-success-handler-ref="customSuccessHandler"
-                     authentication-failure-url="/dang-nhap?incorrectAccount"/>
+                     authentication-failure-handler-ref="customFailerHandler"
+                     />
 <!--         <session-management invalid-session-url="/dang-nhap?sessionTimeout"/> -->
 			<session-management invalid-session-url="/trang-chu"/>
         <logout delete-cookies="JSESSIONID"/>
@@ -36,6 +37,7 @@
     <authentication-manager >
         <authentication-provider user-service-ref="customUserDetailsService">
         		<password-encoder ref="bcryptEncoder"/>
+				
         </authentication-provider>
     </authentication-manager>
 	
@@ -49,5 +51,8 @@
 	<!-- Gọi từ class CustomSuccessHandler --> 
 	 <beans:bean id="customSuccessHandler" class="com.laptrinhjavaweb.security.CustomSuccessHandler" />
 	
+	<!-- Gọi từ class CustomFailerHandler --> 
+	 <beans:bean id="customFailerHandler" class="com.laptrinhjavaweb.security.CustomFailureHandler" />
+		
 
 </beans:beans>

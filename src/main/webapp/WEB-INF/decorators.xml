@@ -18,6 +18,10 @@
 	<decorator name="login" page="login.jsp">
         <pattern>/dang-nhap</pattern>
     </decorator>
+    
+    <decorator name="validation" page="validation.jsp">
+        <pattern>/thong-bao</pattern>
+    </decorator>
 	
 
 </decorators>

@@ -14,12 +14,13 @@ public class SystemConstant {
 	
 	public static final String ERROR_SYSTEM = "Lỗi hệ thống!";
 	
-	public static final String INCORRECT_USERNAME_PASSWORD = "Username or Password bị sai!";
-	
 	public static final String REGISTER_SUCCESS = "Đăng ký tài khoản thành công! Mời bạn hãy đăng nhập";
 	
 	public static final String REGISTER_FAIL = "Đăng ký tài khoản thất bại!";
 	
+	public static final String INCORRECT_USERNAME_PASSWORD = "Username or Password bị sai!";
 	
+	public static final String INVALID_ACCOUNT = "Tài khoản chưa được xác thực!";
 	
+	public static final String CONFIRM_PASSWORD = "Mật khẩu nhập lại bị sai!";
 }

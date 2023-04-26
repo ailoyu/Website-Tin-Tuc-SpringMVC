@@ -2,6 +2,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@include file="/common/taglib.jsp"%>
+
 <c:url var="commentAPI" value="/api/comment" />
 <c:url var="newURL" value="/dang-nhap" />
 <c:url var="registerURL" value="/dang-ky"/>
@@ -41,6 +42,8 @@
 	 <% } else { %>
 	 	<h5>Vui lòng đăng nhập để có thể bình luận!</h5>
 	 <% } %>
+	 
+	 
 	<section style="background-color: #ad655f;">
   <div class="container my-5 py-5">
     <div class="row d-flex justify-content-center">
@@ -68,8 +71,8 @@
                   <a href="#!" class="link-muted"><i class="fas fa-redo-alt ms-2"></i></a>
                   <a href="#!" class="link-muted"><i class="fas fa-heart ms-2"></i></a>
                 </div>
-                Id comment: ${item.id }<br>
-				Parent id : ${item.parentId}                
+<%--                 Id comment: ${item.id }<br> --%>
+<%-- 				Parent id : ${item.parentId}                 --%>
                 <p class="mb-0">
                   ${item.content }
                 </p>
@@ -83,6 +86,7 @@
                 </div>
               </div>
             </div>
+            <% if(SecurityUtils.getPrincipal() != null) { %>
             <form class="d-none" method="post" id="formSubmit1" style="margin-left: 5em">
             <br>
 	 	<textarea rows="5" cols="60" placeholder="Enter your comment..." id="content" name="content"></textarea>
@@ -94,6 +98,7 @@
 	 	<input type="button" id="btnComment1" value="Bình Luận">
 	 	<br><br>
 	 </form>
+	 <% } %>
             <!--  -->
             <c:forEach var="item2" items="${comment.listComment}">
           <c:if test="${item2.parentId == item.id}">
@@ -115,8 +120,8 @@
                   <a href="#!" class="link-muted"><i class="fas fa-redo-alt ms-2"></i></a>
                   <a href="#!" class="link-muted"><i class="fas fa-heart ms-2"></i></a>
                 </div>
-                Id comment: ${item2.id }<br>
-				Parent id : ${item2.parentId}                
+<%--                 Id comment: ${item2.id }<br> --%>
+<%-- 				Parent id : ${item2.parentId}                 --%>
                 <p class="mb-0">
                   ${item2.content }
                 </p>
@@ -151,8 +156,8 @@
                   <a href="#!" class="link-muted"><i class="fas fa-redo-alt ms-2"></i></a>
                   <a href="#!" class="link-muted"><i class="fas fa-heart ms-2"></i></a>
                 </div>
-                Id comment: ${item3.id }<br>
-				Parent id : ${item3.parentId}                
+<%--                 Id comment: ${item3.id }<br> --%>
+<%-- 				Parent id : ${item3.parentId}                 --%>
                 <p class="mb-0">
                   ${item3.content }
                 </p>
@@ -188,8 +193,8 @@
                   <a href="#!" class="link-muted"><i class="fas fa-redo-alt ms-2"></i></a>
                   <a href="#!" class="link-muted"><i class="fas fa-heart ms-2"></i></a>
                 </div>
-                Id comment: ${item4.id }<br>
-				Parent id : ${item4.parentId}                
+<%--                 Id comment: ${item4.id }<br> --%>
+<%-- 				Parent id : ${item4.parentId}                 --%>
                 <p class="mb-0">
                   ${item4.content }
                 </p>
@@ -256,53 +261,9 @@ $('#btnComment1').click(function(e) {
 
 });
 
-$('#btnComment2').click(function(e) {
-	e.preventDefault(); // Nếu ko có, sẽ mặc định submit vào url hiện tại đang đứng
-	// cần truyền vào url: /api/new
 
-	var formData = $('#formSubmit2').serializeArray(); // các dữ liệu dc nhập (thay thế ở trên)
-	var data = {};
 
-	// Chạy vòng lặp bỏ dữ liệu từ formData vào data
-	$.each(formData, function(i, v) {
-		data["" + v.name + ""] = v.value;
-	});
 
-	addNew(data);
-
-});
-
-$('#btnComment3').click(function(e) {
-	e.preventDefault(); // Nếu ko có, sẽ mặc định submit vào url hiện tại đang đứng
-	// cần truyền vào url: /api/new
-
-	var formData = $('#formSubmit3').serializeArray(); // các dữ liệu dc nhập (thay thế ở trên)
-	var data = {};
-
-	// Chạy vòng lặp bỏ dữ liệu từ formData vào data
-	$.each(formData, function(i, v) {
-		data["" + v.name + ""] = v.value;
-	});
-
-	addNew(data);
-
-});
-
-$('#btnComment4').click(function(e) {
-	e.preventDefault(); // Nếu ko có, sẽ mặc định submit vào url hiện tại đang đứng
-	// cần truyền vào url: /api/new
-
-	var formData = $('#formSubmit4').serializeArray(); // các dữ liệu dc nhập (thay thế ở trên)
-	var data = {};
-
-	// Chạy vòng lặp bỏ dữ liệu từ formData vào data
-	$.each(formData, function(i, v) {
-		data["" + v.name + ""] = v.value;
-	});
-
-	addNew(data);
-
-});
 
 function addNew(data) {
 	$.ajax({
@@ -312,10 +273,10 @@ function addNew(data) {
 		data : JSON.stringify(data), // parse từ JavaScript Object -> JSON 
 		dataType : 'json', // nhận kiểu json từ server -> client
 		success : function(result) {
-			window.location.href = "${info}?&id=${ model.id }";
+			window.location.href = "${info}?id=${ model.id }";
 		},
 		error : function(error) {
-			window.location.href = "${info}?&id=${ model.id }";
+			window.location.href = "${info}?id=${ model.id }";
 		}
 	});
 }

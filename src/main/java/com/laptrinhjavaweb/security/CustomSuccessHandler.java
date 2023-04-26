@@ -27,15 +27,15 @@ public class CustomSuccessHandler extends SimpleUrlAuthenticationSuccessHandler{
 		String targetUrl = determineTargetUrl(authentication); // trả về url, sau khi phân quyền xong
 		if (response.isCommitted()) {
 			return;
+		}else {
+			// nếu tài khoản chưa xác thực -> đăng xuất ra
+			redirectStrategy.sendRedirect(request, response, targetUrl);
 		}
-		redirectStrategy.sendRedirect(request, response, targetUrl);
 	}
 
 	public RedirectStrategy getRedirectStrategy() {
 		return redirectStrategy;
 	}
-
-
 
 	public void setRedirectStrategy(RedirectStrategy redirectStrategy) {
 		this.redirectStrategy = redirectStrategy;
@@ -47,9 +47,9 @@ public class CustomSuccessHandler extends SimpleUrlAuthenticationSuccessHandler{
 		List<String> roles = SecurityUtils.getAuthorities(); // lấy ra code: "USER" or "ADMIN"
 		
 		// if role is ADMIN so redirect to controller: /quan-tri/trang-chu
-		if(isAdmin(roles)) {
+		if(isAdmin(roles) && SecurityUtils.getPrincipal().getStatus() == 1) {
 			url = "/quan-tri/trang-chu";
-		}else if(isUser(roles)) { // if role is USER so redirect to controller: /trang-chu
+		}else if(isUser(roles) && SecurityUtils.getPrincipal().getStatus() == 1) { // if role is USER so redirect to controller: /trang-chu
 			url = "/trang-chu";
 		}
 		return url;

@@ -13,11 +13,8 @@
 		<c:if test="${param.accessDenied == null }">
 			<div class="login-form">
 				<div class="main-div">
-					<c:if test="${param.incorrectAccount != null}">
-
-						<div class="alert alert-danger">Username hoặc password bị
-							sai!</div>
-					</c:if>
+					<!-- Sau khi đăng ký thành công -> chuyển message & alert 
+						thông bao thành công sang trang đăng nhập -->
 					<c:if test="${not empty message }">
 						<div class="alert alert-${alert}">${message}</div>
 					</c:if>

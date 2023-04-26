@@ -1,11 +1,15 @@
 package com.laptrinhjavaweb.dto;
 
+import java.sql.Timestamp;
+
 public class UserDTO extends AbstractDTO<UserDTO> {
 	private String fullName;
 	private String password;
 	private String userName;
-	private int status;
 	private String email;
+	private int status;
+	private String verificationCode;
+	private Timestamp validTime;
 	
 	public String getFullName() {
 		return fullName;
@@ -36,6 +40,18 @@ public class UserDTO extends AbstractDTO<UserDTO> {
 	}
 	public void setEmail(String email) {
 		this.email = email;
+	}
+	public Timestamp getValidTime() {
+		return validTime;
+	}
+	public void setValidTime(Timestamp validTime) {
+		this.validTime = validTime;
+	}
+	public String getVerificationCode() {
+		return verificationCode;
+	}
+	public void setVerificationCode(String verificationCode) {
+		this.verificationCode = verificationCode;
 	}
 	
 }

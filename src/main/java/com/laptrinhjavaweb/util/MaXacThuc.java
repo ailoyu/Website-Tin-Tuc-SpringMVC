@@ -2,8 +2,10 @@ package com.laptrinhjavaweb.util;
 
 import java.util.Random;
 
-public class SoNgauNhien {
-	public static String getSoNgauNhien() {
+public class MaXacThuc {
+	
+	
+	public static String getMaXacThuc() {
 		Random rd = new Random();
 		String s1 = rd.nextInt(10) + "";
 		String s2 = rd.nextInt(10) + "";
@@ -15,4 +17,6 @@ public class SoNgauNhien {
 		String s = s1 + s2 + s3 + s4 + s5 + s6;
 		return s;
 	}
+	
+	
 }
