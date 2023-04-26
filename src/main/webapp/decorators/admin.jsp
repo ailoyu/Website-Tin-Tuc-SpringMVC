@@ -24,7 +24,11 @@
     <!-- Thư viện twbsPagination (Phân trang) -->
     <script src="<c:url value='/template/paging/jquery.twbsPagination.js' />"></script>
     <!-- Thư viện CKEDITOR -->
-<script src="//cdn.ckeditor.com/4.21.0/full/ckeditor.js"></script>
+	<script src="//cdn.ckeditor.com/4.21.0/full/ckeditor.js"></script>
+	
+	<!-- Sweet alert -->
+	<script src="<c:url value="/template/admin/sweetalert/sweetalert2.min.js" />"></script>
+	<link rel="stylesheet" href="<c:url value="/template/admin/sweetalert/sweetalert2.min.css" />">
 </head>
 <body class="no-skin">
 	<!-- header -->

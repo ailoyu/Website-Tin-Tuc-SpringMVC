@@ -1,10 +1,13 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@include file="/common/taglib.jsp" %>
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+
+<!DOCTYPE html>
 <html>
 <head>
-    <title><dec:title default="Xác thực" /></title>
-    <!-- Bootstrap core CSS -->
+<meta charset="UTF-8">
+<title>Trang chủ</title>
+
+<!-- Bootstrap core CSS -->
 <link href="<c:url value='/template/web/vendor/bootstrap/css/bootstrap.min.css'/>" rel="stylesheet" type="text/css">
 
 <!-- Custom styles for this template -->
@@ -27,24 +30,14 @@
 	integrity="sha384-mQ93GR66B00ZXjt0YO5KlohRA5SY2XofN4zfuZxLkoj1gXtW8ANNCe9d5Y3eG5eD"
 	crossorigin="anonymous"></script>
 </head>
-<body id="LoginForm">
+<body>
 	<!-- Header/Navigation -->
-    <%@ include file="/common/web/header.jsp" %>
-    <!-- header -->
-    <br>
-    <br>
-    <br>
-    <br>
-    <br> 
-    <dec:body/>
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
-    
-    <%@ include file="/common/web/footer.jsp" %>
-    
+	<%@include file="/common/web/header.jsp" %>
+	
+	<!-- Body -->
+	<div style="margin-left: 30px;margin-right: 30px;margin-top: 30px"  class="container">
+    	<dec:body/>
+    </div>
+
 </body>
 </html>

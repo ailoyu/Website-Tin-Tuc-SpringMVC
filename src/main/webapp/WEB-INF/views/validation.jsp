@@ -22,7 +22,7 @@
 <script type="text/javascript">
 	setTimeout(function() {
 		window.location.href = 'index.jsp';
-	}, 5000);
+	}, 3000);
 </script>
 </c:if>
 

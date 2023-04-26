@@ -107,6 +107,19 @@
 			}
 
 		}
+		
+		var showLoading = function() {
+			Swal.fire({
+				  title: 'Uploading...',
+				  html: 'Please wait...',
+				  allowEscapeKey: false,
+				  allowOutsideClick: false,
+				  showConfirmButton: false,
+				  willOpen: () => {
+				    Swal.showLoading()
+				  }
+				});
+		}
 
 		$('#submit').click(function(e) {
 			matKhau = document.getElementById("password").value;
@@ -125,7 +138,6 @@
 				$.each(formData, function(i, v) {
 					data["" + v.name + ""] = v.value;
 				});
-
 				addNew(data);
 			}
 			

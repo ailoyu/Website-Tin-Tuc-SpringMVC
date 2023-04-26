@@ -29,11 +29,17 @@ public class CustomFailureHandler extends SimpleUrlAuthenticationFailureHandler{
 		
 		UserEntity userEntity = userRepository.findOneByUserName(username);
 		
-		if(userEntity.getStatus() == 0) {
-			getRedirectStrategy().sendRedirect(request, response, "/dang-nhap?message=invalid_account");
-		} else {
+		if(userEntity == null) {
 			getRedirectStrategy().sendRedirect(request, response, "/dang-nhap?message=incorrect_username_password");
+		} else {
+			if(userEntity.getStatus() == 0) {
+				getRedirectStrategy().sendRedirect(request, response, "/dang-nhap?message=invalid_account");
+			} else {
+				getRedirectStrategy().sendRedirect(request, response, "/dang-nhap?message=incorrect_username_password");
+			}
 		}
+		
+		
 				
 	}
 	

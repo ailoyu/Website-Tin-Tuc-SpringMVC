@@ -21,6 +21,7 @@
     
     <decorator name="validation" page="validation.jsp">
         <pattern>/thong-bao</pattern>
+        <pattern>/xac-thuc*</pattern>
     </decorator>
 	
 
