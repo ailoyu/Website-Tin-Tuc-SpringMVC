@@ -69,7 +69,7 @@ public class Email {
 			System.out.println("Gửi email thành công");
 		} catch (MessagingException e) {
 			e.printStackTrace();
-			System.out.println("Gửi email thất bại");
+			System.out.println("Gửi email thất bại");	
 		}
 	}
 

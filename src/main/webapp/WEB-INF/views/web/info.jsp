@@ -2,6 +2,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@include file="/common/taglib.jsp"%>
+<%@ taglib tagdir="/WEB-INF/tags" prefix="myTags" %>
 
 <c:url var="commentAPI" value="/api/comment" />
 <c:url var="newURL" value="/dang-nhap" />
@@ -42,190 +43,197 @@
 	 <% } else { %>
 	 	<h5>Vui lòng đăng nhập để có thể bình luận!</h5>
 	 <% } %>
-	 
-	 
-	<section style="background-color: #ad655f;">
-  <div class="container my-5 py-5">
-    <div class="row d-flex justify-content-center">
-      <div class="col-md-12 col-lg-10">
-        <div class="card text-dark">
-         <h4 class="mb-0">Recent comments</h4>
-            <p class="fw-light mb-4 pb-2">Latest Comments section by users</p>
-        <c:forEach var="item" items="${comment.listComment}">
-        <hr class="my-0" />
-        <c:if test="${ empty item.parentId }">
-          <div class="card-body p-4">
-            <div class="d-flex flex-start">
-              <img class="rounded-circle shadow-1-strong me-3"
-                src="https://mdbcdn.b-cdn.net/img/Photos/Avatars/img%20(23).webp" alt="avatar" width="60"
-                height="60" />
-              <div>
-             <b>${ item.fullName }</b> 
-                <h6 class="fw-bold mb-1"></h6>
-                <div class="d-flex align-items-center mb-3">
-                  <p class="mb-0">
-                  <c:set var="today" value="${item.createdDate }" />
-                    <span class="badge bg-success"><fmt:formatDate pattern="dd-MM-yyyy HH:mm" value="${today}" /></span>
-                  </p>
-                  <a href="#!" class="link-muted"><i class="fas fa-pencil-alt ms-2"></i></a>
-                  <a href="#!" class="link-muted"><i class="fas fa-redo-alt ms-2"></i></a>
-                  <a href="#!" class="link-muted"><i class="fas fa-heart ms-2"></i></a>
-                </div>
-<%--                 Id comment: ${item.id }<br> --%>
-<%-- 				Parent id : ${item.parentId}                 --%>
-                <p class="mb-0">
-                  ${item.content }
-                </p>
-                <div class="d-flex justify-content-between align-items-center">
-                  <p class="small mb-0" style="color: #aaa;">
-                    <button class="btn btn-link" id="reply1">• Reply</button> 
-                  </p>
-                  <div class="d-flex flex-row">
-                    <i class="far fa-check-circle text-primary"></i>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <% if(SecurityUtils.getPrincipal() != null) { %>
-            <form class="d-none" method="post" id="formSubmit1" style="margin-left: 5em">
-            <br>
-	 	<textarea rows="5" cols="60" placeholder="Enter your comment..." id="content" name="content"></textarea>
+	
+	<div id="treeDiv1">
+    <ul>
+        <c:forEach var="child" items="${comment.listComment}">
+            <myTags:folderGroups item="${child }"/>
+        </c:forEach>
+    </ul>
+</div> 
+		 
+<!-- 	<section style="background-color: #ad655f;"> -->
+<!--   <div class="container my-5 py-5"> -->
+<!--     <div class="row d-flex justify-content-center"> -->
+<!--       <div class="col-md-12 col-lg-10"> -->
+<!--         <div class="card text-dark"> -->
+<!--          <h4 class="mb-0">Recent comments</h4> -->
+<!--             <p class="fw-light mb-4 pb-2">Latest Comments section by users</p> -->
+<%--         <c:forEach var="item" items="${comment.listComment}"> --%>
+<!--         <hr class="my-0" /> -->
+<%--         <c:if test="${ empty item.parentId }"> --%>
+<!--           <div class="card-body p-4"> -->
+<!--             <div class="d-flex flex-start"> -->
+<!--               <img class="rounded-circle shadow-1-strong me-3" -->
+<!--                 src="https://mdbcdn.b-cdn.net/img/Photos/Avatars/img%20(23).webp" alt="avatar" width="60" -->
+<!--                 height="60" /> -->
+<!--               <div> -->
+<%--              <b>${ item.fullName }</b>  --%>
+<!--                 <h6 class="fw-bold mb-1"></h6> -->
+<!--                 <div class="d-flex align-items-center mb-3"> -->
+<!--                   <p class="mb-0"> -->
+<%--                   <c:set var="today" value="${item.createdDate }" /> --%>
+<%--                     <span class="badge bg-success"><fmt:formatDate pattern="dd-MM-yyyy HH:mm" value="${today}" /></span> --%>
+<!--                   </p> -->
+<!--                   <a href="#!" class="link-muted"><i class="fas fa-pencil-alt ms-2"></i></a> -->
+<!--                   <a href="#!" class="link-muted"><i class="fas fa-redo-alt ms-2"></i></a> -->
+<!--                   <a href="#!" class="link-muted"><i class="fas fa-heart ms-2"></i></a> -->
+<!--                 </div> -->
+<%-- <%--                 Id comment: ${item.id }<br> --%> --%>
+<%-- <%-- 				Parent id : ${item.parentId}                 --%> --%>
+<!--                 <p class="mb-0"> -->
+<%--                   ${item.content } --%>
+<!--                 </p> -->
+<!--                 <div class="d-flex justify-content-between align-items-center"> -->
+<!--                   <p class="small mb-0" style="color: #aaa;"> -->
+<!--                     <button class="btn btn-link" id="reply1">• Reply</button>  -->
+<!--                   </p> -->
+<!--                   <div class="d-flex flex-row"> -->
+<!--                     <i class="far fa-check-circle text-primary"></i> -->
+<!--                   </div> -->
+<!--                 </div> -->
+<!--               </div> -->
+<!--             </div> -->
+<%--             <% if(SecurityUtils.getPrincipal() != null) { %> --%>
+<!--             <form class="d-none" method="post" id="formSubmit1" style="margin-left: 5em"> -->
+<!--             <br> -->
+<!-- 	 	<textarea rows="5" cols="60" placeholder="Enter your comment..." id="content" name="content"></textarea> -->
 	 	
-	 	<input type="hidden" value="<%= SecurityUtils.getPrincipal().getId() %>" id="userId" name="userId">
-	 	<input type="hidden" value="${model.id}" id="newId" name="newId">
-	 	<input type="hidden" value="${ item.id }" id="parentId" name="parentId">
-	 	<br><br>
-	 	<input type="button" id="btnComment1" value="Bình Luận">
-	 	<br><br>
-	 </form>
-	 <% } %>
-            <!--  -->
-            <c:forEach var="item2" items="${comment.listComment}">
-          <c:if test="${item2.parentId == item.id}">
-          <hr class="my-0" />
-          		 <div class="card-body p-4" style="margin-left: 5em">
-            <div class="d-flex flex-start">
-              <img class="rounded-circle shadow-1-strong me-3"
-                src="https://mdbcdn.b-cdn.net/img/Photos/Avatars/img%20(23).webp" alt="avatar" width="60"
-                height="60" />
-              <div>
-             <b>${ item2.fullName }</b> 
-                <h6 class="fw-bold mb-1"></h6>
-                <div class="d-flex align-items-center mb-3">
-                  <p class="mb-0">
-                  <c:set var="today" value="${item2.createdDate }" />
-                    <span class="badge bg-success"><fmt:formatDate pattern="dd-MM-yyyy HH:mm" value="${today}" /></span>
-                  </p>
-                  <a href="#!" class="link-muted"><i class="fas fa-pencil-alt ms-2"></i></a>
-                  <a href="#!" class="link-muted"><i class="fas fa-redo-alt ms-2"></i></a>
-                  <a href="#!" class="link-muted"><i class="fas fa-heart ms-2"></i></a>
-                </div>
-<%--                 Id comment: ${item2.id }<br> --%>
-<%-- 				Parent id : ${item2.parentId}                 --%>
-                <p class="mb-0">
-                  ${item2.content }
-                </p>
-                <div class="d-flex justify-content-between align-items-center">
-                  <p class="small mb-0" style="color: #aaa;">
-                    <button class="btn btn-link" id="reply2">• Reply</button> 
-                  </p>
-                  <div class="d-flex flex-row">
-                    <i class="far fa-check-circle text-primary"></i>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <!--  -->
-            <c:forEach var="item3" items="${comment.listComment}">
-          <c:if test="${item3.parentId == item2.id}">
-          <hr class="my-0" />
-          		 <div class="card-body p-4" style="margin-left: 5em">
-            <div class="d-flex flex-start">
-              <img class="rounded-circle shadow-1-strong me-3"
-                src="https://mdbcdn.b-cdn.net/img/Photos/Avatars/img%20(23).webp" alt="avatar" width="60"
-                height="60" />
-              <div>
-             <b>${ item3.fullName }</b> 
-                <h6 class="fw-bold mb-1"></h6>
-                <div class="d-flex align-items-center mb-3">
-                  <p class="mb-0">
-                  <c:set var="today" value="${item3.createdDate }" />
-                    <span class="badge bg-success"><fmt:formatDate pattern="dd-MM-yyyy HH:mm" value="${today}" /></span>
-                  </p>
-                  <a href="#!" class="link-muted"><i class="fas fa-pencil-alt ms-2"></i></a>
-                  <a href="#!" class="link-muted"><i class="fas fa-redo-alt ms-2"></i></a>
-                  <a href="#!" class="link-muted"><i class="fas fa-heart ms-2"></i></a>
-                </div>
-<%--                 Id comment: ${item3.id }<br> --%>
-<%-- 				Parent id : ${item3.parentId}                 --%>
-                <p class="mb-0">
-                  ${item3.content }
-                </p>
-                <div class="d-flex justify-content-between align-items-center">
-                  <p class="small mb-0" style="color: #aaa;">
-                    <button class="btn btn-link" id="reply3">• Reply</button> 
-                  </p>
-                  <div class="d-flex flex-row">
-                    <i class="far fa-check-circle text-primary"></i>
-                  </div>
-                </div>
-              </div>
-            </div>
+<%-- 	 	<input type="hidden" value="<%= SecurityUtils.getPrincipal().getId() %>" id="userId" name="userId"> --%>
+<%-- 	 	<input type="hidden" value="${model.id}" id="newId" name="newId"> --%>
+<%-- 	 	<input type="hidden" value="${ item.id }" id="parentId" name="parentId"> --%>
+<!-- 	 	<br><br> -->
+<!-- 	 	<input type="button" id="btnComment1" value="Bình Luận"> -->
+<!-- 	 	<br><br> -->
+<!-- 	 </form> -->
+<%-- 	 <% } %> --%>
             
-          </div>
-          <c:forEach var="item4" items="${comment.listComment}">
-          <c:if test="${item4.parentId == item3.id}">
-          <hr class="my-0" />
-          		 <div class="card-body p-4" style="margin-left: 5em">
-            <div class="d-flex flex-start">
-              <img class="rounded-circle shadow-1-strong me-3"
-                src="https://mdbcdn.b-cdn.net/img/Photos/Avatars/img%20(23).webp" alt="avatar" width="60"
-                height="60" />
-              <div>
-             <b>${ item4.fullName }</b> 
-                <h6 class="fw-bold mb-1"></h6>
-                <div class="d-flex align-items-center mb-3">
-                  <p class="mb-0">
-                  <c:set var="today" value="${item4.createdDate }" />
-                    <span class="badge bg-success"><fmt:formatDate pattern="dd-MM-yyyy HH:mm" value="${today}" /></span>
-                  </p>
-                  <a href="#!" class="link-muted"><i class="fas fa-pencil-alt ms-2"></i></a>
-                  <a href="#!" class="link-muted"><i class="fas fa-redo-alt ms-2"></i></a>
-                  <a href="#!" class="link-muted"><i class="fas fa-heart ms-2"></i></a>
-                </div>
-<%--                 Id comment: ${item4.id }<br> --%>
-<%-- 				Parent id : ${item4.parentId}                 --%>
-                <p class="mb-0">
-                  ${item4.content }
-                </p>
-                <div class="d-flex justify-content-between align-items-center">
-                  <p class="small mb-0" style="color: #aaa;">
-                    <button class="btn btn-link" id="reply4">• Reply</button> 
-                  </p>
-                  <div class="d-flex flex-row">
-                    <i class="far fa-check-circle text-primary"></i>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-          </c:if>
-          </c:forEach>
-          </c:if>
-          </c:forEach>
-          </div>
-          </c:if>
-          </c:forEach>
-          </div>
-          </c:if>
+<%--             <c:forEach var="item2" items="${comment.listComment}"> --%>
+<%--           <c:if test="${item2.parentId == item.id}"> --%>
+<!--           <hr class="my-0" /> -->
+<!--           		 <div class="card-body p-4" style="margin-left: 5em"> -->
+<!--             <div class="d-flex flex-start"> -->
+<!--               <img class="rounded-circle shadow-1-strong me-3" -->
+<!--                 src="https://mdbcdn.b-cdn.net/img/Photos/Avatars/img%20(23).webp" alt="avatar" width="60" -->
+<!--                 height="60" /> -->
+<!--               <div> -->
+<%--              <b>${ item2.fullName }</b>  --%>
+<!--                 <h6 class="fw-bold mb-1"></h6> -->
+<!--                 <div class="d-flex align-items-center mb-3"> -->
+<!--                   <p class="mb-0"> -->
+<%--                   <c:set var="today" value="${item2.createdDate }" /> --%>
+<%--                     <span class="badge bg-success"><fmt:formatDate pattern="dd-MM-yyyy HH:mm" value="${today}" /></span> --%>
+<!--                   </p> -->
+<!--                   <a href="#!" class="link-muted"><i class="fas fa-pencil-alt ms-2"></i></a> -->
+<!--                   <a href="#!" class="link-muted"><i class="fas fa-redo-alt ms-2"></i></a> -->
+<!--                   <a href="#!" class="link-muted"><i class="fas fa-heart ms-2"></i></a> -->
+<!--                 </div> -->
+<%-- <%--                 Id comment: ${item2.id }<br> --%> --%>
+<%-- <%-- 				Parent id : ${item2.parentId}                 --%> --%>
+<!--                 <p class="mb-0"> -->
+<%--                   ${item2.content } --%>
+<!--                 </p> -->
+<!--                 <div class="d-flex justify-content-between align-items-center"> -->
+<!--                   <p class="small mb-0" style="color: #aaa;"> -->
+<!--                     <button class="btn btn-link" id="reply2">• Reply</button>  -->
+<!--                   </p> -->
+<!--                   <div class="d-flex flex-row"> -->
+<!--                     <i class="far fa-check-circle text-primary"></i> -->
+<!--                   </div> -->
+<!--                 </div> -->
+<!--               </div> -->
+<!--             </div> -->
+            
+<%--             <c:forEach var="item3" items="${comment.listComment}"> --%>
+<%--           <c:if test="${item3.parentId == item2.id}"> --%>
+<!--           <hr class="my-0" /> -->
+<!--           		 <div class="card-body p-4" style="margin-left: 5em"> -->
+<!--             <div class="d-flex flex-start"> -->
+<!--               <img class="rounded-circle shadow-1-strong me-3" -->
+<!--                 src="https://mdbcdn.b-cdn.net/img/Photos/Avatars/img%20(23).webp" alt="avatar" width="60" -->
+<!--                 height="60" /> -->
+<!--               <div> -->
+<%--              <b>${ item3.fullName }</b>  --%>
+<!--                 <h6 class="fw-bold mb-1"></h6> -->
+<!--                 <div class="d-flex align-items-center mb-3"> -->
+<!--                   <p class="mb-0"> -->
+<%--                   <c:set var="today" value="${item3.createdDate }" /> --%>
+<%--                     <span class="badge bg-success"><fmt:formatDate pattern="dd-MM-yyyy HH:mm" value="${today}" /></span> --%>
+<!--                   </p> -->
+<!--                   <a href="#!" class="link-muted"><i class="fas fa-pencil-alt ms-2"></i></a> -->
+<!--                   <a href="#!" class="link-muted"><i class="fas fa-redo-alt ms-2"></i></a> -->
+<!--                   <a href="#!" class="link-muted"><i class="fas fa-heart ms-2"></i></a> -->
+<!--                 </div> -->
+<%-- <%--                 Id comment: ${item3.id }<br> --%> --%>
+<%-- <%-- 				Parent id : ${item3.parentId}                 --%> --%>
+<!--                 <p class="mb-0"> -->
+<%--                   ${item3.content } --%>
+<!--                 </p> -->
+<!--                 <div class="d-flex justify-content-between align-items-center"> -->
+<!--                   <p class="small mb-0" style="color: #aaa;"> -->
+<!--                     <button class="btn btn-link" id="reply3">• Reply</button>  -->
+<!--                   </p> -->
+<!--                   <div class="d-flex flex-row"> -->
+<!--                     <i class="far fa-check-circle text-primary"></i> -->
+<!--                   </div> -->
+<!--                 </div> -->
+<!--               </div> -->
+<!--             </div> -->
+            
+<!--           </div> -->
+<%--           <c:forEach var="item4" items="${comment.listComment}"> --%>
+<%--           <c:if test="${item4.parentId == item3.id}"> --%>
+<!--           <hr class="my-0" /> -->
+<!--           		 <div class="card-body p-4" style="margin-left: 5em"> -->
+<!--             <div class="d-flex flex-start"> -->
+<!--               <img class="rounded-circle shadow-1-strong me-3" -->
+<!--                 src="https://mdbcdn.b-cdn.net/img/Photos/Avatars/img%20(23).webp" alt="avatar" width="60" -->
+<!--                 height="60" /> -->
+<!--               <div> -->
+<%--              <b>${ item4.fullName }</b>  --%>
+<!--                 <h6 class="fw-bold mb-1"></h6> -->
+<!--                 <div class="d-flex align-items-center mb-3"> -->
+<!--                   <p class="mb-0"> -->
+<%--                   <c:set var="today" value="${item4.createdDate }" /> --%>
+<%--                     <span class="badge bg-success"><fmt:formatDate pattern="dd-MM-yyyy HH:mm" value="${today}" /></span> --%>
+<!--                   </p> -->
+<!--                   <a href="#!" class="link-muted"><i class="fas fa-pencil-alt ms-2"></i></a> -->
+<!--                   <a href="#!" class="link-muted"><i class="fas fa-redo-alt ms-2"></i></a> -->
+<!--                   <a href="#!" class="link-muted"><i class="fas fa-heart ms-2"></i></a> -->
+<!--                 </div> -->
+<%-- <%--                 Id comment: ${item4.id }<br> --%> --%>
+<%-- <%-- 				Parent id : ${item4.parentId}                 --%> --%>
+<!--                 <p class="mb-0"> -->
+<%--                   ${item4.content } --%>
+<!--                 </p> -->
+<!--                 <div class="d-flex justify-content-between align-items-center"> -->
+<!--                   <p class="small mb-0" style="color: #aaa;"> -->
+<!--                     <button class="btn btn-link" id="reply4">• Reply</button>  -->
+<!--                   </p> -->
+<!--                   <div class="d-flex flex-row"> -->
+<!--                     <i class="far fa-check-circle text-primary"></i> -->
+<!--                   </div> -->
+<!--                 </div> -->
+<!--               </div> -->
+<!--             </div> -->
+<!--           </div> -->
+<%--           </c:if> --%>
+<%--           </c:forEach> --%>
+<%--           </c:if> --%>
+<%--           </c:forEach> --%>
+<!--           </div> -->
+<%--           </c:if> --%>
+<%--           </c:forEach> --%>
+<!--           </div> -->
+<%--           </c:if> --%>
           
-		</c:forEach>
+<%-- 		</c:forEach> --%>
 
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
+<!--         </div> -->
+<!--       </div> -->
+<!--     </div> -->
+<!--   </div> -->
+<!-- </section> -->
 
 
 <script type="text/javascript">
