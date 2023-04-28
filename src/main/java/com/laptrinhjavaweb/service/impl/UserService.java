@@ -74,33 +74,19 @@ public class UserService implements IUserService{
 			
 			RoleEntity r1 = new RoleEntity();
 			if(userEntity.getUserName().startsWith("admin") || userEntity.getUserName().startsWith("quang")) {
-				r1.setId(1L);
+				r1.setId(1L); // set role là Admin
 			}else {
 				r1.setId(2L); // set role là Nhân Viên	
 			}
 			List<RoleEntity> role = new ArrayList<RoleEntity>();
 			role.add(r1);
-			
 			userEntity.setRoles(role);
 			
-			UserEntity save = userRepository.save(userEntity);
+			UserEntity user = userRepository.save(userEntity);
 			
-			if(save != null) {
-				// Gửi email cho khách hàng
-				DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss");
-				LocalDateTime now = LocalDateTime.now();
-				
-				final String baseUrl = 
-						ServletUriComponentsBuilder.fromCurrentContextPath().build().toUriString();
-				
-				String link = baseUrl + "/xac-thuc?maKhachHang=" + save.getId() + "&maXacThuc="
-						+ save.getVerificationCode();
-				
-				System.out.println(link);
-				
-				Email.sendEmail(save.getEmail(), "Xác thực tài khoản để đăng nhập | " + dtf.format(now),
-						getNoiDungEmail(save, link));
-				return userConverter.toDTO(save);
+			if(user != null) {
+				sendEmailToUser(user);
+				return userConverter.toDTO(user);
 			}
 		}
 		return null;
@@ -108,7 +94,24 @@ public class UserService implements IUserService{
 		
 	}
 	
-	public static String getNoiDungEmail(UserEntity kh, String link) {
+	public void sendEmailToUser(UserEntity user) {
+		// Gửi email cho khách hàng
+		DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss");
+		LocalDateTime now = LocalDateTime.now();
+		
+		final String baseUrl = 
+				ServletUriComponentsBuilder.fromCurrentContextPath().build().toUriString();
+		
+		String link = baseUrl + "/xac-thuc?maKhachHang=" + user.getId() + "&maXacThuc="
+				+ user.getVerificationCode();
+		
+		System.out.println(link);
+		
+		Email.sendEmail(user.getEmail(), "Xác thực tài khoản để đăng nhập | " + dtf.format(now),
+				getEmailContent(user, link));
+	}
+	
+	public static String getEmailContent(UserEntity kh, String link) {
 		SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
 		Calendar c = Calendar.getInstance();
 		c.add(Calendar.MINUTE, 2); // thời gian hiệu lực: 2 phút
@@ -157,6 +160,11 @@ public class UserService implements IUserService{
 	@Override
 	public void delete(Long id) {
 		userRepository.delete(id);
+	}
+
+	@Override
+	public UserDTO findByUserName(String userName) {
+		return userConverter.toDTO(userRepository.findOneByUserName(userName));
 	}
 
 }

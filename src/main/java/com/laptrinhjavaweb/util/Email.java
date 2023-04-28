@@ -19,7 +19,7 @@ public class Email {
 	final static String from = "quangtrinhhuynh02@gmail.com";
 	final static String password = "snvrqopjhhrptbgb";
 	
-	public static boolean sendEmail(String to, String tieuDe, String noiDung) {
+	public static void sendEmail(String to, String tieuDe, String noiDung) {
 		
 
 		// Properties : khai báo các thuộc tính
@@ -39,7 +39,7 @@ public class Email {
 			}
 		};
 
-		// Phiên làm việc (để gửi mail)
+		// Session của Email (để gửi mail)
 		Session session = Session.getInstance(props, auth);
 		// Thông qua thuộc tính "props" và tài khoản "auth" (để gửi email)
 
@@ -67,11 +67,9 @@ public class Email {
 			// Gửi email
 			Transport.send(msg);
 			System.out.println("Gửi email thành công");
-			return true;
 		} catch (MessagingException e) {
-			System.out.println("Gửi email thất bại");
 			e.printStackTrace();
-			return false;
+			System.out.println("Gửi email thất bại");
 		}
 	}
 

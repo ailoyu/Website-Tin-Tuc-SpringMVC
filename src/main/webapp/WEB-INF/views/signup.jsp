@@ -143,6 +143,7 @@
 			
 
 		});
+		
 
 		function addNew(data) {
 			$.ajax({
@@ -152,7 +153,7 @@
 				data : JSON.stringify(data), // parse từ JavaScript Object -> JSON 
 				dataType : 'json', // nhận kiểu json từ server -> client
 				success : function(result) {
-					window.location.href = "${validateURL}";
+					window.location.href = "${validateURL}?id="+result.id;
 				},
 				error : function(error) {
 					window.location.href = "${registerURL}?&message=error_system";

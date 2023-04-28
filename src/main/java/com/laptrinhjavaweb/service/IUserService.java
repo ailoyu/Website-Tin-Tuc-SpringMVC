@@ -7,4 +7,5 @@ public interface IUserService {
 	UserDTO findById(Long id);
 	UserDTO update(UserDTO dto);
 	void delete(Long id);
+	UserDTO findByUserName(String userName);
 }

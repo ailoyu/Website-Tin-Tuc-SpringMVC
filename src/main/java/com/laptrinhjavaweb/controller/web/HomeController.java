@@ -35,8 +35,9 @@ public class HomeController {
 
 	@Autowired
 	private INewService newService;
-	
-	@Autowired IUserService userService;
+
+	@Autowired
+	IUserService userService;
 
 	// Request Mapping: nhận đường link url, dùng method: get
 	@RequestMapping(value = "/trang-chu", method = RequestMethod.GET)
@@ -62,7 +63,7 @@ public class HomeController {
 			pageable = new PageRequest(model.getPage() - 1, model.getLimit());
 			model.setListResult(newService.findAll(pageable));
 			model.setTotalItem(newService.getTotalItem());
-			
+
 			// Set tin mới nhất
 			model.setListHotNews(newService.findByHotNew());
 		}
@@ -74,7 +75,7 @@ public class HomeController {
 
 	@RequestMapping(value = "/the-loai", method = RequestMethod.GET)
 	public ModelAndView showCategory(@RequestParam(value = "categoryId", required = false) Long categoryId,
-									@RequestParam(value = "page", required = false) Integer page) {
+			@RequestParam(value = "page", required = false) Integer page) {
 		ModelAndView mav = new ModelAndView();
 		mav = new ModelAndView("web/home"); // home.jsp
 		mav.addObject("categories", categoryService.findAllCategory());
@@ -93,10 +94,10 @@ public class HomeController {
 		return mav;
 
 	}
-	
+
 	@RequestMapping(value = "/search", method = RequestMethod.GET)
 	public ModelAndView timKiem(@RequestParam(value = "key", required = false) String key,
-								@RequestParam(value = "page", required = false) Integer page) {
+			@RequestParam(value = "page", required = false) Integer page) {
 		if (key.isEmpty()) {
 			return homePage(null, null);
 		} else {
@@ -105,17 +106,18 @@ public class HomeController {
 			page = (page == null) ? 1 : page;
 			model.setPage(page);
 			// truyền page và limit từ client vào
-			model.setListResult(newService.findByTitleName(key, (model.getPage() - 1) * model.getLimit(), model.getLimit()));
+			model.setListResult(
+					newService.findByTitleName(key, (model.getPage() - 1) * model.getLimit(), model.getLimit()));
 			model.setTotalItem(newService.getTotalItemByTitle(key));
 			model.setTotalPage((int) Math.ceil((double) model.getTotalItem() / model.getLimit()));
-			
+
 			mav.addObject("key", key);
 			mav.addObject("categories", categoryService.findAllCategory());
 			mav.addObject("model", model);
 			return mav;
 		}
 	}
-	
+
 	@Autowired
 	private ICommentService commentService;
 
@@ -136,28 +138,27 @@ public class HomeController {
 	@RequestMapping(value = "/dang-nhap", method = RequestMethod.GET)
 	public ModelAndView loginPage(HttpServletRequest request) { // modelAndView: Đẩy data từ model ra view (login.jsp)
 		ModelAndView mav = new ModelAndView("login"); // login.jsp
-		if(request.getParameter("message") != null) {
-	    	 Map<String, String> message = messageUtil.getMessage(request.getParameter("message"));
-	    	 mav.addObject("message", message.get("message"));
-	    	 mav.addObject("alert", message.get("alert"));
-	      }
+		if (request.getParameter("message") != null) {
+			Map<String, String> message = messageUtil.getMessage(request.getParameter("message"));
+			mav.addObject("message", message.get("message"));
+			mav.addObject("alert", message.get("alert"));
+		}
 		return mav;
 	}
-	
+
 	@Autowired
 	private MessageUtil messageUtil;
-	
+
 	@RequestMapping(value = "/dang-ky", method = RequestMethod.GET)
 	public ModelAndView signupPage(HttpServletRequest request) {
 		ModelAndView mav = new ModelAndView("signup");
-		if(request.getParameter("message") != null) {
-	    	 Map<String, String> message = messageUtil.getMessage(request.getParameter("message"));
-	    	 mav.addObject("message", message.get("message"));
-	    	 mav.addObject("alert", message.get("alert"));
-	      }
+		if (request.getParameter("message") != null) {
+			Map<String, String> message = messageUtil.getMessage(request.getParameter("message"));
+			mav.addObject("message", message.get("message"));
+			mav.addObject("alert", message.get("alert"));
+		}
 		return mav;
 	}
-	
 
 	@RequestMapping(value = "/accessDenied", method = RequestMethod.GET)
 	public ModelAndView accessDenied() { // modelAndView: Đẩy data từ model ra view (login.jsp)
@@ -173,45 +174,48 @@ public class HomeController {
 		}
 		return new ModelAndView("redirect:/trang-chu");
 	}
-	
+
 	@RequestMapping(value = "/xac-thuc", method = RequestMethod.GET)
 	public ModelAndView xacThuc(@RequestParam(value = "maKhachHang", required = false) Long id,
-								@RequestParam(value = "maXacThuc", required = false) String maXacThuc) {
-		
+			@RequestParam(value = "maXacThuc", required = false) String maXacThuc) {
+
 		UserDTO userDTO = userService.findById(id);
-		
+		ModelAndView mav = new ModelAndView("validation");
 		String message = "";
-		
-		if(userDTO != null) {
-			// Kiểm tra mã xác thực nhập vào có giống trong mã xac thuc trong dtbase kh?
-			if(userDTO.getVerificationCode().equals(maXacThuc)) {
-				// Kiểm tra xem mã xác thực còn hiệu lực hay không?
-				java.sql.Date now = new Date(System.currentTimeMillis());
-				if(now.before(userDTO.getValidTime())) {
-					userDTO.setStatus(1);
+		String alert = "danger";
+
+		if (userDTO != null && userDTO.getStatus() == 0) {
+			// Kiểm tra xem mã xác thực còn hiệu lực hay không?
+			java.sql.Date now = new Date(System.currentTimeMillis());
+			if (now.before(userDTO.getValidTime())) {
+				// Kiểm tra mã xác thực nhập vào có giống trong mã xac thuc trong dtbase kh?
+				if (userDTO.getVerificationCode().equals(maXacThuc)) {
 					userService.update(userDTO);
 					message = "Xác thực thành công";
+					alert = "success";
 				} else {
-					message = "Hết thời gian xác thực, vui lòng đăng ký lại!";
-					userService.delete(userDTO.getId());
+					message = "Mã xác thực không khớp !";
 				}
-			}else {
-				message = "Mã xác thực không khớp !";
+			} else {
+				message = "Hết thời gian xác thực, vui lòng đăng ký lại!";
+				userService.delete(userDTO.getId());
 			}
 		} else {
 			message = "Tài khoản không tồn tại";
 		}
-		ModelAndView mav = new ModelAndView("validation");
+
 		mav.addObject("message", message);
-		
+		mav.addObject("alert", alert);
+		mav.addObject("id", id);
+
 		return mav;
 	}
-	
+
 	@RequestMapping(value = "/thong-bao", method = RequestMethod.GET)
-	public ModelAndView thongBao() {
+	public ModelAndView thongBao(@RequestParam(value = "id", required = false) Long id) {
 		ModelAndView mav = new ModelAndView("validation");
+		mav.addObject("id", id);
 		return mav;
 	}
-	
-	
+
 }
