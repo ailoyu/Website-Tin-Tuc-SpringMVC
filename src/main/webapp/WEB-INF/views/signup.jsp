@@ -76,10 +76,18 @@
 								id="dongYNhanMail" name="dongYNhanMail"> <label
 								for="dongYNhanMail" class="form-label">Đồng ý nhận email</label>
 						</div>
-						<input class="btn btn-primary form-control" type="button"
+						<div class="mb-3">
+							<input class="btn btn-primary form-control" type="button"
 							value="Đăng Ký" id="submit" style="visibility: hidden;" />
+							<br><br>
+							<div class="" role="status" id="loading" style="margin-left: 15.5em">
+		 						 <span class="sr-only">Loading...</span>
+							</div>
+						</div>
+						
 					</div>
 				</div>
+						
 			</form>
 		</div>
 	</div>
@@ -130,6 +138,7 @@
 			if (matKhau != matKhauNhapLai) {
 				window.location.href = "${registerURL}?&message=confirm_password";			
 			} else{
+				$('#loading').addClass('spinner-border');
 				// cần truyền vào url: /api/new
 				var formData = $('#formSubmit').serializeArray(); // các dữ liệu dc nhập (thay thế ở trên)
 				var data = {};
