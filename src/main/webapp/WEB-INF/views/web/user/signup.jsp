@@ -27,7 +27,7 @@
 			<c:if test="${not empty message }">
 				<div class="alert alert-${alert}">${message}</div>
 			</c:if>
-			<form class="form" method="post" id="formSubmit">
+			<form class="form" id="formSubmit">
 				<div class="row">
 					<div class="col-md-6">
 						<h3>Tài Khoản</h3>
@@ -73,7 +73,7 @@
 						</div>
 						<div class="mb-3">
 							<input type="checkbox" class="form-check-input"
-								id="dongYNhanMail" name="dongYNhanMail"> <label
+								id="dongYNhanMail"> <label
 								for="dongYNhanMail" class="form-label">Đồng ý nhận email</label>
 						</div>
 						<div class="mb-3">
@@ -116,22 +116,12 @@
 
 		}
 		
-		var showLoading = function() {
-			Swal.fire({
-				  title: 'Uploading...',
-				  html: 'Please wait...',
-				  allowEscapeKey: false,
-				  allowOutsideClick: false,
-				  showConfirmButton: false,
-				  willOpen: () => {
-				    Swal.showLoading()
-				  }
-				});
-		}
 
 		$('#submit').click(function(e) {
 			matKhau = document.getElementById("password").value;
 			matKhauNhapLai = document.getElementById("matKhauNhapLai").value;
+			
+			var emailReceived = $('#dongYNhanMail').is(':checked');
 			
 			e.preventDefault(); // Nếu ko có, sẽ mặc định submit vào url hiện tại đang đứng
 			
@@ -147,6 +137,11 @@
 				$.each(formData, function(i, v) {
 					data["" + v.name + ""] = v.value;
 				});
+				if(emailReceived == true){
+					data["emailReceived"] = true;
+				} else if(emailReceived == false){
+					data["emailReceived"] = false;
+				}
 				addNew(data);
 			}
 			

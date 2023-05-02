@@ -9,7 +9,7 @@
 </head>
 <body>
 <div class="container">
-	<h3>Đăng ký thành công! Vui lòng kiểm tra email để xác thực tài
+	<h3>Vui lòng kiểm tra email để xác thực tài
 				khoản của bạn.</h3>
 			<h3 style="display: inline;">Bạn có 2 phút để xác thực tài
 				khoản!</h3>

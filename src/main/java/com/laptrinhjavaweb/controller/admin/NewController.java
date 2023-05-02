@@ -33,13 +33,14 @@ public class NewController {
 		
 	// Request Mapping: nhận đường link url, dùng method: get
 	 @RequestMapping(value = "/quan-tri/bai-viet/danh-sach", method = RequestMethod.GET)
-	   public ModelAndView showList(@RequestParam("page") int page, 
+	   public ModelAndView showList(@RequestParam(value = "page", required = false) Integer page, 
 			   						HttpServletRequest request) { 
 		 ModelAndView mav = new ModelAndView("admin/new/list"); 
 		 
 		 
 		 NewDTO model = new NewDTO();
 	     // truyền page và limit từ client vào
+		 page = (page == null) ? 1 : page;
 	     model.setPage(page);
 	     // Phân trang
 	     Pageable pageable = new PageRequest(page - 1, model.getLimit()); // page - 1: index đầu tiên của trang

@@ -59,6 +59,7 @@ public class CommentService implements ICommentService {
 			// Set thuộc tính riêng trong comment
 			newDTO.setFullName(item.getUser().getFullName());
 			newDTO.setCreatedDate((Timestamp) item.getCreatedDate());
+			newDTO.setAvatar(item.getUser().getAvatar());
 			
 			models.add(newDTO);
 		}

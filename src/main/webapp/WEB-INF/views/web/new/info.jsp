@@ -39,7 +39,7 @@
 		<%=SecurityUtils.getPrincipal().getFullName()%></h5>
 	<h5>
 		Username:
-		<%=SecurityUtils.getPrincipal().getUserName()%></h5>
+		<%=SecurityUtils.getPrincipal().getUsername()%></h5>
 	<h5>
 		Email:
 		<%=SecurityUtils.getPrincipal().getEmail()%></h5>

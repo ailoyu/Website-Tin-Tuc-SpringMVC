@@ -18,8 +18,9 @@
 						<ul class="breadcrumb">
 							<li>
 								<i class="ace-icon fa fa-home home-icon"></i>
-								<a href="#">Trang chủ</a>
+								<a href="<c:url value='/quan-tri/trang-chu'/>">Trang chủ</a>
 							</li>
+							<li class="active">Danh sách bài viết</li>
 						</ul>
 						<!-- /.breadcrumb -->
 					</div>
@@ -75,7 +76,7 @@
 											<table class="table table-bordered">
 												<thead>
 													<tr>
-														<th><input type="checkbox" id="checkAll"></th>
+														<th><input type="checkbox" onClick="toggle(this)" id="checkAll"></th>
 														<th>Tên bài viết</th>
 														<th>Mô tả ngắn</th>
 														<th>Thao tác</th>
@@ -84,7 +85,7 @@
 												<tbody>
 													<c:forEach var="item" items="${model.listResult}">
 														<tr>
-															<td><input type="checkbox" id="checkbox_${item.id}" value="${item.id}"></td>
+															<td><input type="checkbox" id="checkbox_${item.id}" name="foo" value="${item.id}"></td>
 															<td>${item.title}</td>
 															<td>${item.shortDescription}</td>
 															<td>
@@ -133,6 +134,13 @@
 	            }
 	        });
 	    });
+		
+		function toggle(source) {
+			  checkboxes = document.getElementsByName('foo');
+			  for(var i=0, n=checkboxes.length;i<n;i++) {
+			    checkboxes[i].checked = source.checked;
+			  }
+		}
 		
 		
 		function warningBeforeDelete() {

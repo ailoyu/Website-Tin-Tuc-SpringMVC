@@ -38,7 +38,17 @@ public class UserEntity extends BaseEntity {
 	@Column(name = "valid_time")
 	private Date validTime;
 	
+	@Column(name = "emailReceived")
+	private Boolean emailReceived;
 	
+	@Column(name = "avatar")
+	private String avatar;
+	
+	@Column(name = "change_email_status")
+	private Boolean changeEmailStatus;
+	
+	@Column(name = "new_password")
+	private String newPassword;
 	
 	// Bảng trung gian tên "user_role", lấy userid và roleid (Chỉ cần bỏ user, ko cần bỏ bên role)
 	@ManyToMany(fetch = FetchType.LAZY)
@@ -120,5 +130,39 @@ public class UserEntity extends BaseEntity {
 	public void setValidTime(Date validTime) {
 		this.validTime = validTime;
 	}
+
+	public Boolean getEmailReceived() {
+		return emailReceived;
+	}
+
+	public void setEmailReceived(Boolean emailReceived) {
+		this.emailReceived = emailReceived;
+	}
+
+	public String getAvatar() {
+		return avatar;
+	}
+
+	public void setAvatar(String avatar) {
+		this.avatar = avatar;
+	}
+
+	public Boolean getChangeEmailStatus() {
+		return changeEmailStatus;
+	}
+
+	public void setChangeEmailStatus(Boolean changeEmailStatus) {
+		this.changeEmailStatus = changeEmailStatus;
+	}
+
+	public String getNewPassword() {
+		return newPassword;
+	}
+
+	public void setNewPassword(String newPassword) {
+		this.newPassword = newPassword;
+	}
 	
+	
+
 }

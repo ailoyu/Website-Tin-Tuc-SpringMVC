@@ -13,6 +13,9 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -26,6 +29,7 @@ import com.laptrinhjavaweb.service.ICommentService;
 import com.laptrinhjavaweb.service.INewService;
 import com.laptrinhjavaweb.service.IUserService;
 import com.laptrinhjavaweb.util.MessageUtil;
+import com.laptrinhjavaweb.util.SecurityUtils;
 
 @Controller(value = "homeControllerOfWeb") // controller của thằng spring mvc
 public class HomeController {
@@ -124,7 +128,7 @@ public class HomeController {
 	@RequestMapping(value = "/thong-tin-bai-viet", method = RequestMethod.GET)
 	public ModelAndView showInfo(@RequestParam(value = "id", required = false) Long id) {
 		ModelAndView mav = new ModelAndView();
-		mav = new ModelAndView("/web/info");
+		mav = new ModelAndView("/web/new/info");
 		NewDTO model = new NewDTO();
 		model.setId(id);
 		model = newService.findById(id);
@@ -137,7 +141,7 @@ public class HomeController {
 
 	@RequestMapping(value = "/dang-nhap", method = RequestMethod.GET)
 	public ModelAndView loginPage(HttpServletRequest request) { // modelAndView: Đẩy data từ model ra view (login.jsp)
-		ModelAndView mav = new ModelAndView("login"); // login.jsp
+		ModelAndView mav = new ModelAndView("web/user/login"); // login.jsp
 		if (request.getParameter("message") != null) {
 			Map<String, String> message = messageUtil.getMessage(request.getParameter("message"));
 			mav.addObject("message", message.get("message"));
@@ -151,7 +155,7 @@ public class HomeController {
 
 	@RequestMapping(value = "/dang-ky", method = RequestMethod.GET)
 	public ModelAndView signupPage(HttpServletRequest request) {
-		ModelAndView mav = new ModelAndView("signup");
+		ModelAndView mav = new ModelAndView("web/user/signup");
 		if (request.getParameter("message") != null) {
 			Map<String, String> message = messageUtil.getMessage(request.getParameter("message"));
 			mav.addObject("message", message.get("message"));
@@ -180,7 +184,7 @@ public class HomeController {
 			@RequestParam(value = "maXacThuc", required = false) String maXacThuc) {
 
 		UserDTO userDTO = userService.findById(id);
-		ModelAndView mav = new ModelAndView("validation");
+		ModelAndView mav = new ModelAndView("web/user/validation");
 		String message = "";
 		String alert = "danger";
 
@@ -200,8 +204,25 @@ public class HomeController {
 				message = "Hết thời gian xác thực, vui lòng đăng ký lại!";
 				userService.delete(userDTO.getId());
 			}
-		} else {
-			message = "Tài khoản không tồn tại";
+		}
+
+		if (userDTO != null && userDTO.getChangeEmailStatus() == false) {
+			// Kiểm tra xem mã xác thực còn hiệu lực hay không?
+			java.sql.Date now = new Date(System.currentTimeMillis());
+			if (now.before(userDTO.getValidTime())) {
+				// Kiểm tra mã xác thực nhập vào có giống trong mã xac thuc trong dtbase kh?
+				if (userDTO.getVerificationCode().equals(maXacThuc)) {
+					userDTO.setChangeEmailStatus(true);
+					userDTO.setPassword(userDTO.getNewPassword());
+					userService.update2(userDTO);
+					message = "Xác thực thành công";
+					alert = "success";
+				} else {
+					message = "Mã xác thực không khớp !";
+				}
+			} else {
+				message = "Hết thời gian xác thực, vui lòng xác thực lại!";
+			}
 		}
 
 		mav.addObject("message", message);
@@ -213,9 +234,67 @@ public class HomeController {
 
 	@RequestMapping(value = "/thong-bao", method = RequestMethod.GET)
 	public ModelAndView thongBao(@RequestParam(value = "id", required = false) Long id) {
-		ModelAndView mav = new ModelAndView("validation");
+		ModelAndView mav = new ModelAndView("web/user/validation");
 		mav.addObject("id", id);
 		return mav;
+	}
+
+	@RequestMapping(value = "/thay-doi-thong-tin", method = RequestMethod.GET)
+	public ModelAndView thayDoiThongTin(HttpServletRequest request) {
+		ModelAndView mav = new ModelAndView("web/user/changeInfo");
+		UserDTO userDTO = userService.findByUserName(SecurityUtils.getPrincipal().getUsername());
+		mav.addObject("model", userDTO);
+		if (request.getParameter("message") != null) {
+			Map<String, String> message = messageUtil.getMessage(request.getParameter("message"));
+			mav.addObject("message", message.get("message"));
+			mav.addObject("alert", message.get("alert"));
+		}
+		return mav;
+	}
+
+	@RequestMapping(value = "/thay-doi-mat-khau", method = RequestMethod.GET)
+	public ModelAndView thayDoiMatKhau(HttpServletRequest request) {
+		ModelAndView mav = new ModelAndView("web/user/changePassword");
+		if (request.getParameter("message") != null) {
+			Map<String, String> message = messageUtil.getMessage(request.getParameter("message"));
+			mav.addObject("message", message.get("message"));
+			mav.addObject("alert", message.get("alert"));
+		}
+		return mav;
+	}
+
+	@GetMapping(value = { "/quen-mat-khau/{message}", "/quen-mat-khau" })
+	public ModelAndView quenMatKhau(@PathVariable(value = "message", required = false) String message) {
+		ModelAndView mav = new ModelAndView("web/user/forgotPassword");
+		if (message != null) {
+			Map<String, String> message1 = messageUtil.getMessage(message);
+			mav.addObject("message", message1.get("message"));
+			mav.addObject("alert", message1.get("alert"));
+		}
+		return mav;
+	}
+
+	@GetMapping(value = { "/reset-mat-khau/{id}" })
+	public ModelAndView resetMatKhau(@PathVariable Long id,
+			@RequestParam(value = "message", required = false) String message) {
+		ModelAndView mav = new ModelAndView("web/user/resetPassword");
+		if (message != null) {
+			Map<String, String> message1 = messageUtil.getMessage(message);
+			mav.addObject("message", message1.get("message"));
+			mav.addObject("alert", message1.get("alert"));
+		}
+		mav.addObject("userId", id);
+		return mav;
+	}
+
+	@PostMapping("/forgotPassword")
+	public String forgotPassword(@RequestParam String email, @RequestParam String userName) {
+		UserDTO userDTO = userService.findOneByEmailAndUserName(email, userName);
+		if (userDTO != null) {
+			return "redirect:/reset-mat-khau/" + userDTO.getId();
+		} else {
+			return "redirect:/quen-mat-khau/invalid_username_email";
+		}
 	}
 
 }

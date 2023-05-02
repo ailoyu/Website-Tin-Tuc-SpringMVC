@@ -32,8 +32,8 @@ public class MessageUtil {
 		} else if(message.equals("register_fail")) {
 			result.put("message", SystemConstant.REGISTER_FAIL);
 			result.put("alert", "danger");
-		} else if(message.equals("incorrect_username_password")) {
-			result.put("message", SystemConstant.INCORRECT_USERNAME_PASSWORD);
+		} else if(message.equals("incorrect_password")) {
+			result.put("message", SystemConstant.INCORRECT_PASSWORD);
 			result.put("alert", "danger");
 		} else if(message.equals("invalid_account")) {
 			result.put("message", SystemConstant.INVALID_ACCOUNT);
@@ -41,8 +41,31 @@ public class MessageUtil {
 		} else if(message.equals("confirm_password")) {
 			result.put("message", SystemConstant.CONFIRM_PASSWORD);
 			result.put("alert", "danger");
+		} else if(message.equals("update_account_success")) {
+			result.put("message", SystemConstant.UPDATE_ACCOUNT_SUCCESS);
+			result.put("alert", "success");
+		} else if(message.equals("update_account_fail")) {
+			result.put("message", SystemConstant.UPDATE_ACCOUNT_FAIL);
+			result.put("alert", "danger");
+		} else if(message.equals("inavailable_account")) {
+			result.put("message", SystemConstant.INAVAILABLE_ACCOUNT);
+			result.put("alert", "danger");
+		} else if(message.equals("same_password")) {
+			result.put("message", SystemConstant.SAME_PASSWORD);
+			result.put("alert", "danger");
+		} else if(message.equals("change_password_success")) {
+			result.put("message", SystemConstant.CHANGE_PASSWORD_SUCCESS);
+			result.put("alert", "success");
+		} else if(message.equals("change_password_fail")) {
+			result.put("message", SystemConstant.CHANGE_PASSWORD_FAIL);
+			result.put("alert", "danger");
+		} else if(message.equals("blank_password")) {
+			result.put("message", SystemConstant.BLANK_PASSWORD);
+			result.put("alert", "danger");
+		} else if(message.equals("invalid_username_email")) {
+			result.put("message", SystemConstant.INVALID_USERNAME_EMAIL);
+			result.put("alert", "danger");
 		}
-
 		return result;
 	}
 

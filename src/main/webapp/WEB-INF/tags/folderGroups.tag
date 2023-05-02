@@ -10,7 +10,7 @@
 	<div class="card-body p-4">
 		<div class="d-flex flex-start">
 			<img class="rounded-circle shadow-1-strong me-3"
-				src="https://mdbcdn.b-cdn.net/img/Photos/Avatars/img%20(23).webp"
+				src="${ item.avatar }"
 				alt="avatar" width="60" height="60" />
 			<div>
 				<b>${ item.fullName }</b>
@@ -45,7 +45,7 @@
 				<div class="card-body p-4" style="margin-left: 5em">
 					<div class="d-flex flex-start">
 						<img class="rounded-circle shadow-1-strong me-3"
-							src="https://mdbcdn.b-cdn.net/img/Photos/Avatars/img%20(23).webp"
+							src="${ item2.avatar }"
 							alt="avatar" width="60" height="60" />
 						<div>
 							<b>${ item2.fullName }</b>

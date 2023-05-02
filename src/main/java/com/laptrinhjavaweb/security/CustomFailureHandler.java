@@ -8,6 +8,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationFailureHandler;
 import org.springframework.stereotype.Component;
 
@@ -20,21 +21,30 @@ public class CustomFailureHandler extends SimpleUrlAuthenticationFailureHandler{
 	@Autowired
 	private UserRepository userRepository;
 	
+	@Autowired
+	private BCryptPasswordEncoder passwordEncode;
+	
 	@Override
 	public void onAuthenticationFailure(HttpServletRequest request, HttpServletResponse response,
 			AuthenticationException exception) throws IOException, ServletException {
 		
 		String username = exception.getAuthentication().getName();
+		String password = exception.getAuthentication().getCredentials().toString();
+		
 		
 		UserEntity userEntity = userRepository.findOneByUserName(username);
 		
+		
 		if(userEntity == null) {
-			getRedirectStrategy().sendRedirect(request, response, "/dang-nhap?message=incorrect_username_password");
+			getRedirectStrategy().sendRedirect(request, response, "/dang-nhap?message=inavailable_account");
 		} else {
+			boolean matKhau = passwordEncode.matches(password, userEntity.getPassword());
 			if(userEntity.getStatus() == 0) {
 				getRedirectStrategy().sendRedirect(request, response, "/dang-nhap?message=invalid_account");
+			} else if(matKhau == false) {
+				getRedirectStrategy().sendRedirect(request, response, "/dang-nhap?message=incorrect_password");
 			} else {
-				getRedirectStrategy().sendRedirect(request, response, "/dang-nhap?message=incorrect_username_password");
+				getRedirectStrategy().sendRedirect(request, response, "/dang-nhap?message=error_system");
 			}
 		}
 		

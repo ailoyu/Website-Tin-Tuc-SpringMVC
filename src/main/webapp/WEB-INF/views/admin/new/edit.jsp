@@ -18,13 +18,13 @@
 						<ul class="breadcrumb">
 							<li>
 								<i class="ace-icon fa fa-home home-icon"></i>
-								<a href="#">Home</a>
+								<a href="<c:url value='/quan-tri/trang-chu'/>">Trang chủ</a>
 							</li>
 
 							<li>
-								<a href="#">Forms</a>
+								<a href="<c:url value='/quan-tri/bai-viet/danh-sach'/>">Danh sách bài viết</a>
 							</li>
-							<li class="active">Form Elements</li>
+							<li class="active">Chỉnh sửa chi tiết</li>
 						</ul><!-- /.breadcrumb -->
 					</div>	
 					

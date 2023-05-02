@@ -15,6 +15,8 @@ public class CommentDTO extends AbstractDTO<CommentDTO> {
 	
 	private String fullName;
 	
+	private String avatar;
+	
 	private List<CommentDTO> listComment = new ArrayList<CommentDTO>();
 	
 	public String getContent() {
@@ -63,6 +65,14 @@ public class CommentDTO extends AbstractDTO<CommentDTO> {
 
 	public void setFullName(String fullName) {
 		this.fullName = fullName;
+	}
+
+	public String getAvatar() {
+		return avatar;
+	}
+
+	public void setAvatar(String avatar) {
+		this.avatar = avatar;
 	}
 
 	

@@ -34,6 +34,8 @@
 							Password
 						</div>
 						<button type="submit" class="btn btn-primary">Đăng nhập</button>
+						<br><br>
+						<a href="<c:url value='/quen-mat-khau' />" class="text-decoration-none">Quên mật khẩu?</a>
 					</form>
 
 

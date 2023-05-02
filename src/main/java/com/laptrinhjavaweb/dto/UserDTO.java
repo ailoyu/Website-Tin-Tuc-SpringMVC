@@ -10,6 +10,10 @@ public class UserDTO extends AbstractDTO<UserDTO> {
 	private int status;
 	private String verificationCode;
 	private Timestamp validTime;
+	private Boolean emailReceived;
+	private String avatar;
+	private String newPassword;
+	private Boolean changeEmailStatus;
 	
 	public String getFullName() {
 		return fullName;
@@ -52,6 +56,30 @@ public class UserDTO extends AbstractDTO<UserDTO> {
 	}
 	public void setVerificationCode(String verificationCode) {
 		this.verificationCode = verificationCode;
+	}
+	public Boolean getEmailReceived() {
+		return emailReceived;
+	}
+	public void setEmailReceived(Boolean emailReceived) {
+		this.emailReceived = emailReceived;
+	}
+	public String getAvatar() {
+		return avatar;
+	}
+	public void setAvatar(String avatar) {
+		this.avatar = avatar;
+	}
+	public String getNewPassword() {
+		return newPassword;
+	}
+	public void setNewPassword(String newPassword) {
+		this.newPassword = newPassword;
+	}
+	public Boolean getChangeEmailStatus() {
+		return changeEmailStatus;
+	}
+	public void setChangeEmailStatus(Boolean changeEmailStatus) {
+		this.changeEmailStatus = changeEmailStatus;
 	}
 	
 }

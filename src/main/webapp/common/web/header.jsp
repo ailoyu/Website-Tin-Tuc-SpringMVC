@@ -44,9 +44,9 @@
 									data-bs-toggle="dropdown" aria-expanded="false"> Welcome, <%=SecurityUtils.getPrincipal().getFullName()%></a>
 									<ul class="dropdown-menu">
 										<li><a class="dropdown-item" href="<c:url value='/quan-tri/trang-chu'/>">Trang quản trị</a></li>
-										<li><a class="dropdown-item" href="">Thay đổi thông
+										<li><a class="dropdown-item" href="<c:url value='/thay-doi-thong-tin' />">Thay đổi thông
 												tin</a></li>
-										<li><a class="dropdown-item" href="">Đổi mật khẩu</a></li>
+										<li><a class="dropdown-item" href="<c:url value='/thay-doi-mat-khau' />">Đổi mật khẩu</a></li>
 										<li><hr class="dropdown-divider"></li>
 										<li><a class="dropdown-item"
 											href="<c:url value='/thoat' />">Đăng xuất</a></li>
@@ -57,9 +57,9 @@
 									class="nav-link dropdown-toggle" href="#" role="button"
 									data-bs-toggle="dropdown" aria-expanded="false"> Welcome, <%=SecurityUtils.getPrincipal().getFullName()%></a>
 									<ul class="dropdown-menu">
-										<li><a class="dropdown-item" href="">Thay đổi thông
+										<li><a class="dropdown-item" href="<c:url value='/thay-doi-thong-tin' />">Thay đổi thông
 												tin</a></li>
-										<li><a class="dropdown-item" href="">Đổi mật khẩu</a></li>
+										<li><a class="dropdown-item" href="<c:url value='/thay-doi-mat-khau' />">Đổi mật khẩu</a></li>
 										<li><hr class="dropdown-divider"></li>
 										<li><a class="dropdown-item"
 											href="<c:url value='/thoat' />">Đăng xuất</a></li>

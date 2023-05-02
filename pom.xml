@@ -126,7 +126,6 @@
 		</dependency>
 
 
-
 		<!-- Spring Security -->
 		<dependency>
 			<groupId>org.springframework.security</groupId>
@@ -180,7 +179,8 @@
 		</dependency>
 		<!--end json -->
 
-		<!-- https://mvnrepository.com/artifact/commons-beanutils/commons-beanutils -->
+		<!--
+		https://mvnrepository.com/artifact/commons-beanutils/commons-beanutils -->
 		<dependency>
 			<groupId>commons-beanutils</groupId>
 			<artifactId>commons-beanutils</artifactId>
@@ -215,15 +215,13 @@
 			<version>1.6.2</version>
 		</dependency>
 
-		<!-- https://mvnrepository.com/artifact/com.sun.activation/javax.activation -->
+		<!--
+		https://mvnrepository.com/artifact/com.sun.activation/javax.activation -->
 		<dependency>
 			<groupId>com.sun.activation</groupId>
 			<artifactId>javax.activation</artifactId>
 			<version>1.2.0</version>
 		</dependency>
-
-
-
 
 
 	</dependencies>
@@ -238,6 +236,11 @@
 					<source>1.8</source>
 					<target>1.8</target>
 				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-war-plugin</artifactId>
+				<version>3.3.1</version>
 			</plugin>
 		</plugins>
 	</build>

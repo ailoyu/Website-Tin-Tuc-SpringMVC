@@ -28,10 +28,6 @@ public class MyUser extends User { // Custom lại User để thêm fullName
 		return fullName;
 	}
 
-	public String getUserName() {
-		return username;
-	}
-
 	public String getPassword() {
 		return password;
 	}

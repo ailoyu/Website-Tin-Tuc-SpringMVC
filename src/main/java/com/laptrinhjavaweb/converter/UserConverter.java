@@ -21,7 +21,10 @@ public class UserConverter {
 		result.setStatus(dto.getStatus());
 		result.setVerificationCode(dto.getVerificationCode());
 		result.setValidTime(dto.getValidTime());
-		
+		result.setEmailReceived(dto.getEmailReceived());
+		result.setAvatar(dto.getAvatar());
+		result.setChangeEmailStatus(dto.getChangeEmailStatus());
+		result.setNewPassword(dto.getNewPassword());
 		
 		return result;
 	}
@@ -43,6 +46,12 @@ public class UserConverter {
 			Timestamp valueOf = Timestamp.valueOf(sm.format(dto.getValidTime()));
 			result.setValidTime(valueOf);
 		}
+		Timestamp ts = new Timestamp(dto.getCreatedDate().getTime());
+		result.setCreatedDate(ts);
+		result.setEmailReceived(dto.getEmailReceived());
+		result.setAvatar(dto.getAvatar());
+		result.setChangeEmailStatus(dto.getChangeEmailStatus());
+		result.setNewPassword(dto.getNewPassword());
 		return result;
 	}
 	

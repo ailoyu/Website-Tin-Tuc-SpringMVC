@@ -10,8 +10,6 @@ import java.util.Calendar;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
@@ -24,93 +22,85 @@ import com.laptrinhjavaweb.repository.UserRepository;
 import com.laptrinhjavaweb.service.IUserService;
 import com.laptrinhjavaweb.util.Email;
 import com.laptrinhjavaweb.util.MaXacThuc;
-
+import com.laptrinhjavaweb.util.SecurityUtils;
 
 @Service // khai báo để AutoWired cho service
-public class UserService implements IUserService{
-	
+public class UserService implements IUserService {
+
 	@Autowired
 	private UserRepository userRepository;
-	
+
 	@Autowired
 	private UserConverter userConverter;
-	
-	@Bean
-	public PasswordEncoder encoder() {
-	    return new BCryptPasswordEncoder();
-	}
-	
+
 	@Autowired
 	private PasswordEncoder passwordEncoder;
-	
-	
+
 	@Override
 	public UserDTO save(UserDTO userDTO) {
-		
+
 		UserEntity timTaiKhoan = userRepository.findOneByUserNameAndStatus(userDTO.getUserName(), 0);
-		
+
 		String baoLoi = "";
-		
-		if(timTaiKhoan != null) {
+
+		if (timTaiKhoan != null) {
 			userRepository.delete(timTaiKhoan.getId());
 			baoLoi = "Đã xóa tài khoản chưa xác thực";
-		} 
-		
-		if(baoLoi.length() == 0 || baoLoi.equals("Đã xóa tài khoản chưa xác thực")) {
+		}
+
+		if (baoLoi.length() == 0 || baoLoi.equals("Đã xóa tài khoản chưa xác thực")) {
 			// Set mã xác thực
 			String maXacThuc = MaXacThuc.getMaXacThuc();
-			
+
 			// Set thời gian hiệu lực của mã xác thực
 			Calendar c = Calendar.getInstance();
 			c.add(Calendar.MINUTE, 2); // thời gian hiệu lực: 2 phút
 			Timestamp thoiGianHieuLucXacThuc = new Timestamp(c.getTimeInMillis());
-			
+
 			userDTO.setValidTime(thoiGianHieuLucXacThuc);
 			userDTO.setVerificationCode(maXacThuc);
 			userDTO.setStatus(0);
 			userDTO.setPassword(passwordEncoder.encode(userDTO.getPassword()));
-			
+			// Set avatar mặc định
+			userDTO.setAvatar("https://www.garyqi.com/wp-content/uploads/2017/01/default-avatar-500x500.jpg");
+
 			UserEntity userEntity = userConverter.toEntity(userDTO);
-			
+
 			RoleEntity r1 = new RoleEntity();
-			if(userEntity.getUserName().startsWith("admin") || userEntity.getUserName().startsWith("quang")) {
+			if (userEntity.getUserName().startsWith("admin") || userEntity.getUserName().startsWith("quang")) {
 				r1.setId(1L); // set role là Admin
-			}else {
-				r1.setId(2L); // set role là Nhân Viên	
+			} else {
+				r1.setId(2L); // set role là Nhân Viên
 			}
 			List<RoleEntity> role = new ArrayList<RoleEntity>();
 			role.add(r1);
 			userEntity.setRoles(role);
-			
+
 			UserEntity user = userRepository.save(userEntity);
-			
-			if(user != null) {
-				sendEmailToUser(user);
+
+			if (user != null) {
+				sendEmailToUser(user, "Xác thực tài khoản để đăng nhập | ");
 				return userConverter.toDTO(user);
 			}
 		}
 		return null;
-		
-		
+
 	}
-	
-	public void sendEmailToUser(UserEntity user) {
+
+	public void sendEmailToUser(UserEntity user, String content) {
 		// Gửi email cho khách hàng
 		DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss");
 		LocalDateTime now = LocalDateTime.now();
-		
-		final String baseUrl = 
-				ServletUriComponentsBuilder.fromCurrentContextPath().build().toUriString();
-		
-		String link = baseUrl + "/xac-thuc?maKhachHang=" + user.getId() + "&maXacThuc="
-				+ user.getVerificationCode();
-		
+
+		final String baseUrl = ServletUriComponentsBuilder.fromCurrentContextPath().build().toUriString();
+
+		String link = baseUrl + "/xac-thuc?maKhachHang=" + user.getId() + "&maXacThuc=" + user.getVerificationCode();
+
 		System.out.println(link);
-		
-		Email.sendEmail(user.getEmail(), "Xác thực tài khoản để đăng nhập | " + dtf.format(now),
-				getEmailContent(user, link));
+
+		Email.sendEmail(user.getEmail(), content + dtf.format(now), getEmailContent(user, link));
 	}
-	
+
 	public static String getEmailContent(UserEntity kh, String link) {
 		SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
 		Calendar c = Calendar.getInstance();
@@ -153,7 +143,8 @@ public class UserService implements IUserService{
 	@Override
 	public UserDTO update(UserDTO dto) {
 		UserEntity entity = userRepository.findOne(dto.getId());
-		entity.setStatus(1);
+		if (entity.getStatus() == 0)
+			entity.setStatus(1);
 		return userConverter.toDTO(userRepository.save(entity));
 	}
 
@@ -165,6 +156,74 @@ public class UserService implements IUserService{
 	@Override
 	public UserDTO findByUserName(String userName) {
 		return userConverter.toDTO(userRepository.findOneByUserName(userName));
+	}
+
+	@Override
+	public UserDTO update1(UserDTO dto) {
+		UserEntity oldEntity = userRepository.findOneByUserName(dto.getUserName());
+		oldEntity.setFullName(dto.getFullName());
+		oldEntity.setEmail(dto.getEmail());
+		oldEntity.setEmailReceived(dto.getEmailReceived());
+		oldEntity.setAvatar(dto.getAvatar());
+		return userConverter.toDTO(userRepository.save(oldEntity));
+	}
+
+	@Override
+	public UserDTO updatePassword(UserDTO oldUserDTO) {
+		UserEntity entity = new UserEntity();
+		if (oldUserDTO.getId() != null) { // thay đổi mật khẩu (Quên mật khẩu)
+			entity = userRepository.findOne(oldUserDTO.getId());
+			// Set mã xác thực
+			String maXacThuc = MaXacThuc.getMaXacThuc();
+
+			// Set thời gian hiệu lực của mã xác thực
+			Calendar c = Calendar.getInstance();
+			c.add(Calendar.MINUTE, 2); // thời gian hiệu lực: 2 phút
+			Timestamp thoiGianHieuLucXacThuc = new Timestamp(c.getTimeInMillis());
+
+			entity.setValidTime(thoiGianHieuLucXacThuc);
+			entity.setVerificationCode(maXacThuc);
+			entity.setChangeEmailStatus(false);
+
+			entity.setNewPassword(passwordEncoder.encode(oldUserDTO.getNewPassword()));
+			sendEmailToUser(entity, "Xác thực tài khoản để thay đổi mật khẩu | ");
+
+			return userConverter.toDTO(userRepository.save(entity));
+			
+		} else { // thay đổi mật khẩu (Sau khi đăng nhập)
+			String userName = SecurityUtils.getPrincipal().getUsername();
+			entity = userRepository.findOneByUserName(userName);
+			if (oldUserDTO.getPassword() != null && oldUserDTO.getNewPassword() != null) {
+				boolean checkOldPassword = passwordEncoder.matches(oldUserDTO.getPassword(), entity.getPassword());
+				boolean checkNewPasswordWithOld = passwordEncoder.matches(oldUserDTO.getNewPassword(),
+						entity.getPassword());
+				if (checkOldPassword && !checkNewPasswordWithOld) {
+					entity.setPassword(passwordEncoder.encode(oldUserDTO.getNewPassword()));
+					return userConverter.toDTO(userRepository.save(entity));
+				} else {
+					return null;
+				}
+			}
+			return null;
+		}
+	}
+
+	@Override
+	public UserDTO findOneByEmailAndUserName(String email, String userName) {
+		UserEntity entity = userRepository.findOneByEmailAndUserName(email, userName);
+		if (entity != null) {
+			return userConverter.toDTO(entity);
+		} else {
+			return null;
+		}
+	}
+
+	@Override
+	public UserDTO update2(UserDTO dto) {
+		UserEntity entity = userRepository.findOne(dto.getId());
+		entity.setChangeEmailStatus(true);
+		entity.setPassword(dto.getPassword());
+		return userConverter.toDTO(userRepository.save(entity));
 	}
 
 }
