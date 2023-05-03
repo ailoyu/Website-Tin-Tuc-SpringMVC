@@ -8,10 +8,10 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.AuthenticationException;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationFailureHandler;
 import org.springframework.stereotype.Component;
 
+import com.laptrinhjavaweb.config.PasswordEncoderConfig;
 import com.laptrinhjavaweb.entity.UserEntity;
 import com.laptrinhjavaweb.repository.UserRepository;
 
@@ -22,7 +22,7 @@ public class CustomFailureHandler extends SimpleUrlAuthenticationFailureHandler{
 	private UserRepository userRepository;
 	
 	@Autowired
-	private BCryptPasswordEncoder passwordEncode;
+	private PasswordEncoderConfig passwordEncoder;
 	
 	@Override
 	public void onAuthenticationFailure(HttpServletRequest request, HttpServletResponse response,
@@ -38,7 +38,7 @@ public class CustomFailureHandler extends SimpleUrlAuthenticationFailureHandler{
 		if(userEntity == null) {
 			getRedirectStrategy().sendRedirect(request, response, "/dang-nhap?message=inavailable_account");
 		} else {
-			boolean matKhau = passwordEncode.matches(password, userEntity.getPassword());
+			boolean matKhau = passwordEncoder.passwordEncoder().matches(password, userEntity.getPassword());
 			if(userEntity.getStatus() == 0) {
 				getRedirectStrategy().sendRedirect(request, response, "/dang-nhap?message=invalid_account");
 			} else if(matKhau == false) {

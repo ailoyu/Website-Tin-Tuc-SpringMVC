@@ -5,6 +5,7 @@
     <script type="text/javascript">
         try{ace.settings.loadState('sidebar')}catch(e){}
     </script>
+    
     <div class="sidebar-shortcuts">
         <div class="sidebar-shortcuts-large">
             <button class="btn btn-success">

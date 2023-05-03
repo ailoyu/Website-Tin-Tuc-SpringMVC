@@ -188,12 +188,14 @@ public class HomeController {
 		String message = "";
 		String alert = "danger";
 
+		// Xác thực khi đăng ký
 		if (userDTO != null && userDTO.getStatus() == 0) {
 			// Kiểm tra xem mã xác thực còn hiệu lực hay không?
 			java.sql.Date now = new Date(System.currentTimeMillis());
 			if (now.before(userDTO.getValidTime())) {
 				// Kiểm tra mã xác thực nhập vào có giống trong mã xac thuc trong dtbase kh?
 				if (userDTO.getVerificationCode().equals(maXacThuc)) {
+					userDTO.setStatus(1);
 					userService.update(userDTO);
 					message = "Xác thực thành công";
 					alert = "success";
@@ -204,9 +206,7 @@ public class HomeController {
 				message = "Hết thời gian xác thực, vui lòng đăng ký lại!";
 				userService.delete(userDTO.getId());
 			}
-		}
-
-		if (userDTO != null && userDTO.getChangeEmailStatus() == false) {
+		} else if (userDTO != null && userDTO.getChangeEmailStatus() == false) { // Xác thực khi đổi mật khẩu
 			// Kiểm tra xem mã xác thực còn hiệu lực hay không?
 			java.sql.Date now = new Date(System.currentTimeMillis());
 			if (now.before(userDTO.getValidTime())) {
@@ -230,6 +230,7 @@ public class HomeController {
 		mav.addObject("id", id);
 
 		return mav;
+
 	}
 
 	@RequestMapping(value = "/thong-bao", method = RequestMethod.GET)

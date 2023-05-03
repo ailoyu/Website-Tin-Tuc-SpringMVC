@@ -73,12 +73,15 @@
 						
 						<div class="carousel-inner" role="listbox">
 							<div class="carousel-item active">
-<!-- 								<img class="d-block img-fluid" -->
-<%-- 									src="<c:url value='/template/Twinkle.png'/>" --%>
-<!-- 									width="1000px"> -->
-<iframe width="840" height="545" src="https://www.youtube.com/embed/5hPsXvKzZnU" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
-						</div>
+								<img class="d-block img-fluid"
+									src="<c:url value='/template/Twinkle.png'/>"
+									width="1000px">
+									</div>
+
 						
+						<div class="carousel-item">
+						<iframe width="840" height="545" src="https://www.youtube.com/embed/5hPsXvKzZnU" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+						</div>
 						<c:forEach var="item" items="${ model.listHotNews }">
 						
 							<div class="carousel-item">
@@ -111,6 +114,7 @@
 					
 					</c:if>
 				</c:if>
+				
 				
 				<div class="row">
 			

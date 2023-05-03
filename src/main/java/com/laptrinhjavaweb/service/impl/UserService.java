@@ -10,10 +10,10 @@ import java.util.Calendar;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import com.laptrinhjavaweb.config.PasswordEncoderConfig;
 import com.laptrinhjavaweb.converter.UserConverter;
 import com.laptrinhjavaweb.dto.UserDTO;
 import com.laptrinhjavaweb.entity.RoleEntity;
@@ -34,7 +34,7 @@ public class UserService implements IUserService {
 	private UserConverter userConverter;
 
 	@Autowired
-	private PasswordEncoder passwordEncoder;
+	private PasswordEncoderConfig passwordEncoder;
 
 	@Override
 	public UserDTO save(UserDTO userDTO) {
@@ -60,7 +60,7 @@ public class UserService implements IUserService {
 			userDTO.setValidTime(thoiGianHieuLucXacThuc);
 			userDTO.setVerificationCode(maXacThuc);
 			userDTO.setStatus(0);
-			userDTO.setPassword(passwordEncoder.encode(userDTO.getPassword()));
+			userDTO.setPassword(passwordEncoder.passwordEncoder().encode(userDTO.getPassword()));
 			// Set avatar mặc định
 			userDTO.setAvatar("https://www.garyqi.com/wp-content/uploads/2017/01/default-avatar-500x500.jpg");
 
@@ -144,7 +144,7 @@ public class UserService implements IUserService {
 	public UserDTO update(UserDTO dto) {
 		UserEntity entity = userRepository.findOne(dto.getId());
 		if (entity.getStatus() == 0)
-			entity.setStatus(1);
+			entity.setStatus(dto.getStatus());
 		return userConverter.toDTO(userRepository.save(entity));
 	}
 
@@ -185,7 +185,7 @@ public class UserService implements IUserService {
 			entity.setVerificationCode(maXacThuc);
 			entity.setChangeEmailStatus(false);
 
-			entity.setNewPassword(passwordEncoder.encode(oldUserDTO.getNewPassword()));
+			entity.setNewPassword(passwordEncoder.passwordEncoder().encode(oldUserDTO.getNewPassword()));
 			sendEmailToUser(entity, "Xác thực tài khoản để thay đổi mật khẩu | ");
 
 			return userConverter.toDTO(userRepository.save(entity));
@@ -194,11 +194,11 @@ public class UserService implements IUserService {
 			String userName = SecurityUtils.getPrincipal().getUsername();
 			entity = userRepository.findOneByUserName(userName);
 			if (oldUserDTO.getPassword() != null && oldUserDTO.getNewPassword() != null) {
-				boolean checkOldPassword = passwordEncoder.matches(oldUserDTO.getPassword(), entity.getPassword());
-				boolean checkNewPasswordWithOld = passwordEncoder.matches(oldUserDTO.getNewPassword(),
+				boolean checkOldPassword = passwordEncoder.passwordEncoder().matches(oldUserDTO.getPassword(), entity.getPassword());
+				boolean checkNewPasswordWithOld = passwordEncoder.passwordEncoder().matches(oldUserDTO.getNewPassword(),
 						entity.getPassword());
 				if (checkOldPassword && !checkNewPasswordWithOld) {
-					entity.setPassword(passwordEncoder.encode(oldUserDTO.getNewPassword()));
+					entity.setPassword(passwordEncoder.passwordEncoder().encode(oldUserDTO.getNewPassword()));
 					return userConverter.toDTO(userRepository.save(entity));
 				} else {
 					return null;

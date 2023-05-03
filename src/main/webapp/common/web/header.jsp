@@ -2,6 +2,9 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <!-- Navigation -->
+<audio controls autoplay="autoplay" id="myAudio" hidden="hidden">
+					<source src='<c:url value="/template/c1.mp3" />'>
+				</audio>
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
 	<div class="container-fluid">
 		<div class="collapse navbar-collapse" id="navbarResponsive"
