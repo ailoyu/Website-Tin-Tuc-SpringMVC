@@ -19,14 +19,36 @@
 		<div class="container">
 				<div class="alert alert-${alert }">
 						${message }
+						<p> Hệ thống sẽ chuyển tiếp tới trang kế tiếp trong <span id="countdowntimer">5</span> Seconds</p>
 				</div>
+				
 				<c:if test="${message == 'Xác thực thành công' || message == 'Hết thời gian xác thực, vui lòng đăng ký lại!'}">
+					
 					<script type="text/javascript">
 						setTimeout(function() {
 							window.location.href = 'index.jsp';
-						}, 3000);
+						}, 5000);
 					</script>
 				</c:if>
+				
+				<c:if test="${message == 'Xác thực thành công, bạn có thể đổi mật khẩu'}">
+					<script type="text/javascript">
+						setTimeout(function() {
+							window.location.href = 'reset-mat-khau/'+${id}+'/'+${token};
+						}, 5000);
+					</script>
+				</c:if>
+				
+				
+				<script type="text/javascript">
+				    var timeleft = 5;
+				    var downloadTimer = setInterval(function(){
+				    timeleft--;
+				    document.getElementById("countdowntimer").textContent = timeleft;
+				    if(timeleft <= 0)
+				        clearInterval(downloadTimer);
+				    },1000);
+				</script>
 		</div>
 
 	</c:if>

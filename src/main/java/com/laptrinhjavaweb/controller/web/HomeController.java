@@ -187,6 +187,7 @@ public class HomeController {
 		ModelAndView mav = new ModelAndView("web/user/validation");
 		String message = "";
 		String alert = "danger";
+		String token = "";
 
 		// Xác thực khi đăng ký
 		if (userDTO != null && userDTO.getStatus() == 0) {
@@ -213,10 +214,10 @@ public class HomeController {
 				// Kiểm tra mã xác thực nhập vào có giống trong mã xac thuc trong dtbase kh?
 				if (userDTO.getVerificationCode().equals(maXacThuc)) {
 					userDTO.setChangeEmailStatus(true);
-					userDTO.setPassword(userDTO.getNewPassword());
 					userService.update2(userDTO);
-					message = "Xác thực thành công";
+					message = "Xác thực thành công, bạn có thể đổi mật khẩu";
 					alert = "success";
+					token = userDTO.getVerificationCode();
 				} else {
 					message = "Mã xác thực không khớp !";
 				}
@@ -224,10 +225,11 @@ public class HomeController {
 				message = "Hết thời gian xác thực, vui lòng xác thực lại!";
 			}
 		}
-
+		
 		mav.addObject("message", message);
 		mav.addObject("alert", alert);
 		mav.addObject("id", id);
+		mav.addObject("token", token);
 
 		return mav;
 
@@ -275,24 +277,38 @@ public class HomeController {
 		return mav;
 	}
 
-	@GetMapping(value = { "/reset-mat-khau/{id}" })
+	@GetMapping(value = { "/reset-mat-khau/{id}/{token}" })
 	public ModelAndView resetMatKhau(@PathVariable Long id,
+									@PathVariable String token,
 			@RequestParam(value = "message", required = false) String message) {
-		ModelAndView mav = new ModelAndView("web/user/resetPassword");
-		if (message != null) {
-			Map<String, String> message1 = messageUtil.getMessage(message);
-			mav.addObject("message", message1.get("message"));
-			mav.addObject("alert", message1.get("alert"));
+		UserDTO dto = userService.findByIdAndVerificationCode(id, token);
+		
+		if(dto != null) {
+			ModelAndView mav = new ModelAndView("web/user/resetPassword");
+			if (message != null) {
+				Map<String, String> message1 = messageUtil.getMessage(message);
+				mav.addObject("message", message1.get("message"));
+				mav.addObject("alert", message1.get("alert"));
+				
+				if(message.equals("change_password_success")) {
+					userService.deleteToken(dto);
+				}
+				
+			}
+			mav.addObject("token", token);
+			mav.addObject("userId", id);
+			return mav;
+		} else {
+			return new ModelAndView("redirect:/trang-chu");
 		}
-		mav.addObject("userId", id);
-		return mav;
 	}
 
 	@PostMapping("/forgotPassword")
 	public String forgotPassword(@RequestParam String email, @RequestParam String userName) {
 		UserDTO userDTO = userService.findOneByEmailAndUserName(email, userName);
 		if (userDTO != null) {
-			return "redirect:/reset-mat-khau/" + userDTO.getId();
+			userService.validateToChangePassword(userDTO);
+			return "redirect:/thong-bao?id=" + userDTO.getId();
 		} else {
 			return "redirect:/quen-mat-khau/invalid_username_email";
 		}

@@ -12,4 +12,7 @@ public interface IUserService {
 	UserDTO updatePassword(UserDTO userDTO);
 	UserDTO findOneByEmailAndUserName(String email, String userName);
 	UserDTO update2(UserDTO dto);
+	void validateToChangePassword(UserDTO oldUserDTO);
+	UserDTO findByIdAndVerificationCode(Long id, String token);
+	void deleteToken(UserDTO dto);
 }

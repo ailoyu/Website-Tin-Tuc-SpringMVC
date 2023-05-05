@@ -32,11 +32,20 @@
 					type="text" class="form-control" id="userName"
 					name="userName">
 			</div>
-			<button type="submit" id="submit" class="btn btn-primary">Gửi</button>
+			<button type="submit" id="submit" onclick="myFunction()" class="btn btn-primary">Gửi</button>
+			<div class="" role="status" id="loading" style="margin-left: 1em">
+				<span class="sr-only">Loading...</span>
+			</div>
 			<br>
 			<br>
 			<br>
 		</form>
 	</div>
+	<script type="text/javascript">
+	function myFunction() {
+		$('#loading').addClass('spinner-border');
+	}
+	</script>
+	
 </body>
 </html>

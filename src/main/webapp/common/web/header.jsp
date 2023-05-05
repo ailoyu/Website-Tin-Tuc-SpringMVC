@@ -2,9 +2,8 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <!-- Navigation -->
-<audio controls autoplay="autoplay" id="myAudio" hidden="hidden">
-					<source src='<c:url value="/template/c1.mp3" />'>
-				</audio>
+
+
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
 	<div class="container-fluid">
 		<div class="collapse navbar-collapse" id="navbarResponsive"
@@ -76,3 +75,54 @@
 		</div>
 	</div>
 </nav>
+
+<audio preload="auto" src="<c:url value="/template/c1.mp3" />" loop="true" autobuffer>
+					</audio>
+
+<script type="text/javascript">
+function setCookie(c_name,value,exdays)
+{
+    var exdate=new Date();
+    exdate.setDate(exdate.getDate() + exdays);
+    var c_value=escape(value) + ((exdays==null) ? "" : "; expires="+exdate.toUTCString());
+    document.cookie=c_name + "=" + c_value;
+}
+
+function getCookie(c_name)
+{
+    var i,x,y,ARRcookies=document.cookie.split(";");
+    for (i=0;i<ARRcookies.length;i++)
+    {
+      x=ARRcookies[i].substr(0,ARRcookies[i].indexOf("="));
+      y=ARRcookies[i].substr(ARRcookies[i].indexOf("=")+1);
+      x=x.replace(/^\s+|\s+$/g,"");
+      if (x==c_name)
+        {
+        return unescape(y);
+        }
+      }
+}
+
+var song = document.getElementsByTagName('audio')[0];
+var played = false;
+var tillPlayed = getCookie('timePlayed');
+function update()
+{
+    if(!played){
+        if(tillPlayed){
+        song.currentTime = tillPlayed;
+        song.play();
+        played = true;
+        }
+        else {
+                song.play();
+                played = true;
+        }
+    }
+
+    else {
+    setCookie('timePlayed', song.currentTime);
+    }
+}
+setInterval(update,1000);
+</script>

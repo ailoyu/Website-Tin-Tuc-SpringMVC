@@ -79,6 +79,7 @@
 														<th><input type="checkbox" onClick="toggle(this)" id="checkAll"></th>
 														<th>Tên bài viết</th>
 														<th>Mô tả ngắn</th>
+														<th>Hình thumbnail</th>
 														<th>Thao tác</th>
 													</tr>
 												</thead>
@@ -88,6 +89,15 @@
 															<td><input type="checkbox" id="checkbox_${item.id}" name="foo" value="${item.id}"></td>
 															<td>${item.title}</td>
 															<td>${item.shortDescription}</td>
+															<td>
+																<c:url var="updateNewURL" value="/quan-tri/bai-viet/chinh-sua">
+																	<c:param name="id" value="${item.id }"></c:param>
+																</c:url>
+																<a class=""
+																   title="Cập nhật bài viết" href='${updateNewURL}'>
+																<img src="${item.thumbnail }" width="150" height="80">
+																</a>
+															</td>
 															<td>
 															<c:url var="updateNewURL" value="/quan-tri/bai-viet/chinh-sua">
 																<c:param name="id" value="${item.id }"></c:param>

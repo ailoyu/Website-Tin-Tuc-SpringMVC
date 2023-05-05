@@ -170,26 +170,10 @@ public class UserService implements IUserService {
 
 	@Override
 	public UserDTO updatePassword(UserDTO oldUserDTO) {
-		UserEntity entity = new UserEntity();
-		if (oldUserDTO.getId() != null) { // thay đổi mật khẩu (Quên mật khẩu)
-			entity = userRepository.findOne(oldUserDTO.getId());
-			// Set mã xác thực
-			String maXacThuc = MaXacThuc.getMaXacThuc();
-
-			// Set thời gian hiệu lực của mã xác thực
-			Calendar c = Calendar.getInstance();
-			c.add(Calendar.MINUTE, 2); // thời gian hiệu lực: 2 phút
-			Timestamp thoiGianHieuLucXacThuc = new Timestamp(c.getTimeInMillis());
-
-			entity.setValidTime(thoiGianHieuLucXacThuc);
-			entity.setVerificationCode(maXacThuc);
-			entity.setChangeEmailStatus(false);
-
+		UserEntity entity = userRepository.findOne(oldUserDTO.getId());
+		if (entity.getChangeEmailStatus() == true) { // thay đổi mật khẩu (Quên mật khẩu)
 			entity.setNewPassword(passwordEncoder.passwordEncoder().encode(oldUserDTO.getNewPassword()));
-			sendEmailToUser(entity, "Xác thực tài khoản để thay đổi mật khẩu | ");
-
 			return userConverter.toDTO(userRepository.save(entity));
-			
 		} else { // thay đổi mật khẩu (Sau khi đăng nhập)
 			String userName = SecurityUtils.getPrincipal().getUsername();
 			entity = userRepository.findOneByUserName(userName);
@@ -222,8 +206,48 @@ public class UserService implements IUserService {
 	public UserDTO update2(UserDTO dto) {
 		UserEntity entity = userRepository.findOne(dto.getId());
 		entity.setChangeEmailStatus(true);
-		entity.setPassword(dto.getPassword());
 		return userConverter.toDTO(userRepository.save(entity));
+	}
+
+	@Override
+	public void validateToChangePassword(UserDTO oldUserDTO) {
+		UserEntity entity = new UserEntity();
+		if (oldUserDTO.getId() != null) { // thay đổi mật khẩu (Quên mật khẩu)
+			entity = userRepository.findOne(oldUserDTO.getId());
+			// Set mã xác thực
+			String maXacThuc = MaXacThuc.getMaXacThuc();
+
+			// Set thời gian hiệu lực của mã xác thực
+			Calendar c = Calendar.getInstance();
+			c.add(Calendar.MINUTE, 2); // thời gian hiệu lực: 2 phút
+			Timestamp thoiGianHieuLucXacThuc = new Timestamp(c.getTimeInMillis());
+
+			entity.setValidTime(thoiGianHieuLucXacThuc);
+			entity.setVerificationCode(maXacThuc);
+			entity.setChangeEmailStatus(false);
+
+//			entity.setNewPassword(passwordEncoder.passwordEncoder().encode(oldUserDTO.getNewPassword()));
+			sendEmailToUser(entity, "Xác thực tài khoản để thay đổi mật khẩu | ");
+			userRepository.save(entity);
+		}
+	}
+
+	@Override
+	public UserDTO findByIdAndVerificationCode(Long id, String token) {
+		UserEntity entity = userRepository.findOneByIdAndVerificationCode(id, token);
+		if(entity != null) {
+			return userConverter.toDTO(entity);
+		} else {
+			return null;
+		}
+		
+	}
+
+	@Override
+	public void deleteToken(UserDTO dto) {
+		UserEntity findOne = userRepository.findOne(dto.getId());
+		findOne.setVerificationCode(null);
+		userRepository.save(findOne);
 	}
 
 }

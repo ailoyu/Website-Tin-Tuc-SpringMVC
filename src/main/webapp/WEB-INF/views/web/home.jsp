@@ -115,6 +115,7 @@
 					</c:if>
 				</c:if>
 				
+<%-- 				 <embed src='<c:url value="/template/c1.mp3" />' loop="true" autostart="true" hidden="true"> --%>
 				
 				<div class="row">
 			
@@ -183,6 +184,11 @@
             }
         });
     });
+	
+	
+	
+	
+	
 	</script>
 
 </body>
