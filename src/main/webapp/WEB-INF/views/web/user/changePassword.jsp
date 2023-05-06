@@ -35,6 +35,7 @@
 					id="confirmPass"
 					onkeyup="kiemTraMatKhauMoi()"><span id="msg1" style="color: red"></span>
 			</div>
+			<input type="hidden" id="id" name="id" value="${id}" />
 			<button type="submit" id="submit" class="btn btn-primary">Lưu mật khẩu</button>
 			<div class="" role="status" id="loading" style="margin-left: 1em">
 		 						 <span class="sr-only">Loading...</span>

@@ -14,5 +14,5 @@ public interface IUserService {
 	UserDTO update2(UserDTO dto);
 	void validateToChangePassword(UserDTO oldUserDTO);
 	UserDTO findByIdAndVerificationCode(Long id, String token);
-	void deleteToken(UserDTO dto);
+	void deleteTokenAndChangePasswordStatus(UserDTO dto);
 }

@@ -207,13 +207,13 @@ public class HomeController {
 				message = "Hết thời gian xác thực, vui lòng đăng ký lại!";
 				userService.delete(userDTO.getId());
 			}
-		} else if (userDTO != null && userDTO.getChangeEmailStatus() == false) { // Xác thực khi đổi mật khẩu
+		} else if (userDTO != null && userDTO.getChangePasswordStatus() == false) { // Xác thực khi đổi mật khẩu
 			// Kiểm tra xem mã xác thực còn hiệu lực hay không?
 			java.sql.Date now = new Date(System.currentTimeMillis());
 			if (now.before(userDTO.getValidTime())) {
 				// Kiểm tra mã xác thực nhập vào có giống trong mã xac thuc trong dtbase kh?
 				if (userDTO.getVerificationCode().equals(maXacThuc)) {
-					userDTO.setChangeEmailStatus(true);
+					userDTO.setChangePasswordStatus(true);
 					userService.update2(userDTO);
 					message = "Xác thực thành công, bạn có thể đổi mật khẩu";
 					alert = "success";
@@ -257,12 +257,14 @@ public class HomeController {
 
 	@RequestMapping(value = "/thay-doi-mat-khau", method = RequestMethod.GET)
 	public ModelAndView thayDoiMatKhau(HttpServletRequest request) {
+		Long id = SecurityUtils.getPrincipal().getId();
 		ModelAndView mav = new ModelAndView("web/user/changePassword");
 		if (request.getParameter("message") != null) {
 			Map<String, String> message = messageUtil.getMessage(request.getParameter("message"));
 			mav.addObject("message", message.get("message"));
 			mav.addObject("alert", message.get("alert"));
 		}
+		mav.addObject("id", id);
 		return mav;
 	}
 
@@ -291,7 +293,7 @@ public class HomeController {
 				mav.addObject("alert", message1.get("alert"));
 				
 				if(message.equals("change_password_success")) {
-					userService.deleteToken(dto);
+					userService.deleteTokenAndChangePasswordStatus(dto);
 				}
 				
 			}

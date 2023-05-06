@@ -171,12 +171,10 @@ public class UserService implements IUserService {
 	@Override
 	public UserDTO updatePassword(UserDTO oldUserDTO) {
 		UserEntity entity = userRepository.findOne(oldUserDTO.getId());
-		if (entity.getChangeEmailStatus() == true) { // thay đổi mật khẩu (Quên mật khẩu)
-			entity.setNewPassword(passwordEncoder.passwordEncoder().encode(oldUserDTO.getNewPassword()));
+		if (entity.getChangePasswordStatus() == true) { // thay đổi mật khẩu (Quên mật khẩu)
+			entity.setPassword(passwordEncoder.passwordEncoder().encode(oldUserDTO.getNewPassword()));
 			return userConverter.toDTO(userRepository.save(entity));
 		} else { // thay đổi mật khẩu (Sau khi đăng nhập)
-			String userName = SecurityUtils.getPrincipal().getUsername();
-			entity = userRepository.findOneByUserName(userName);
 			if (oldUserDTO.getPassword() != null && oldUserDTO.getNewPassword() != null) {
 				boolean checkOldPassword = passwordEncoder.passwordEncoder().matches(oldUserDTO.getPassword(), entity.getPassword());
 				boolean checkNewPasswordWithOld = passwordEncoder.passwordEncoder().matches(oldUserDTO.getNewPassword(),
@@ -205,7 +203,7 @@ public class UserService implements IUserService {
 	@Override
 	public UserDTO update2(UserDTO dto) {
 		UserEntity entity = userRepository.findOne(dto.getId());
-		entity.setChangeEmailStatus(true);
+		entity.setChangePasswordStatus(true);
 		return userConverter.toDTO(userRepository.save(entity));
 	}
 
@@ -224,7 +222,7 @@ public class UserService implements IUserService {
 
 			entity.setValidTime(thoiGianHieuLucXacThuc);
 			entity.setVerificationCode(maXacThuc);
-			entity.setChangeEmailStatus(false);
+			entity.setChangePasswordStatus(false);
 
 //			entity.setNewPassword(passwordEncoder.passwordEncoder().encode(oldUserDTO.getNewPassword()));
 			sendEmailToUser(entity, "Xác thực tài khoản để thay đổi mật khẩu | ");
@@ -244,9 +242,10 @@ public class UserService implements IUserService {
 	}
 
 	@Override
-	public void deleteToken(UserDTO dto) {
+	public void deleteTokenAndChangePasswordStatus(UserDTO dto) {
 		UserEntity findOne = userRepository.findOne(dto.getId());
 		findOne.setVerificationCode(null);
+		findOne.setChangePasswordStatus(false);
 		userRepository.save(findOne);
 	}
 

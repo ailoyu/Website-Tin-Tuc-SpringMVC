@@ -13,7 +13,7 @@ public class UserDTO extends AbstractDTO<UserDTO> {
 	private Boolean emailReceived;
 	private String avatar;
 	private String newPassword;
-	private Boolean changeEmailStatus;
+	private Boolean changePasswordStatus;
 	
 	public String getFullName() {
 		return fullName;
@@ -75,11 +75,11 @@ public class UserDTO extends AbstractDTO<UserDTO> {
 	public void setNewPassword(String newPassword) {
 		this.newPassword = newPassword;
 	}
-	public Boolean getChangeEmailStatus() {
-		return changeEmailStatus;
+	public Boolean getChangePasswordStatus() {
+		return changePasswordStatus;
 	}
-	public void setChangeEmailStatus(Boolean changeEmailStatus) {
-		this.changeEmailStatus = changeEmailStatus;
+	public void setChangePasswordStatus(Boolean changePasswordStatus) {
+		this.changePasswordStatus = changePasswordStatus;
 	}
 	
 }

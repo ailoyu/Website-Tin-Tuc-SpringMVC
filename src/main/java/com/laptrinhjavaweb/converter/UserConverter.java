@@ -23,8 +23,7 @@ public class UserConverter {
 		result.setValidTime(dto.getValidTime());
 		result.setEmailReceived(dto.getEmailReceived());
 		result.setAvatar(dto.getAvatar());
-		result.setChangeEmailStatus(dto.getChangeEmailStatus());
-		result.setNewPassword(dto.getNewPassword());
+		result.setChangePasswordStatus(dto.getChangePasswordStatus());
 		
 		return result;
 	}
@@ -50,8 +49,7 @@ public class UserConverter {
 		result.setCreatedDate(ts);
 		result.setEmailReceived(dto.getEmailReceived());
 		result.setAvatar(dto.getAvatar());
-		result.setChangeEmailStatus(dto.getChangeEmailStatus());
-		result.setNewPassword(dto.getNewPassword());
+		result.setChangePasswordStatus(dto.getChangePasswordStatus());
 		return result;
 	}
 	
