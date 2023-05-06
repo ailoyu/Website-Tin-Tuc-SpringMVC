@@ -28,7 +28,7 @@ import com.laptrinhjavaweb.service.ICategoryService;
 import com.laptrinhjavaweb.service.ICommentService;
 import com.laptrinhjavaweb.service.INewService;
 import com.laptrinhjavaweb.service.IUserService;
-import com.laptrinhjavaweb.util.MessageUtil;
+import com.laptrinhjavaweb.util.MessageUtils;
 import com.laptrinhjavaweb.util.SecurityUtils;
 
 @Controller(value = "homeControllerOfWeb") // controller của thằng spring mvc
@@ -151,7 +151,7 @@ public class HomeController {
 	}
 
 	@Autowired
-	private MessageUtil messageUtil;
+	private MessageUtils messageUtil;
 
 	@RequestMapping(value = "/dang-ky", method = RequestMethod.GET)
 	public ModelAndView signupPage(HttpServletRequest request) {

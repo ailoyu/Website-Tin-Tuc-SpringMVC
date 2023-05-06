@@ -16,7 +16,7 @@ import org.springframework.web.servlet.ModelAndView;
 import com.laptrinhjavaweb.dto.NewDTO;
 import com.laptrinhjavaweb.service.ICategoryService;
 import com.laptrinhjavaweb.service.INewService;
-import com.laptrinhjavaweb.util.MessageUtil;
+import com.laptrinhjavaweb.util.MessageUtils;
 
 @Controller(value = "newControllerOfAdmin") // controller của thằng spring mvc
 public class NewController {
@@ -28,7 +28,7 @@ public class NewController {
 		private ICategoryService categoryService;
 		
 		@Autowired
-		private MessageUtil messageUtil;
+		private MessageUtils messageUtil;
 		
 		
 	// Request Mapping: nhận đường link url, dùng method: get

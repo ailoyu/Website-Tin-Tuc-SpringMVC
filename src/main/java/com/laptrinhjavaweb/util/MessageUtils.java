@@ -8,7 +8,7 @@ import org.springframework.stereotype.Component;
 import com.laptrinhjavaweb.constant.SystemConstant;
 
 @Component // để autoWired
-public class MessageUtil {
+public class MessageUtils {
 
 	public Map<String, String> getMessage(String message) {
 

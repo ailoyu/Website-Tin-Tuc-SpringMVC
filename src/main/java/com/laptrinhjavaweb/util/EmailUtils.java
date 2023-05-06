@@ -12,7 +12,7 @@ import javax.mail.Transport;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 
-public class Email {
+public class EmailUtils {
 	// Email: quangtrinhhuynh02@gmail.com
 	// Password: snvrqopjhhrptbgb
 	
@@ -55,7 +55,7 @@ public class Email {
 			// Người nhận
 			msg.setRecipients(Message.RecipientType.TO, InternetAddress.parse(to, false));
 			// Tiêu đề email
-			msg.setSubject(tieuDe);
+			msg.setSubject(tieuDe, "text/html; charset=UTF-8");
 			// Quy định ngày gửi
 			msg.setSentDate(new Date());
 

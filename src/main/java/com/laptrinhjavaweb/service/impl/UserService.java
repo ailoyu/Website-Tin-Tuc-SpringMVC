@@ -20,7 +20,7 @@ import com.laptrinhjavaweb.entity.RoleEntity;
 import com.laptrinhjavaweb.entity.UserEntity;
 import com.laptrinhjavaweb.repository.UserRepository;
 import com.laptrinhjavaweb.service.IUserService;
-import com.laptrinhjavaweb.util.Email;
+import com.laptrinhjavaweb.util.EmailUtils;
 import com.laptrinhjavaweb.util.MaXacThuc;
 import com.laptrinhjavaweb.util.SecurityUtils;
 
@@ -98,7 +98,7 @@ public class UserService implements IUserService {
 
 		System.out.println(link);
 
-		Email.sendEmail(user.getEmail(), content + dtf.format(now), getEmailContent(user, link));
+		EmailUtils.sendEmail(user.getEmail(), content + dtf.format(now), getEmailContent(user, link));
 	}
 
 	public static String getEmailContent(UserEntity kh, String link) {
