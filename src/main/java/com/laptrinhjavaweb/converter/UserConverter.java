@@ -19,7 +19,7 @@ public class UserConverter {
 		result.setUserName(dto.getUserName());
 		result.setEmail(dto.getEmail());
 		result.setStatus(dto.getStatus());
-		result.setVerificationCode(dto.getVerificationCode());
+		result.setToken(dto.getToken());
 		result.setValidTime(dto.getValidTime());
 		result.setEmailReceived(dto.getEmailReceived());
 		result.setAvatar(dto.getAvatar());
@@ -39,7 +39,7 @@ public class UserConverter {
 		result.setUserName(dto.getUserName());
 		result.setEmail(dto.getEmail());
 		result.setStatus(dto.getStatus());
-		result.setVerificationCode(dto.getVerificationCode());
+		result.setToken(dto.getToken());
 		if(dto.getValidTime() != null) {
 			SimpleDateFormat sm = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 			Timestamp valueOf = Timestamp.valueOf(sm.format(dto.getValidTime()));

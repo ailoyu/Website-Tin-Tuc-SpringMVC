@@ -8,7 +8,7 @@ public class UserDTO extends AbstractDTO<UserDTO> {
 	private String userName;
 	private String email;
 	private int status;
-	private String verificationCode;
+	private String token;
 	private Timestamp validTime;
 	private Boolean emailReceived;
 	private String avatar;
@@ -51,12 +51,6 @@ public class UserDTO extends AbstractDTO<UserDTO> {
 	public void setValidTime(Timestamp validTime) {
 		this.validTime = validTime;
 	}
-	public String getVerificationCode() {
-		return verificationCode;
-	}
-	public void setVerificationCode(String verificationCode) {
-		this.verificationCode = verificationCode;
-	}
 	public Boolean getEmailReceived() {
 		return emailReceived;
 	}
@@ -80,6 +74,12 @@ public class UserDTO extends AbstractDTO<UserDTO> {
 	}
 	public void setChangePasswordStatus(Boolean changePasswordStatus) {
 		this.changePasswordStatus = changePasswordStatus;
+	}
+	public String getToken() {
+		return token;
+	}
+	public void setToken(String token) {
+		this.token = token;
 	}
 	
 }

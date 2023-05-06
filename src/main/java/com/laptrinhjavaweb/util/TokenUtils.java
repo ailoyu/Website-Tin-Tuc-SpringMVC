@@ -2,7 +2,7 @@ package com.laptrinhjavaweb.util;
 
 import java.util.Random;
 
-public class MaXacThuc {
+public class TokenUtils {
 	
 	
 	public static String getMaXacThuc() {

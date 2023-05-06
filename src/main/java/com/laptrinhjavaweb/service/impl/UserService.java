@@ -21,8 +21,7 @@ import com.laptrinhjavaweb.entity.UserEntity;
 import com.laptrinhjavaweb.repository.UserRepository;
 import com.laptrinhjavaweb.service.IUserService;
 import com.laptrinhjavaweb.util.EmailUtils;
-import com.laptrinhjavaweb.util.MaXacThuc;
-import com.laptrinhjavaweb.util.SecurityUtils;
+import com.laptrinhjavaweb.util.TokenUtils;
 
 @Service // khai báo để AutoWired cho service
 public class UserService implements IUserService {
@@ -50,7 +49,7 @@ public class UserService implements IUserService {
 
 		if (baoLoi.length() == 0 || baoLoi.equals("Đã xóa tài khoản chưa xác thực")) {
 			// Set mã xác thực
-			String maXacThuc = MaXacThuc.getMaXacThuc();
+			String maXacThuc = TokenUtils.getMaXacThuc();
 
 			// Set thời gian hiệu lực của mã xác thực
 			Calendar c = Calendar.getInstance();
@@ -58,7 +57,7 @@ public class UserService implements IUserService {
 			Timestamp thoiGianHieuLucXacThuc = new Timestamp(c.getTimeInMillis());
 
 			userDTO.setValidTime(thoiGianHieuLucXacThuc);
-			userDTO.setVerificationCode(maXacThuc);
+			userDTO.setToken(maXacThuc);
 			userDTO.setStatus(0);
 			userDTO.setPassword(passwordEncoder.passwordEncoder().encode(userDTO.getPassword()));
 			// Set avatar mặc định
@@ -94,7 +93,7 @@ public class UserService implements IUserService {
 
 		final String baseUrl = ServletUriComponentsBuilder.fromCurrentContextPath().build().toUriString();
 
-		String link = baseUrl + "/xac-thuc?maKhachHang=" + user.getId() + "&maXacThuc=" + user.getVerificationCode();
+		String link = baseUrl + "/xac-thuc?maKhachHang=" + user.getId() + "&maXacThuc=" + user.getToken();
 
 		System.out.println(link);
 
@@ -116,7 +115,7 @@ public class UserService implements IUserService {
 				+ "<tr style=\"font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; margin: 0;\">\r\n"
 				+ "<td style=\"font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; vertical-align: top; margin: 0; padding: 0 0 20px;\" valign=\"top\">\r\n"
 				+ "<p>Vui l&ograve;ng x&aacute;c thực t&agrave;i khoản của bạn bằng c&aacute;ch nhập mã xác thực này <strong><h1>"
-				+ kh.getVerificationCode() + "</h1></strong></p>\r\n"
+				+ kh.getToken() + "</h1></strong></p>\r\n"
 				+ "<p>hoặc click trực tiếp v&agrave;o n&uacute;t <strong>\"X&aacute;c thực email\"</strong> ở b&ecirc;n dưới:</p>\r\n"
 				+ "</td>\r\n" + "</tr>\r\n"
 				+ "<tr style=\"font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; margin: 0;\">\r\n"
@@ -213,7 +212,7 @@ public class UserService implements IUserService {
 		if (oldUserDTO.getId() != null) { // thay đổi mật khẩu (Quên mật khẩu)
 			entity = userRepository.findOne(oldUserDTO.getId());
 			// Set mã xác thực
-			String maXacThuc = MaXacThuc.getMaXacThuc();
+			String maXacThuc = TokenUtils.getMaXacThuc();
 
 			// Set thời gian hiệu lực của mã xác thực
 			Calendar c = Calendar.getInstance();
@@ -221,7 +220,7 @@ public class UserService implements IUserService {
 			Timestamp thoiGianHieuLucXacThuc = new Timestamp(c.getTimeInMillis());
 
 			entity.setValidTime(thoiGianHieuLucXacThuc);
-			entity.setVerificationCode(maXacThuc);
+			entity.setToken(maXacThuc);
 			entity.setChangePasswordStatus(false);
 
 //			entity.setNewPassword(passwordEncoder.passwordEncoder().encode(oldUserDTO.getNewPassword()));
@@ -232,7 +231,7 @@ public class UserService implements IUserService {
 
 	@Override
 	public UserDTO findByIdAndVerificationCode(Long id, String token) {
-		UserEntity entity = userRepository.findOneByIdAndVerificationCode(id, token);
+		UserEntity entity = userRepository.findOneByIdAndToken(id, token);
 		if(entity != null) {
 			return userConverter.toDTO(entity);
 		} else {
@@ -244,7 +243,7 @@ public class UserService implements IUserService {
 	@Override
 	public void deleteTokenAndChangePasswordStatus(UserDTO dto) {
 		UserEntity findOne = userRepository.findOne(dto.getId());
-		findOne.setVerificationCode(null);
+		findOne.setToken(null);
 		findOne.setChangePasswordStatus(false);
 		userRepository.save(findOne);
 	}

@@ -32,8 +32,8 @@ public class UserEntity extends BaseEntity {
 	@Column(name = "email")
 	private String email;
 	
-	@Column(name = "verification_code")
-	private String verificationCode;
+	@Column(name = "token")
+	private String token;
 	
 	@Column(name = "valid_time")
 	private Date validTime;
@@ -112,13 +112,13 @@ public class UserEntity extends BaseEntity {
 	public void setEmail(String email) {
 		this.email = email;
 	}
-
-	public String getVerificationCode() {
-		return verificationCode;
+	
+	public String getToken() {
+		return token;
 	}
 
-	public void setVerificationCode(String verificationCode) {
-		this.verificationCode = verificationCode;
+	public void setToken(String token) {
+		this.token = token;
 	}
 
 	public Date getValidTime() {

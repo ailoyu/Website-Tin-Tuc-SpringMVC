@@ -8,6 +8,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.web.WebAttributes;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationFailureHandler;
 import org.springframework.stereotype.Component;
 
@@ -28,9 +29,15 @@ public class CustomFailureHandler extends SimpleUrlAuthenticationFailureHandler{
 	public void onAuthenticationFailure(HttpServletRequest request, HttpServletResponse response,
 			AuthenticationException exception) throws IOException, ServletException {
 		
-		String username = exception.getAuthentication().getName();
-		String password = exception.getAuthentication().getCredentials().toString();
+//		String username = exception.getAuthentication().getName();
+//		String password = exception.getAuthentication().getCredentials().toString();
 		
+		exception = (AuthenticationException)request.getSession().getAttribute(WebAttributes.AUTHENTICATION_EXCEPTION);
+
+	    String username = request.getParameter("j_username");
+	    String password = request.getParameter("j_password");
+	    
+	    System.out.println(username + " | " + password);
 		
 		UserEntity userEntity = userRepository.findOneByUserName(username);
 		

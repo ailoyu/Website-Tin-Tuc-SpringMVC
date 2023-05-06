@@ -145,6 +145,7 @@ public class HomeController {
 		if (request.getParameter("message") != null) {
 			Map<String, String> message = messageUtil.getMessage(request.getParameter("message"));
 			mav.addObject("message", message.get("message"));
+			System.out.println(message.get("message"));
 			mav.addObject("alert", message.get("alert"));
 		}
 		return mav;
@@ -195,7 +196,7 @@ public class HomeController {
 			java.sql.Date now = new Date(System.currentTimeMillis());
 			if (now.before(userDTO.getValidTime())) {
 				// Kiểm tra mã xác thực nhập vào có giống trong mã xac thuc trong dtbase kh?
-				if (userDTO.getVerificationCode().equals(maXacThuc)) {
+				if (userDTO.getToken().equals(maXacThuc)) {
 					userDTO.setStatus(1);
 					userService.update(userDTO);
 					message = "Xác thực thành công";
@@ -212,12 +213,12 @@ public class HomeController {
 			java.sql.Date now = new Date(System.currentTimeMillis());
 			if (now.before(userDTO.getValidTime())) {
 				// Kiểm tra mã xác thực nhập vào có giống trong mã xac thuc trong dtbase kh?
-				if (userDTO.getVerificationCode().equals(maXacThuc)) {
+				if (userDTO.getToken().equals(maXacThuc)) {
 					userDTO.setChangePasswordStatus(true);
 					userService.update2(userDTO);
 					message = "Xác thực thành công, bạn có thể đổi mật khẩu";
 					alert = "success";
-					token = userDTO.getVerificationCode();
+					token = userDTO.getToken();
 				} else {
 					message = "Mã xác thực không khớp !";
 				}
@@ -225,7 +226,7 @@ public class HomeController {
 				message = "Hết thời gian xác thực, vui lòng xác thực lại!";
 			}
 		}
-		
+
 		mav.addObject("message", message);
 		mav.addObject("alert", alert);
 		mav.addObject("id", id);
@@ -280,22 +281,21 @@ public class HomeController {
 	}
 
 	@GetMapping(value = { "/reset-mat-khau/{id}/{token}" })
-	public ModelAndView resetMatKhau(@PathVariable Long id,
-									@PathVariable String token,
+	public ModelAndView resetMatKhau(@PathVariable Long id, @PathVariable String token,
 			@RequestParam(value = "message", required = false) String message) {
 		UserDTO dto = userService.findByIdAndVerificationCode(id, token);
-		
-		if(dto != null) {
+
+		if (dto != null) {
 			ModelAndView mav = new ModelAndView("web/user/resetPassword");
 			if (message != null) {
 				Map<String, String> message1 = messageUtil.getMessage(message);
 				mav.addObject("message", message1.get("message"));
 				mav.addObject("alert", message1.get("alert"));
-				
-				if(message.equals("change_password_success")) {
+
+				if (message.equals("change_password_success")) {
 					userService.deleteTokenAndChangePasswordStatus(dto);
 				}
-				
+
 			}
 			mav.addObject("token", token);
 			mav.addObject("userId", id);

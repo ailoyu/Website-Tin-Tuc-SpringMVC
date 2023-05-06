@@ -55,13 +55,13 @@ public class EmailUtils {
 			// Người nhận
 			msg.setRecipients(Message.RecipientType.TO, InternetAddress.parse(to, false));
 			// Tiêu đề email
-			msg.setSubject(tieuDe, "text/html; charset=UTF-8");
+			msg.setSubject(tieuDe, "UTF-8");
 			// Quy định ngày gửi
 			msg.setSentDate(new Date());
 
 			// Quy định email nhận phản hồi
 //			msg.setReplyTo(InternetAddress.parse(from, false));
-
+			
 			// Nội dung email
 			msg.setContent(noiDung, "text/html; charset=UTF-8");
 			// Gửi email
