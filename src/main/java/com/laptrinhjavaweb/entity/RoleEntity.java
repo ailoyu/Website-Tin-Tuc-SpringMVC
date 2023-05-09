@@ -22,7 +22,6 @@ public class RoleEntity extends BaseEntity {
 	@ManyToMany(mappedBy = "roles") // lấy tên biến arrayList bên kia
 	private List<UserEntity> users = new ArrayList<UserEntity>();
 
-	
 	public List<UserEntity> getUsers() {
 		return users;
 	}

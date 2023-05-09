@@ -20,7 +20,7 @@ public class SystemConstant {
 	
 	public static final String INCORRECT_PASSWORD = "Mật khẩu không chính xác!";
 	
-	public static final String INAVAILABLE_ACCOUNT = "Tài khoản không tồn tại";
+	public static final String INAVAILABLE_ACCOUNT = "Tài khoản chưa từng tồn tại!";
 	
 	public static final String INVALID_ACCOUNT = "Tài khoản chưa được xác thực!";
 	
@@ -38,5 +38,5 @@ public class SystemConstant {
 	
 	public static final String BLANK_PASSWORD = "Vui lòng không bỏ trống khi nhập mật khẩu!";
 	
-	public static final String INVALID_USERNAME_EMAIL = "Tài khoản hoặc email không hợp lệ!";
+	public static final String INVALID_USERNAME_EMAIL = "Tài khoản hoặc email không trùng khớp!";
 }

@@ -3,13 +3,7 @@ package com.laptrinhjavaweb.entity;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 @Entity
 @Table(name = "new")
@@ -32,7 +26,10 @@ public class NewEntity extends BaseEntity{
 	private CategoryEntity category;
 	
 	@OneToMany(mappedBy = "news", fetch = FetchType.EAGER)
-	private List<CommentEntity> comments = new ArrayList<CommentEntity>(); 
+	private List<CommentEntity> comments = new ArrayList<CommentEntity>();
+
+	@ManyToMany(mappedBy = "news") // lấy tên biến arrayList bên kia
+	private List<UserEntity> users = new ArrayList<UserEntity>();
 
 	public String getTitle() {
 		return title;
@@ -74,5 +71,19 @@ public class NewEntity extends BaseEntity{
 		this.category = category;
 	}
 
-	
+	public List<CommentEntity> getComments() {
+		return comments;
+	}
+
+	public void setComments(List<CommentEntity> comments) {
+		this.comments = comments;
+	}
+
+	public List<UserEntity> getUsers() {
+		return users;
+	}
+
+	public void setUsers(List<UserEntity> users) {
+		this.users = users;
+	}
 }

@@ -50,6 +50,7 @@ public class CustomUserDetailsService implements UserDetailsService{
 			myUser.setPassword(userEntity.getPassword());
 			myUser.setUsername(userEntity.getUserName());
 			myUser.setStatus(userEntity.getStatus());
+			myUser.setAvatar(userEntity.getAvatar());
 			
 			return myUser;//MyUser extends User(mà User implement UserDetails)=> myUser cx thuộc kiểu UserDetails
 		}

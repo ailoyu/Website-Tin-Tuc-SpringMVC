@@ -19,7 +19,16 @@ public class MyUser extends User { // Custom lại User để thêm fullName
 	private String password;
 	private String email;
 	private int status;
-	
+	private String avatar;
+
+	public String getAvatar() {
+		return avatar;
+	}
+
+	public void setAvatar(String avatar) {
+		this.avatar = avatar;
+	}
+
 	public void setFullName(String fullName) {
 		this.fullName = fullName;
 	}
