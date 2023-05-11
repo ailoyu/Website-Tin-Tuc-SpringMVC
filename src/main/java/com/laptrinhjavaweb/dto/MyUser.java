@@ -7,6 +7,11 @@ import org.springframework.security.core.userdetails.User;
 
 public class MyUser extends User { // Custom lại User để thêm fullName
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
 	public MyUser(String username, String password, boolean enabled, boolean accountNonExpired,
 			boolean credentialsNonExpired, boolean accountNonLocked,
 			Collection<? extends GrantedAuthority> authorities) {

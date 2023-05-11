@@ -161,6 +161,17 @@ public class NewService implements INewService {
 		return models;
 	}
 
+	@Override
+	public List<NewDTO> recommendCategoryForUser(Long id) {
+		List<NewDTO> list = new ArrayList<>();
+		List<NewEntity> recommendForUser =  newRepository.recommendCategoryForUser(id);
+		for (NewEntity item : recommendForUser) {
+			NewDTO newDTO = newConverter.toDTO(item); // convert từ entity -> dto
+			list.add(newDTO);
+		}
+		return list;
+	}
+
 	
 
 }

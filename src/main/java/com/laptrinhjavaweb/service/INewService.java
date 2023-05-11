@@ -19,4 +19,5 @@ public interface INewService {
 	List<NewDTO> findByTitleName(String key, int page, int maxpage);
 	int getTotalItemByTitle(String key);
 	List<NewDTO> findByHotNew();
+	List<NewDTO> recommendCategoryForUser(Long id);
 }

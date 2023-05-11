@@ -54,13 +54,19 @@ public class UserEntity extends BaseEntity {
 									inverseJoinColumns = @JoinColumn(name = "roleid")) // id của class role kia
 	private List<RoleEntity> roles = new ArrayList<RoleEntity>();
 
-	@ManyToMany(fetch = FetchType.LAZY)
-	@JoinTable(name = "view_count", joinColumns = @JoinColumn(name = "user_id"),
-									inverseJoinColumns = @JoinColumn(name = "new_id"))
-	private List<NewEntity> news = new ArrayList<>();
+	@OneToMany(mappedBy = "userEntity")
+	private List<ViewCountEntity> views;
 	
 	@OneToMany(mappedBy = "user")
 	private List<CommentEntity> comments = new ArrayList<>();
+	
+	public List<ViewCountEntity> getViews() {
+		return views;
+	}
+
+	public void setViews(List<ViewCountEntity> views) {
+		this.views = views;
+	}
 
 	public List<CommentEntity> getComments() {
 		return comments;
@@ -158,11 +164,4 @@ public class UserEntity extends BaseEntity {
 		this.changePasswordStatus = changePasswordStatus;
 	}
 
-	public List<NewEntity> getNews() {
-		return news;
-	}
-
-	public void setNews(List<NewEntity> news) {
-		this.news = news;
-	}
 }

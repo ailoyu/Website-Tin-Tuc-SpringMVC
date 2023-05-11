@@ -10,7 +10,7 @@ import com.laptrinhjavaweb.dto.UserDTO;
 import com.laptrinhjavaweb.service.IUserService;
 
 @RestController(value = "signupAPIOfWeb")
-public class AccountAPI {
+public class UserAPI {
 		
 	@Autowired
 	private IUserService userService;

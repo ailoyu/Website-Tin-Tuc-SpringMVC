@@ -28,5 +28,10 @@ public interface NewRepository extends JpaRepository<NewEntity, Long> { // Giố
 	@Query(value = "SELECT * FROM new ORDER by modifieddate DESC LIMIT 7", nativeQuery = true)
 	List<NewEntity> findByHotNew();
 	
+	@Query(value = "SELECT * FROM `new` n WHERE n.category_id = (SELECT n.category_id FROM `new` n INNER JOIN views v ON n.id = v.new_id\r\n"
+			+ "where v.user_id = :userId AND v.view_count = (SELECT max(v.view_count) FROM views v WHERE v.user_id = :userId)\r\n"
+			+ "LIMIT 1)", nativeQuery = true)
+	List<NewEntity> recommendCategoryForUser(@Param("userId") Long userId);
+	
 }
  

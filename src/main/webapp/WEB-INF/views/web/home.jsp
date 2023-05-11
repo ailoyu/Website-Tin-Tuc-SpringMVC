@@ -1,8 +1,10 @@
+<%@page import="com.laptrinhjavaweb.util.SecurityUtils"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@include file="/common/taglib.jsp"%>
 <c:url var="HomeURL" value="/trang-chu" />
 <c:url var="searching" value="/search"/>
+<c:url var="viewCountAPI" value="/api/views" />
 <!DOCTYPE html>
 
 <html>
@@ -43,7 +45,7 @@
 			<%-- 				<c:param name="sortName" value="title"/> --%>
 			<%-- 				<c:param name="sortBy" value="desc"/>  --%>
 						</c:url>
-
+						
 						<a href="${editURL}" class="list-group-item" >${item.name }</a>
 					</c:forEach>
 				</div>
@@ -85,7 +87,7 @@
 						<c:forEach var="item" items="${ model.listHotNews }">
 						
 							<div class="carousel-item">
-							<a href="<c:url value="/thong-tin-bai-viet?id=${ item.id }"/>">
+							<a onclick="myFunction(${item.id})" href="<c:url value="/thong-tin-bai-viet?id=${ item.id }"/>">
 								<img class="d-block img-fluid"
 									src="${ item.thumbnail }"
 									width="1000px" height="500px">
@@ -96,6 +98,8 @@
 							</div>	
 						</div>
 						</c:forEach>
+						
+						
 						
 						
 							
@@ -115,7 +119,45 @@
 					</c:if>
 				</c:if>
 				
-<%-- 				 <embed src='<c:url value="/template/c1.mp3" />' loop="true" autostart="true" hidden="true"> --%>
+				<section class="search-sec">
+    <div class="container">
+        <form action="#" method="post" novalidate="novalidate">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="row">
+                        <div class="col-lg-3 col-md-3 col-sm-12 p-0" style="margin-left: 1em">
+                            <select class="form-control search-slt" id="exampleFormControlSelect1">
+                                <option>Select Vehicle</option>
+                                <option>Example one</option>
+                                <option>Example one</option>
+                                <option>Example one</option>
+                                <option>Example one</option>
+                                <option>Example one</option>
+                                <option>Example one</option>
+                            </select>
+                        </div>
+                        <div class="col-lg-3 col-md-3 col-sm-12 p-0" style="margin-left: 1em">
+                            <select class="form-control search-slt" id="exampleFormControlSelect1">
+                                <option>Select Vehicle</option>
+                                <option>Example one</option>
+                                <option>Example one</option>
+                                <option>Example one</option>
+                                <option>Example one</option>
+                                <option>Example one</option>
+                                <option>Example one</option>
+                            </select>
+                        </div>
+                        
+                        <div class="col-lg-3 col-md-3 col-sm-12 p-0" style="margin-left: 1em">
+                            <button type="button" class="btn btn-danger wrn-btn">Search</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</section>
+<br><br>
 				
 				<div class="row">
 			
@@ -127,10 +169,10 @@
 				</c:url>
 					  <div class="col-lg-4 col-md-6 mb-4">
               <div class="card h-100">
-                <a href='${editURL }'><img class="card-img-top" src="${item.thumbnail }" alt=""></a>
+                <a href='${editURL }'><img class="card-img-top" src="${item.thumbnail }" onclick="myFunction(${item.id})"></a>
                 <div class="card-body">
                   <h4 class="card-title">
-                    <a href='${editURL }'>${item.title}</a>
+                    <a href='${editURL }' onclick="myFunction(${item.id})">${item.title}</a>
                   </h4>
                   <h5>Tác giả: ${item.createdBy }</h5>
                   <p class="card-text">${item.shortDescription }</p>
@@ -142,6 +184,9 @@
               </div>
             </div>	
 				</c:forEach>
+				
+				
+            	
 				</div>
 				<ul class="pagination" id="pagination"></ul>
 				<c:if test="${ not empty model.categoryId }">
@@ -185,6 +230,32 @@
         });
     });
 	
+	<% if (SecurityUtils.getPrincipal() != null){ %>
+		function myFunction(newId) {
+			var data = {};
+			data["userId"] = <%= SecurityUtils.getPrincipal().getId() %>;
+			data["newId"] = newId;
+			
+			addNew(data);
+		}
+		
+		function addNew(data) {
+			$.ajax({
+				url : '${viewCountAPI}', // gửi tới url api
+				type : 'POST',
+				contentType : 'application/json', // ép kiểu json từ client -> server
+				data : JSON.stringify(data), // parse từ JavaScript Object -> JSON
+				dataType : 'json', // nhận kiểu json từ server -> client
+				success : function(result) {
+					console.log("Thành công");
+				},
+				error : function(error) {
+					console.log("Thất bại");
+				}
+			});
+		}
+	
+	<% } %>
 	
 	
 	

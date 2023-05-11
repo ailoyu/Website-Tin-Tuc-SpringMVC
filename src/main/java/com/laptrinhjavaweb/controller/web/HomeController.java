@@ -1,6 +1,7 @@
 package com.laptrinhjavaweb.controller.web;
 
 import java.sql.Date;
+import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -24,10 +25,12 @@ import org.springframework.web.servlet.ModelAndView;
 import com.laptrinhjavaweb.dto.CommentDTO;
 import com.laptrinhjavaweb.dto.NewDTO;
 import com.laptrinhjavaweb.dto.UserDTO;
+import com.laptrinhjavaweb.dto.ViewCountDTO;
 import com.laptrinhjavaweb.service.ICategoryService;
 import com.laptrinhjavaweb.service.ICommentService;
 import com.laptrinhjavaweb.service.INewService;
 import com.laptrinhjavaweb.service.IUserService;
+import com.laptrinhjavaweb.service.IViewCountService;
 import com.laptrinhjavaweb.util.MessageUtils;
 import com.laptrinhjavaweb.util.SecurityUtils;
 
@@ -124,6 +127,9 @@ public class HomeController {
 
 	@Autowired
 	private ICommentService commentService;
+	
+	@Autowired
+	private IViewCountService viewCountService;
 
 	@RequestMapping(value = "/thong-tin-bai-viet", method = RequestMethod.GET)
 	public ModelAndView showInfo(@RequestParam(value = "id", required = false) Long id) {
@@ -136,6 +142,14 @@ public class HomeController {
 		commentDTO.setListComment(commentService.findByNewId(id));
 		mav.addObject("comment", commentDTO);
 		mav.addObject("model", model);
+		if(SecurityUtils.getPrincipal() != null) {
+			List<ViewCountDTO> recommendForUser = viewCountService.recommendForUser(SecurityUtils.getPrincipal().getId());		
+			if(recommendForUser.size() == 3) {
+				mav.addObject("recommendForUser", recommendForUser);
+				List<NewDTO> recommendCategoryForUser = newService.recommendCategoryForUser(SecurityUtils.getPrincipal().getId());
+				mav.addObject("recommendCategoryForUser", recommendCategoryForUser);
+			}
+		}
 		return mav;
 	}
 

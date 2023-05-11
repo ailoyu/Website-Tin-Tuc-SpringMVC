@@ -21,6 +21,7 @@ import com.laptrinhjavaweb.entity.UserEntity;
 import com.laptrinhjavaweb.repository.UserRepository;
 import com.laptrinhjavaweb.service.IUserService;
 import com.laptrinhjavaweb.util.EmailUtils;
+import com.laptrinhjavaweb.util.SecurityUtils;
 import com.laptrinhjavaweb.util.TokenUtils;
 
 @Service // khai báo để AutoWired cho service
@@ -161,9 +162,14 @@ public class UserService implements IUserService {
 	public UserDTO update1(UserDTO dto) {
 		UserEntity oldEntity = userRepository.findOneByUserName(dto.getUserName());
 		oldEntity.setFullName(dto.getFullName());
+		SecurityUtils.getPrincipal().setFullName(dto.getFullName());
 		oldEntity.setEmail(dto.getEmail());
-		oldEntity.setEmailReceived(dto.getEmailReceived());
+		SecurityUtils.getPrincipal().setEmail(dto.getEmail());
 		oldEntity.setAvatar(dto.getAvatar());
+		SecurityUtils.getPrincipal().setAvatar(dto.getAvatar());
+		
+		oldEntity.setEmailReceived(dto.getEmailReceived());
+		
 		return userConverter.toDTO(userRepository.save(oldEntity));
 	}
 

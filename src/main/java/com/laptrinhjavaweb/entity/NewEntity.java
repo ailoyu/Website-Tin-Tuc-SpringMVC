@@ -28,8 +28,18 @@ public class NewEntity extends BaseEntity{
 	@OneToMany(mappedBy = "news", fetch = FetchType.EAGER)
 	private List<CommentEntity> comments = new ArrayList<CommentEntity>();
 
-	@ManyToMany(mappedBy = "news") // lấy tên biến arrayList bên kia
-	private List<UserEntity> users = new ArrayList<UserEntity>();
+	@OneToMany(mappedBy = "newEntity")
+	private List<ViewCountEntity> views;
+	
+
+
+	public List<ViewCountEntity> getViews() {
+		return views;
+	}
+
+	public void setViews(List<ViewCountEntity> views) {
+		this.views = views;
+	}
 
 	public String getTitle() {
 		return title;
@@ -79,11 +89,4 @@ public class NewEntity extends BaseEntity{
 		this.comments = comments;
 	}
 
-	public List<UserEntity> getUsers() {
-		return users;
-	}
-
-	public void setUsers(List<UserEntity> users) {
-		this.users = users;
-	}
 }
