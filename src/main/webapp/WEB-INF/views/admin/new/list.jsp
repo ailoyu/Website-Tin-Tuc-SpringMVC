@@ -163,15 +163,15 @@
 				  cancelButtonClass: "btn-danger",
 				  confirmButtonText: "Xác nhận",
 				  cancelButtonText: "Hủy bỏ",
-				}).then(function(isConfirm) {
-				  if (isConfirm) {
+				}).then(function(result) {
+					if(result.value){
 					// call api
 					// tìm các id trong các checkbox đã chọn, từ phần <tbody> trở xuống
 					  var ids = $('tbody input[type=checkbox]:checked').map(function () {
 				            return $(this).val(); // bỏ value của các id cho vào mảng[]
 				        }).get();
 						deleteNew(ids);
-				  }
+				  } 
 				});
 		}
 		

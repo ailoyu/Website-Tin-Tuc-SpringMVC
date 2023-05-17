@@ -74,7 +74,7 @@
 						<div class="mb-3">
 							<input type="checkbox" class="form-check-input"
 								id="dongYNhanMail"> <label
-								for="dongYNhanMail" class="form-label">Đồng ý nhận email</label>
+								for="dongYNhanMail" class="form-label">Đồng ý nhận thông báo của hệ thống qua email</label>
 						</div>
 						<div class="mb-3">
 							<input class="btn btn-primary form-control" type="button"

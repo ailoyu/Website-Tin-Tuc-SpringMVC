@@ -19,9 +19,9 @@
 			style="margin-left: 33%;">
 			<form action="<c:url value='/search'/>">
 				<ul class="navbar-nav me-auto mb-2 mb-lg-0">
-					<li class="nav-item"><input oninput=""
+					<li class="nav-item"><input oninput="" style="width: 16em"
 						class="form-control me-2" type="text"
-						placeholder="Nội Dung Tìm Kiếm" aria-label="Search" name="key"
+						placeholder="Tìm kiếm bài viết và người dùng" aria-label="Search" name="key"
 						value="${key}"></li>
 					<li class="nav-item" style="margin-left: 1em;">
 						<button class="btn btn-outline-success" type="submit">Tìm</button>
@@ -46,8 +46,10 @@
 									data-bs-toggle="dropdown" aria-expanded="false"> Welcome, <%=SecurityUtils.getPrincipal().getFullName()%></a>
 									<ul class="dropdown-menu">
 										<li><a class="dropdown-item" href="<c:url value='/quan-tri/trang-chu'/>">Trang quản trị</a></li>
+										<li><a class="dropdown-item" href="<c:url value='/trang-ca-nhan'/>">Trang cá nhân</a></li>
 										<li><a class="dropdown-item" href="<c:url value='/thay-doi-thong-tin' />">Thay đổi thông
 												tin</a></li>
+										<li><a class="dropdown-item" href="<c:url value='/tin-nhan' />">Nhắn tin</a></li>
 										<li><a class="dropdown-item" href="<c:url value='/thay-doi-mat-khau' />">Đổi mật khẩu</a></li>
 										<li><hr class="dropdown-divider"></li>
 										<li><a class="dropdown-item"
@@ -59,8 +61,10 @@
 									class="nav-link dropdown-toggle" href="#" role="button"
 									data-bs-toggle="dropdown" aria-expanded="false"> Welcome, <%=SecurityUtils.getPrincipal().getFullName()%></a>
 									<ul class="dropdown-menu">
+									<li><a class="dropdown-item" href="<c:url value='/trang-ca-nhan'/>">Trang cá nhân</a></li>
 										<li><a class="dropdown-item" href="<c:url value='/thay-doi-thong-tin' />">Thay đổi thông
 												tin</a></li>
+										<li><a class="dropdown-item" href="<c:url value='/tin-nhan' />">Nhắn tin</a></li>
 										<li><a class="dropdown-item" href="<c:url value='/thay-doi-mat-khau' />">Đổi mật khẩu</a></li>
 										<li><hr class="dropdown-divider"></li>
 										<li><a class="dropdown-item"
@@ -108,6 +112,7 @@ var played = false;
 var tillPlayed = getCookie('timePlayed');
 function update()
 {
+	song.volume = 0.1;
     if(!played){
         if(tillPlayed){
         song.currentTime = tillPlayed;

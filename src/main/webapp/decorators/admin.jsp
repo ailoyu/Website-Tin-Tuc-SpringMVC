@@ -29,6 +29,8 @@
 	<!-- Sweet alert -->
 	<script src="<c:url value="/template/admin/sweetalert/sweetalert2.min.js" />"></script>
 	<link rel="stylesheet" href="<c:url value="/template/admin/sweetalert/sweetalert2.min.css" />">
+	
+	
 </head>
 <body class="no-skin">
 	<!-- header -->

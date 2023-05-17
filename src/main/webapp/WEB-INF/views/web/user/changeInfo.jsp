@@ -14,7 +14,7 @@
 		<br>
 		<br>
 		<div class="text-center">
-			<h1>THÔNG TIN TÀI KHOẢN</h1>
+			<h1>CHỈNH SỬA THÔNG TIN</h1>
 		</div>
 		
 		<c:if test="${not empty message }">
@@ -61,7 +61,7 @@
 						<div class="mb-3">
 							<input type="checkbox" checked class="form-check-input"
 								id="dongYNhanMail" name="dongYNhanMail"> <label
-								for="dongYNhanMail" class="form-label">Đồng ý nhận email</label>
+								for="dongYNhanMail" class="form-label">Đồng ý nhận thông báo của hệ thống qua email</label>
 						</div>
 					</c:if>
 
@@ -69,7 +69,7 @@
 						<div class="mb-3">
 							<input type="checkbox" class="form-check-input"
 								id="dongYNhanMail" name="dongYNhanMail"> <label
-								for="dongYNhanMail" class="form-label">Đồng ý nhận email</label>
+								for="dongYNhanMail" class="form-label">Đồng ý nhận thông báo của hệ thống qua email</label>
 						</div>
 					</c:if>
 

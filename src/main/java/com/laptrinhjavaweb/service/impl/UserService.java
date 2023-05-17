@@ -15,7 +15,9 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.laptrinhjavaweb.config.PasswordEncoderConfig;
 import com.laptrinhjavaweb.converter.UserConverter;
+import com.laptrinhjavaweb.dto.NewDTO;
 import com.laptrinhjavaweb.dto.UserDTO;
+import com.laptrinhjavaweb.entity.NewEntity;
 import com.laptrinhjavaweb.entity.RoleEntity;
 import com.laptrinhjavaweb.entity.UserEntity;
 import com.laptrinhjavaweb.repository.UserRepository;
@@ -176,10 +178,7 @@ public class UserService implements IUserService {
 	@Override
 	public UserDTO updatePassword(UserDTO oldUserDTO) {
 		UserEntity entity = userRepository.findOne(oldUserDTO.getId());
-		if (entity.getChangePasswordStatus() == true) { // thay đổi mật khẩu (Quên mật khẩu)
-			entity.setPassword(passwordEncoder.passwordEncoder().encode(oldUserDTO.getNewPassword()));
-			return userConverter.toDTO(userRepository.save(entity));
-		} else { // thay đổi mật khẩu (Sau khi đăng nhập)
+		if(entity.getChangePasswordStatus() == null || entity.getChangePasswordStatus() == false) { // thay đổi mật khẩu (Sau khi đăng nhập)
 			if (oldUserDTO.getPassword() != null && oldUserDTO.getNewPassword() != null) {
 				boolean checkOldPassword = passwordEncoder.passwordEncoder().matches(oldUserDTO.getPassword(), entity.getPassword());
 				boolean checkNewPasswordWithOld = passwordEncoder.passwordEncoder().matches(oldUserDTO.getNewPassword(),
@@ -191,8 +190,11 @@ public class UserService implements IUserService {
 					return null;
 				}
 			}
-			return null;
+		}  else if (entity.getChangePasswordStatus() == true) { // thay đổi mật khẩu (Quên mật khẩu)
+			entity.setPassword(passwordEncoder.passwordEncoder().encode(oldUserDTO.getNewPassword()));
+			return userConverter.toDTO(userRepository.save(entity));
 		}
+		return null;
 	}
 
 	@Override
@@ -253,5 +255,29 @@ public class UserService implements IUserService {
 		findOne.setChangePasswordStatus(false);
 		userRepository.save(findOne);
 	}
+
+	@Override
+	public List<UserDTO> findByFullName(String userName) {
+		List<UserDTO> models = new ArrayList<UserDTO>();
+		List<UserEntity> entities = userRepository.findByFullName(userName);
+		for (UserEntity item : entities) {
+			UserDTO userDTO = userConverter.toDTO(item); // convert từ entity -> dto
+			models.add(userDTO);
+		}
+		return models;
+	}
+
+	@Override
+	public List<UserDTO> findByFriendList(Long id) {
+		List<UserDTO> models = new ArrayList<UserDTO>();
+		List<UserEntity> entities = userRepository.findByListFriend(id);
+		for (UserEntity item : entities) {
+			UserDTO userDTO = userConverter.toDTO(item); // convert từ entity -> dto
+			models.add(userDTO);
+		}
+		return models;
+	}
+
+	
 
 }

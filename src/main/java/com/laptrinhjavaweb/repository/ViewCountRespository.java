@@ -11,7 +11,7 @@ import com.laptrinhjavaweb.entity.ViewCountEntity;
 public interface ViewCountRespository extends JpaRepository<ViewCountEntity, Long> {
 	
 	
-	@Query(value = "SELECT * FROM views v INNER JOIN `new` n ON v.new_id = n.id WHERE v.user_id = :userId ORDER BY v.view_count DESC LIMIT 3", nativeQuery = true)
+	@Query(value = "SELECT * FROM views v INNER JOIN `new` n ON v.new_id = n.id WHERE v.user_id = :userId ORDER BY RAND() LIMIT 3", nativeQuery = true)
 	List<ViewCountEntity> recommendForUser(@Param("userId") Long userId);
 	
 }

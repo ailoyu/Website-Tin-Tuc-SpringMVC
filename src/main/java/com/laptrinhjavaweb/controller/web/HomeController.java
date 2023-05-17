@@ -23,11 +23,13 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.laptrinhjavaweb.dto.CommentDTO;
+import com.laptrinhjavaweb.dto.FriendshipDTO;
 import com.laptrinhjavaweb.dto.NewDTO;
 import com.laptrinhjavaweb.dto.UserDTO;
 import com.laptrinhjavaweb.dto.ViewCountDTO;
 import com.laptrinhjavaweb.service.ICategoryService;
 import com.laptrinhjavaweb.service.ICommentService;
+import com.laptrinhjavaweb.service.IFriendshipService;
 import com.laptrinhjavaweb.service.INewService;
 import com.laptrinhjavaweb.service.IUserService;
 import com.laptrinhjavaweb.service.IViewCountService;
@@ -42,9 +44,9 @@ public class HomeController {
 
 	@Autowired
 	private INewService newService;
-
+	
 	@Autowired
-	IUserService userService;
+	private IUserService userService;
 
 	// Request Mapping: nhận đường link url, dùng method: get
 	@RequestMapping(value = "/trang-chu", method = RequestMethod.GET)
@@ -117,10 +119,14 @@ public class HomeController {
 					newService.findByTitleName(key, (model.getPage() - 1) * model.getLimit(), model.getLimit()));
 			model.setTotalItem(newService.getTotalItemByTitle(key));
 			model.setTotalPage((int) Math.ceil((double) model.getTotalItem() / model.getLimit()));
-
+			
+			
+			List<UserDTO> findByFullName = userService.findByFullName(key);
+			
 			mav.addObject("key", key);
 			mav.addObject("categories", categoryService.findAllCategory());
 			mav.addObject("model", model);
+			mav.addObject("findName", findByFullName);
 			return mav;
 		}
 	}
@@ -270,6 +276,7 @@ public class HomeController {
 		return mav;
 	}
 
+
 	@RequestMapping(value = "/thay-doi-mat-khau", method = RequestMethod.GET)
 	public ModelAndView thayDoiMatKhau(HttpServletRequest request) {
 		Long id = SecurityUtils.getPrincipal().getId();
@@ -282,6 +289,49 @@ public class HomeController {
 		mav.addObject("id", id);
 		return mav;
 	}
+	
+	@Autowired
+	private IFriendshipService friendshipService;
+	
+	@GetMapping(value = {"/trang-ca-nhan/{userId}", "/trang-ca-nhan" })
+	public ModelAndView trangCaNhan(@PathVariable(value = "userId", required = false) Long userId) {
+		ModelAndView mav = new ModelAndView("web/user/personalPage");
+		UserDTO dto = new UserDTO();
+		Long requesterId;
+		if(userId == null){
+			requesterId = SecurityUtils.getPrincipal().getId();
+			dto = userService.findById(SecurityUtils.getPrincipal().getId());
+		}else{
+			requesterId = userId;
+			dto = userService.findById(userId);
+		}
+		if(SecurityUtils.getPrincipal() != null) {
+			if(Long.compare(requesterId, SecurityUtils.getPrincipal().getId()) != 0) {
+				FriendshipDTO friend = new FriendshipDTO();
+				friend = friendshipService.findByRequesterIdAndAddresseeId(SecurityUtils.getPrincipal().getId(), userId);
+				if(friend == null) {
+					friend = friendshipService.findByRequesterIdAndAddresseeId(userId, SecurityUtils.getPrincipal().getId());
+					mav.addObject("friend1", friend);
+				} else {
+					mav.addObject("friend", friend);
+				}
+				
+			}
+		}
+		List<UserDTO> listFriend = userService.findByFriendList(requesterId);
+		mav.addObject("listFriend", listFriend);
+		mav.addObject("model", dto);
+		mav.addObject("userName", dto.getUserName());
+		
+		return mav;
+	}
+	
+	@GetMapping(value = {"/tin-nhan"})
+	public ModelAndView tinNhan() {
+		ModelAndView mav = new ModelAndView("web/user/messenger");
+		return mav;
+	}
+	
 
 	@GetMapping(value = { "/quen-mat-khau/{message}", "/quen-mat-khau" })
 	public ModelAndView quenMatKhau(@PathVariable(value = "message", required = false) String message) {

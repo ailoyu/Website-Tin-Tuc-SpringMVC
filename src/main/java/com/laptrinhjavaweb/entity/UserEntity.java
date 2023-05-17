@@ -60,6 +60,29 @@ public class UserEntity extends BaseEntity {
 	@OneToMany(mappedBy = "user")
 	private List<CommentEntity> comments = new ArrayList<>();
 	
+	@OneToMany(mappedBy = "requester")
+	private List<FriendshipEntity> requester;
+	
+	@OneToMany(mappedBy = "addressee")
+	private List<FriendshipEntity> addressee;
+	
+	
+	public List<FriendshipEntity> getRequester() {
+		return requester;
+	}
+
+	public void setRequester(List<FriendshipEntity> requester) {
+		this.requester = requester;
+	}
+
+	public List<FriendshipEntity> getAddressee() {
+		return addressee;
+	}
+
+	public void setAddressee(List<FriendshipEntity> addressee) {
+		this.addressee = addressee;
+	}
+
 	public List<ViewCountEntity> getViews() {
 		return views;
 	}

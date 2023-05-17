@@ -1,5 +1,7 @@
 package com.laptrinhjavaweb.service;
 
+import java.util.List;
+
 import com.laptrinhjavaweb.dto.UserDTO;
 
 public interface IUserService {
@@ -15,4 +17,6 @@ public interface IUserService {
 	void validateToChangePassword(UserDTO oldUserDTO);
 	UserDTO findByIdAndVerificationCode(Long id, String token);
 	void deleteTokenAndChangePasswordStatus(UserDTO dto);
+	List<UserDTO> findByFullName(String userName);
+	List<UserDTO> findByFriendList(Long id);
 }

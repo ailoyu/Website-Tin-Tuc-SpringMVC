@@ -19,5 +19,4 @@ public class CommentAPI {
 	public CommentDTO createComment(@RequestBody CommentDTO commentDTO) { // khai báo để Map kiểu JSon -> kiểu NewDT
 		return commentService.save(commentDTO);
 	}
-	
 }
