@@ -96,11 +96,12 @@
             <br>
             <br>
         </div>
+        <c:if test="${ empty listFriend1 }">
         <div class="row">
         <div class="col-md-6 col-lg-4" style="margin-left:auto;margin-right:auto;text-align:center">
             <div class="card">
                 <div class="header">
-                    <h4><strong>Danh sách bạn bè</strong></h4>
+                    <h4><a href='<c:url value="/trang-ca-nhan/${model.id }/danh-sach-ban-be" />' ><strong style="color: graytext;">Danh sách bạn bè</strong></a></h4>
                 </div>
                 <div class="body">
                     <ul class="new_friend_list list-unstyled row">
@@ -120,8 +121,45 @@
            
         </div>
          <div class="col-md-6"></div>
+        	
+        </div>
+        </c:if>
+        <c:if test="${ not empty listFriend1 }">
+        <div class="row">
+        <h4><a href='<c:url value="/trang-ca-nhan/${model.id }/danh-sach-ban-be" />' ><strong style="color: graytext;">Danh sách bạn bè</strong></a></h4>
+        <div class="container">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="people-nearby">
+              <c:forEach var="item" items="${ listFriend1 }">
+             
+              <div class="nearby-user">
+                <div class="row ">
+                  <div class="col-md-2 col-sm-2">
+                  	<a href='<c:url value="/trang-ca-nhan${ item.id }" />'>
+                    	<img src="${ item.avatar }" alt="user" class="profile-photo-lg">
+                  	</a>
+                  </div>
+                  <div class="col-md-7 col-sm-7">
+                  <a href='<c:url value="/trang-ca-nhan/${ item.id }" />'>
+                    <h5>${item.fullName }</h5>
+                    <p class="text-muted">@${item.userName }</p>
+                  </a>
+                  </div>
+                  <div class="col-md-3 col-sm-3">
+                    <button class="btn btn-primary pull-right">Add Friend</button>
+                  </div>
+                </div>
+              </div>
+              </a>
+              </c:forEach>
+            </div>
+    	</div>
+	</div>
+</div>
         
         </div>
+        </c:if>
 
 
 </div>

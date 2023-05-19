@@ -18,5 +18,6 @@ public interface IUserService {
 	UserDTO findByIdAndVerificationCode(Long id, String token);
 	void deleteTokenAndChangePasswordStatus(UserDTO dto);
 	List<UserDTO> findByFullName(String userName);
-	List<UserDTO> findByFriendList(Long id);
+	List<UserDTO> findBy9FriendList(Long id);
+	List<UserDTO> findByAllFriendList(Long id);
 }

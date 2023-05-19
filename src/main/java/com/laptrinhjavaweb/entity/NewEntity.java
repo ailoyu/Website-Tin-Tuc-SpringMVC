@@ -25,10 +25,10 @@ public class NewEntity extends BaseEntity{
 	@JoinColumn(name = "category_id")
 	private CategoryEntity category;
 	
-	@OneToMany(mappedBy = "news", fetch = FetchType.EAGER)
+	@OneToMany(mappedBy = "news", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
 	private List<CommentEntity> comments = new ArrayList<CommentEntity>();
 
-	@OneToMany(mappedBy = "newEntity")
+	@OneToMany(mappedBy = "newEntity",cascade = CascadeType.ALL)
 	private List<ViewCountEntity> views;
 	
 

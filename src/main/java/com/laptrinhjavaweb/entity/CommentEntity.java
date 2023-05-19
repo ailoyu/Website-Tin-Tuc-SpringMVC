@@ -17,11 +17,11 @@ public class CommentEntity extends BaseEntity {
 	@Column(name = "parent_id")
 	private Integer parentId;
 	
-	@ManyToOne(cascade = CascadeType.ALL)
+	@ManyToOne()
 	@JoinColumn(name = "user_id")
 	private UserEntity user;
 	
-	@ManyToOne(cascade = CascadeType.ALL)
+	@ManyToOne()
 	@JoinColumn(name = "new_id")
 	private NewEntity news;
 	

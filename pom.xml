@@ -226,18 +226,26 @@
 		</dependency>
 		
 		<!-- https://mvnrepository.com/artifact/javax.jms/javax.jms-api -->
-<!--		<dependency>-->
-<!--		    <groupId>javax.jms</groupId>-->
-<!--		    <artifactId>javax.jms-api</artifactId>-->
-<!--		    <version>2.0.1</version>-->
-<!--		</dependency>-->
+		<dependency>
+		    <groupId>javax.jms</groupId>
+		    <artifactId>javax.jms-api</artifactId>
+		    <version>2.0.1</version>
+		</dependency>
 		
 		<!-- https://mvnrepository.com/artifact/org.apache.activemq/activemq-all -->
+		<dependency>
+		    <groupId>org.apache.activemq</groupId>
+		    <artifactId>activemq-all</artifactId>
+		    <version>5.15.5</version>
+		</dependency>
+		
+		<!-- https://mvnrepository.com/artifact/org.springframework/spring-jms -->
 <!--		<dependency>-->
-<!--		    <groupId>org.apache.activemq</groupId>-->
-<!--		    <artifactId>activemq-all</artifactId>-->
-<!--		    <version>5.15.15</version>-->
+<!--		    <groupId>org.springframework</groupId>-->
+<!--		    <artifactId>spring-jms</artifactId>-->
+<!--		    <version>${springframework.version}</version>-->
 <!--		</dependency>-->
+
 
 		<!-- https://mvnrepository.com/artifact/org.springframework/spring-websocket -->
 <!--		<dependency>-->

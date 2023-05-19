@@ -16,11 +16,17 @@
 
 
 <title>Trang chủ</title>
+<style type="text/css">
 
+</style>
 </head>
 
 <body>
 	<!-- Page Content -->
+	<div class="row">
+		
+		
+	</div>
 	<c:if test="${not empty model.categoryId }">
 		<form action="<c:url value='the-loai'/>" id="formSubmit" method="get">
 	</c:if>

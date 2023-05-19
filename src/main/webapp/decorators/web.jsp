@@ -57,6 +57,76 @@
 	<!-- Sweet alert -->	
 	<script src="<c:url value="/template/admin/sweetalert/sweetalert2.min.js" />"></script>
 	<link rel="stylesheet" href="<c:url value="/template/admin/sweetalert/sweetalert2.min.css" />">
+	
+<style type="text/css">
+.chat-messages {
+    display: flex;
+    flex-direction: column;
+    max-height: 350px;
+    overflow-y: scroll
+}
+
+.chat-message-left,
+.chat-message-right {
+    display: flex;
+    flex-shrink: 0
+}
+
+.chat-message-left {
+    margin-right: auto
+}
+
+.chat-message-right {
+    flex-direction: row-reverse;
+    margin-left: auto
+}
+.py-3 {
+    padding-top: 1rem!important;
+    padding-bottom: 1rem!important;
+}
+.px-4 {
+    padding-right: 1.5rem!important;
+    padding-left: 1.5rem!important;
+}
+.flex-grow-0 {
+    flex-grow: 0!important;
+}
+.border-top {
+    border-top: 1px solid #dee2e6!important;
+}
+.border-right{
+	display: flex;
+    flex-direction: column;
+    max-height: 450px;
+    overflow-y: scroll
+}
+.people-nearby .google-maps{
+  background: #f8f8f8;
+  border-radius: 4px;
+  border: 1px solid #f1f2f2;
+  padding: 20px;
+  margin-bottom: 20px;
+}
+
+.people-nearby .google-maps .map{
+  height: 300px;
+  width: 100%;
+  border: none;
+}
+
+.people-nearby .nearby-user{
+  padding: 20px 0;
+  border-top: 1px solid #f1f2f2;
+  border-bottom: 1px solid #f1f2f2;
+  margin-bottom: 20px;
+}
+
+img.profile-photo-lg{
+  height: 80px;
+  width: 80px;
+  border-radius: 50%;
+}
+	</style>
 </head>
 <body>
 	<!-- Header/Navigation -->

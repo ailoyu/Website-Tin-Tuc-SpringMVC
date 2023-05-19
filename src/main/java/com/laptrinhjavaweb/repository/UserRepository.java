@@ -22,7 +22,14 @@ public interface UserRepository extends JpaRepository<UserEntity, Long> {
 			+ "ORDER BY RAND() LIMIT 9) tbl1 JOIN `user` \r\n"
 			+ "ON tbl1.requester_id = `user`.id OR tbl1.addressee_id = `user`.id \r\n"
 			+ "WHERE `user`.id NOT LIKE :userId", nativeQuery = true)
-	List<UserEntity> findByListFriend(@Param("userId") Long id);
+	List<UserEntity> findBy9ListFriend(@Param("userId") Long id);
+	
+	@Query(value = "SELECT `user`.* FROM (SELECT requester_id, addressee_id FROM friendship \r\n"
+			+ "WHERE (requester_id = :userId AND `status` = 1) OR (addressee_id = :userId AND `status` = 1))\r\n"
+			+ " tbl1 JOIN `user` \r\n"
+			+ "ON tbl1.requester_id = `user`.id OR tbl1.addressee_id = `user`.id \r\n"
+			+ "WHERE `user`.id NOT LIKE :userId ORDER BY `user`.fullname asc", nativeQuery = true)
+	List<UserEntity> findByListFriend(@Param("userId")Long id);
 	
 	
 }

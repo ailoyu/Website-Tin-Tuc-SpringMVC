@@ -8,6 +8,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+import org.springframework.context.support.AbstractApplicationContext;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.Authentication;
@@ -22,11 +24,13 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.laptrinhjavaweb.config.AppConfig;
 import com.laptrinhjavaweb.dto.CommentDTO;
 import com.laptrinhjavaweb.dto.FriendshipDTO;
 import com.laptrinhjavaweb.dto.NewDTO;
 import com.laptrinhjavaweb.dto.UserDTO;
 import com.laptrinhjavaweb.dto.ViewCountDTO;
+import com.laptrinhjavaweb.messenger.MessengerSender;
 import com.laptrinhjavaweb.service.ICategoryService;
 import com.laptrinhjavaweb.service.ICommentService;
 import com.laptrinhjavaweb.service.IFriendshipService;
@@ -293,8 +297,9 @@ public class HomeController {
 	@Autowired
 	private IFriendshipService friendshipService;
 	
-	@GetMapping(value = {"/trang-ca-nhan/{userId}", "/trang-ca-nhan" })
-	public ModelAndView trangCaNhan(@PathVariable(value = "userId", required = false) Long userId) {
+	@GetMapping(value = {"/trang-ca-nhan/{userId}", "/trang-ca-nhan", "/trang-ca-nhan/{userId}/{listFriend}" })
+	public ModelAndView trangCaNhan(@PathVariable(value = "userId", required = false) Long userId,
+									@PathVariable(value = "listFriend", required = false) String danhSachBanBe) {
 		ModelAndView mav = new ModelAndView("web/user/personalPage");
 		UserDTO dto = new UserDTO();
 		Long requesterId;
@@ -318,8 +323,12 @@ public class HomeController {
 				
 			}
 		}
-		List<UserDTO> listFriend = userService.findByFriendList(requesterId);
+		List<UserDTO> listFriend = userService.findBy9FriendList(requesterId);
 		mav.addObject("listFriend", listFriend);
+		if(danhSachBanBe != null) {
+			List<UserDTO> allListFriend = userService.findByAllFriendList(requesterId);
+			mav.addObject("listFriend1", allListFriend);
+		}
 		mav.addObject("model", dto);
 		mav.addObject("userName", dto.getUserName());
 		
@@ -329,6 +338,20 @@ public class HomeController {
 	@GetMapping(value = {"/tin-nhan"})
 	public ModelAndView tinNhan() {
 		ModelAndView mav = new ModelAndView("web/user/messenger");
+		
+		List<UserDTO> listFriend = userService.findByAllFriendList(SecurityUtils.getPrincipal().getId());
+		mav.addObject("listFriend", listFriend);
+		
+		// gửi tin nhắn
+//		AbstractApplicationContext context = new AnnotationConfigApplicationContext(AppConfig.class);
+//		
+//		MessengerSender messengerSender = context.getBean(MessengerSender.class);
+//		
+//		messengerSender.sendMessage("Hola Quang");
+//		System.out.println("Gửi tin nhắn thành công");
+//		
+//		((AbstractApplicationContext) context).close();
+		
 		return mav;
 	}
 	

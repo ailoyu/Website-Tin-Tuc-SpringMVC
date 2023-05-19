@@ -268,7 +268,18 @@ public class UserService implements IUserService {
 	}
 
 	@Override
-	public List<UserDTO> findByFriendList(Long id) {
+	public List<UserDTO> findBy9FriendList(Long id) {
+		List<UserDTO> models = new ArrayList<UserDTO>();
+		List<UserEntity> entities = userRepository.findBy9ListFriend(id);
+		for (UserEntity item : entities) {
+			UserDTO userDTO = userConverter.toDTO(item); // convert từ entity -> dto
+			models.add(userDTO);
+		}
+		return models;
+	}
+
+	@Override
+	public List<UserDTO> findByAllFriendList(Long id) {
 		List<UserDTO> models = new ArrayList<UserDTO>();
 		List<UserEntity> entities = userRepository.findByListFriend(id);
 		for (UserEntity item : entities) {

@@ -110,7 +110,9 @@
 													</c:forEach>
 												</tbody>
 											</table>
-											<ul class="pagination" id="pagination"></ul>
+											<div class="row" style="text-align: center; margin-right: 3em">
+											<ul class="pagination" id="pagination" ></ul>
+											</div>
 											<input type="hidden" value="" id="page" name="page"/>
 											<c:if test="${ not empty key }">
 												<input type="hidden" value="${key}" id="key" name="key"/>

@@ -6,5 +6,6 @@
         <class>com.laptrinhjavaweb.entity.RoleEntity</class>
         <class>com.laptrinhjavaweb.entity.CategoryEntity</class>
         <class>com.laptrinhjavaweb.entity.CommentEntity</class>
+        <class>com.laptrinhjavaweb.entity.ViewCountEntity</class>
     </persistence-unit>
 </persistence>
