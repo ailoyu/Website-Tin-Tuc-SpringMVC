@@ -19,6 +19,8 @@ public class NewConverter {
 		result.setContent(entity.getContent());
 		result.setThumbnail(entity.getThumbnail());
 		result.setCategoryCode(entity.getCategory().getCode());
+		
+		
 		SimpleDateFormat sm = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		Timestamp valueOf = Timestamp.valueOf(sm.format(entity.getCreatedDate()));
 		

@@ -66,6 +66,10 @@ public class UserEntity extends BaseEntity {
 	@OneToMany(mappedBy = "addressee")
 	private List<FriendshipEntity> addressee;
 	
+	// 1 user có nhiều bài posts
+	@OneToMany(mappedBy = "user") 
+	private List<PostEntity> posts = new ArrayList<PostEntity>();
+	
 	
 	public List<FriendshipEntity> getRequester() {
 		return requester;
@@ -187,4 +191,14 @@ public class UserEntity extends BaseEntity {
 		this.changePasswordStatus = changePasswordStatus;
 	}
 
+	public List<PostEntity> getPosts() {
+		return posts;
+	}
+
+	public void setPosts(List<PostEntity> posts) {
+		this.posts = posts;
+	}
+	
+	
+	
 }

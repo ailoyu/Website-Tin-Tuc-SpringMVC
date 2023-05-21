@@ -145,14 +145,13 @@
 	</c:if>
 
 
-	<button class="btn btn-primary" id="hiddenComments" type="button">Hiển thị
-		tất cả bình luận của bài viết</button>
+	<button class="btn btn-primary" id="hiddenComments" type="button">Ẩn tất cả bình luận của bài viết</button>
 	<br>
 	<br>
 	<br>
 
 
-<!-- 	<div hidden="true" id="comments"> -->
+	<div id="comments">
 		<h1>Comment</h1>
 
 		<%
@@ -257,8 +256,7 @@
 				</div>
 			</div>
 		</section>
-
-<!-- 	</div> -->
+	</div>
 	<script type="text/javascript">
 		$("#hiddenComments").click(function() {
 			var commentStatus = $("#comments").attr("hidden")

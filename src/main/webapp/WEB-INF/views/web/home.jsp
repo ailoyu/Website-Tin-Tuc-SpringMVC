@@ -169,7 +169,8 @@
 
 
 			</div>
-			<ul class="pagination" id="pagination"></ul>
+			<ul class="pagination" id="pagination" style="margin-left: 15em" ></ul>
+			
 			<c:if test="${ not empty model.categoryId }">
 				<input type="hidden" value="${model.categoryId}" id="categoryId"
 					name="categoryId" />

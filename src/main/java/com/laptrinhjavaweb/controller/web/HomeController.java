@@ -8,8 +8,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.AnnotationConfigApplicationContext;
-import org.springframework.context.support.AbstractApplicationContext;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.Authentication;
@@ -24,17 +22,17 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.laptrinhjavaweb.config.AppConfig;
 import com.laptrinhjavaweb.dto.CommentDTO;
 import com.laptrinhjavaweb.dto.FriendshipDTO;
 import com.laptrinhjavaweb.dto.NewDTO;
+import com.laptrinhjavaweb.dto.PostDTO;
 import com.laptrinhjavaweb.dto.UserDTO;
 import com.laptrinhjavaweb.dto.ViewCountDTO;
-import com.laptrinhjavaweb.messenger.MessengerSender;
 import com.laptrinhjavaweb.service.ICategoryService;
 import com.laptrinhjavaweb.service.ICommentService;
 import com.laptrinhjavaweb.service.IFriendshipService;
 import com.laptrinhjavaweb.service.INewService;
+import com.laptrinhjavaweb.service.IPostService;
 import com.laptrinhjavaweb.service.IUserService;
 import com.laptrinhjavaweb.service.IViewCountService;
 import com.laptrinhjavaweb.util.MessageUtils;
@@ -51,6 +49,8 @@ public class HomeController {
 	
 	@Autowired
 	private IUserService userService;
+	
+	@Autowired IPostService postService;
 
 	// Request Mapping: nhận đường link url, dùng method: get
 	@RequestMapping(value = "/trang-chu", method = RequestMethod.GET)
@@ -329,6 +329,8 @@ public class HomeController {
 			List<UserDTO> allListFriend = userService.findByAllFriendList(requesterId);
 			mav.addObject("listFriend1", allListFriend);
 		}
+		List<PostDTO> listPost = postService.getAllPostsById(requesterId);
+		mav.addObject("listPost", listPost);
 		mav.addObject("model", dto);
 		mav.addObject("userName", dto.getUserName());
 		
