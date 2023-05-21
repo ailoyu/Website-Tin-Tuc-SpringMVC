@@ -12,6 +12,7 @@
 <title>Trang cá nhân</title>
 </head>
 <body>
+<div class="container">
 	<br>
 	<br>
 	<div class="text-center">
@@ -177,7 +178,7 @@
 						class="mb-3 img-fluid" style="width: 300px; display:block; margin-left: auto; margin-right: auto;" id="img_preview1" />
 					<input id="thumbnail" name="thumbnail" type="file" onchange="previewFile()" style="visibility: hidden;">
                     <textarea name="content" id="content"
-                    placeholder="Share what you've been up to..." 
+                    placeholder="What've you been up to, ${ name }?" 
                     rows="4" class="form-control"></textarea>
                     <input type="hidden" name="userId" id="userId" value="<%=SecurityUtils.getPrincipal().getId()%>">
                     <div class="actions">
@@ -195,6 +196,10 @@
                 <hr />
 			<% } %>
 			<% } %>
+			
+			<c:if test="${ empty listPost }">
+				<h4 align="center" style="margin-top: 3em"><strong style="color: graytext;">Người dùng chưa có bài viết nào</strong></h4>
+			</c:if>
 
 			<c:forEach var="item" items="${listPost }">
 				<div class="container mt-5 mb-5">
@@ -212,9 +217,26 @@
 									</div>
 									</a>
 								</div>
+								<%
+								if (SecurityUtils.getPrincipal() != null) {
+								%>
+								<%
+								if (SecurityUtils.getPrincipal().getUsername().equals(userName)) {
+								%>
 								<div class="d-flex flex-row mt-1 ellipsis">
-									<i class="fa fa-ellipsis-h"></i>
+									<a
+									class="fa fa-ellipsis-h"
+									href="" role="button"
+									data-bs-toggle="dropdown" aria-expanded="false"></a>
+									<ul class="dropdown-menu">
+										<li><button class="dropdown-item" type="button" 
+										>Chỉnh sửa bài viết</button></li>
+										<li><hr class="dropdown-divider"></li>
+										<li><button class="dropdown-item" id="btnDelete-${item.id }" value="${item.id }" type="button" 
+										>Xóa bài viết</button></li>
+									</ul>
 								</div>
+								<% } } %>
 							</div>
 							<p class="text-justify">${ item.content }</p>
 							<c:if test="${ not empty item.thumbnail }">
@@ -224,7 +246,8 @@
 								<hr>
 								<div class="d-flex justify-content-between align-items-center">
 									<div class="d-flex flex-row icons d-flex align-items-center">
-										<i class="fa fa-heart"></i> <i class="fa fa-smile-o ml-2"></i>
+<!-- 										<i class="fa fa-heart" style="color: #FF1493;"></i> -->
+										<i class="far fa-heart" style="color: #FF69B4;"></i>
 									</div>
 									<div class="d-flex flex-row muted-color">
 										<span>2 comments</span> <span class="ml-2">Share</span>
@@ -314,7 +337,7 @@
 
 		</div>
 	</c:if>
-
+</div>
 
 
 	<script type="text/javascript">
@@ -444,6 +467,46 @@
 			$.ajax({
 				url : '${postAPI}', // gửi tới url api
 				type : 'POST',
+				contentType : 'application/json', // ép kiểu json từ client -> server
+				data : JSON.stringify(data), // parse từ JavaScript Object -> JSON 
+				dataType : 'json', // nhận kiểu json từ server -> client
+				success : function(result) {
+					window.location.href = "${personalInfo}/${model.id}";
+				},
+				error : function(error) {
+					window.location.href = "${personalInfo}/${model.id}";
+				}
+			});
+		}
+		
+		$("button[id*='btnDelete-']").click(function(e) {
+			
+			 var id = $(this).prop("id").split("-")[1];
+			 warningBeforeDelete1(id);
+		});
+		
+		function warningBeforeDelete1(id) {
+			swal({
+				  title: "Xác nhận xóa",
+				  text: "Bạn có muốn xóa bài viết hay không?",
+				  type: "warning",
+				  showCancelButton: true,
+				  confirmButtonClass: "btn-success",
+				  cancelButtonClass: "btn-danger",
+				  confirmButtonText: "Xác nhận",
+				  cancelButtonText: "Hủy bỏ",
+				}).then(function(result) {
+					if(result.value){
+					// call api
+					  deletePost(id);
+				  } 
+				});
+		}
+		
+		function deletePost(data) {
+			$.ajax({
+				url : '${postAPI}', // gửi tới url api
+				type : 'DELETE',
 				contentType : 'application/json', // ép kiểu json từ client -> server
 				data : JSON.stringify(data), // parse từ JavaScript Object -> JSON 
 				dataType : 'json', // nhận kiểu json từ server -> client

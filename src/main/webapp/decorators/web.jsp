@@ -60,7 +60,20 @@
 	<!-- Thư viện CKEDITOR -->
 	<script src="//cdn.ckeditor.com/4.21.0/full/ckeditor.js"></script>
 	
+<style type="text/css">
+body {
+	background-color: #eee;
+}
+.fa-heart-o {
+  color: red;
+  cursor: pointer;
+}
 
+.fa-heart {
+  color: red;
+  cursor: pointer;
+}
+</style>
 </head>
 <body>
 	<!-- Header/Navigation -->

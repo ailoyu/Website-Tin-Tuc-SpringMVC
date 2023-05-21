@@ -46,5 +46,10 @@ public class PostService implements IPostService {
 		}
 		return listDTO;
 	}
+
+	@Override
+	public void delete(long id) {
+		postRespository.delete(id);
+	}
 	
 }

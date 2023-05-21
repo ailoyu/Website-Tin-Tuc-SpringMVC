@@ -121,3 +121,12 @@ button.btn-link {
     flex: 1;
     font-size: 16px;
 }	
+.fa-heart-o {
+  color: red;
+  cursor: pointer;
+}
+
+.fa-heart {
+  color: red;
+  cursor: pointer;
+}

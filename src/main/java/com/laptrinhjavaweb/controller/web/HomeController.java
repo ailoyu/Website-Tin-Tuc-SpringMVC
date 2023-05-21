@@ -332,6 +332,9 @@ public class HomeController {
 		List<PostDTO> listPost = postService.getAllPostsById(requesterId);
 		mav.addObject("listPost", listPost);
 		mav.addObject("model", dto);
+		// chữ cuối cùng trong tên
+		String[] name = dto.getFullName().split(" ");
+		mav.addObject("name", name[name.length - 1]);
 		mav.addObject("userName", dto.getUserName());
 		
 		return mav;

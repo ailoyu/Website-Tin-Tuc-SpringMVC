@@ -8,4 +8,5 @@ public interface IPostService {
 	
 	PostDTO save(PostDTO postDTO);
 	List<PostDTO> getAllPostsById(Long id);
+	void delete(long id);
 }
