@@ -11,7 +11,7 @@ import com.laptrinhjavaweb.entity.PostEntity;
 public interface PostRespository extends JpaRepository<PostEntity, Long>{
 	
 	@Query(value = "SELECT * FROM post WHERE user_id = :userId ORDER BY createddate desc ", nativeQuery = true)
-	List<PostEntity> getAllPostsById(@Param("userId") Long id);
+	List<PostEntity> getAllPostsByUserId(@Param("userId") Long id);
 	
 
 }

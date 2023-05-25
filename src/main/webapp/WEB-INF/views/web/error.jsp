@@ -25,6 +25,6 @@
 	<!-- Header/Navigation -->
 	<%@include file="/common/web/header.jsp" %>
 	
-	<h1 style="margin-top: 5em; margin-left: 5em">Rất tiếc, trang bạn truy cập không tồn tại :>>></h1>
+	<h1 style="margin-top: 5em; margin-left: 5em">Rất tiếc, bạn ko có quyền truy cập trang này hoặc trang không tồn tại :>>></h1>
 </body>
 </html>

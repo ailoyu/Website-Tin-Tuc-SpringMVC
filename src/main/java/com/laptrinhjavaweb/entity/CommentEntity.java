@@ -1,6 +1,5 @@
 package com.laptrinhjavaweb.entity;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
@@ -15,7 +14,7 @@ public class CommentEntity extends BaseEntity {
 	private String content;
 	
 	@Column(name = "parent_id")
-	private Integer parentId;
+	private Long parentId;
 	
 	@ManyToOne
 	@JoinColumn(name = "user_id")
@@ -49,11 +48,11 @@ public class CommentEntity extends BaseEntity {
 		this.news = news;
 	}
 
-	public Integer getParentId() {
+	public Long getParentId() {
 		return parentId;
 	}
 
-	public void setParentId(Integer parentId) {
+	public void setParentId(Long parentId) {
 		this.parentId = parentId;
 	}
 	

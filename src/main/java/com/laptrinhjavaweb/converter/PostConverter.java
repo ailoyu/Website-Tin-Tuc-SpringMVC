@@ -12,6 +12,7 @@ import com.laptrinhjavaweb.entity.UserEntity;
 @Component
 public class PostConverter {
 	
+	
 	public PostDTO toDTO(PostEntity entity) {
 		
 		PostDTO dto = new PostDTO();
@@ -23,6 +24,7 @@ public class PostConverter {
 		
 		SimpleDateFormat sm = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		Timestamp valueOf = Timestamp.valueOf(sm.format(entity.getCreatedDate()));
+		
 		
 		dto.setCreatedDate(valueOf);
 		dto.setCreatedBy(entity.getCreatedBy());

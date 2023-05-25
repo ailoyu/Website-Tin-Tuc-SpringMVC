@@ -70,7 +70,29 @@ public class UserEntity extends BaseEntity {
 	@OneToMany(mappedBy = "user") 
 	private List<PostEntity> posts = new ArrayList<PostEntity>();
 	
+	@OneToMany(mappedBy = "user") 
+	private List<CommentPostEntity> commentPosts = new ArrayList<CommentPostEntity>();
 	
+	@OneToMany(mappedBy = "user")
+	private List<LikeEntity> likes = new ArrayList<>();
+	
+
+	public List<LikeEntity> getLikes() {
+		return likes;
+	}
+
+	public void setLikes(List<LikeEntity> likes) {
+		this.likes = likes;
+	}
+
+	public List<CommentPostEntity> getCommentPosts() {
+		return commentPosts;
+	}
+
+	public void setCommentPosts(List<CommentPostEntity> commentPosts) {
+		this.commentPosts = commentPosts;
+	}
+
 	public List<FriendshipEntity> getRequester() {
 		return requester;
 	}

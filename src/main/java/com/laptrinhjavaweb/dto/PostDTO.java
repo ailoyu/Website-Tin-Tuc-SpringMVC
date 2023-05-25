@@ -1,10 +1,15 @@
 package com.laptrinhjavaweb.dto;
 
+import java.util.List;
+
 public class PostDTO extends AbstractDTO<PostDTO> {
 	
 	private Long userId;
 	private String thumbnail;
 	private String content;
+	private List<CommentDTO> comments;
+	private List<LikeDTO> likes;
+	private Boolean liked;
 	
 	
 	public Long getUserId() {
@@ -24,6 +29,27 @@ public class PostDTO extends AbstractDTO<PostDTO> {
 	}
 	public void setContent(String content) {
 		this.content = content;
+	}
+	public List<CommentDTO> getComments() {
+		return comments;
+	}
+	public void setComments(List<CommentDTO> comments) {
+		this.comments = comments;
+	}
+
+	public List<LikeDTO> getLikes() {
+		return likes;
+	}
+
+	public void setLikes(List<LikeDTO> likes) {
+		this.likes = likes;
+	}
+
+	public Boolean getLiked() {
+		return liked;
+	}
+	public void setLiked(Boolean liked) {
+		this.liked = liked;
 	}
 	
 	

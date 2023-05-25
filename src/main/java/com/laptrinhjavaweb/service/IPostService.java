@@ -7,6 +7,6 @@ import com.laptrinhjavaweb.dto.PostDTO;
 public interface IPostService {
 	
 	PostDTO save(PostDTO postDTO);
-	List<PostDTO> getAllPostsById(Long id);
+	List<PostDTO> getAllPostsByUserId(Long id);
 	void delete(long id);
 }

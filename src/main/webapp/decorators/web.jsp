@@ -73,6 +73,32 @@ body {
   color: red;
   cursor: pointer;
 }
+
+.tags {
+  display: inline;
+  position: relative;
+}
+
+.tags:hover:after {
+  background: #333;
+  background: rgba(0, 0, 0, .8);
+  border-radius: 5px;
+  bottom: -34px;
+  color: #fff;
+  content: attr(data-gloss);
+  left: 20%;
+  padding: 5px 15px;
+  position: absolute;
+  width: 180px;
+  font-size: 12px;
+  z-index: 98;
+  display: flex;
+  white-space: pre-line;
+  margin-top: 3em
+}
+
+
+
 </style>
 </head>
 <body>

@@ -21,7 +21,7 @@
                     </a>
                     </li>
                 <li class="light-blue dropdown-modal">
-                    <a href="<c:url value='/quan-tri/trang-chu'/>" class="dropdown-toggle">
+                    <a href="<c:url value='/trang-ca-nhan'/>" class="dropdown-toggle">
                         Xin chào, <%= SecurityUtils.getPrincipal().getFullName() %>
                     </a>
                     </li>

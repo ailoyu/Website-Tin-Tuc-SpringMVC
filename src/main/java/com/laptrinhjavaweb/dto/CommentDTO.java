@@ -7,15 +7,19 @@ public class CommentDTO extends AbstractDTO<CommentDTO> {
 
 	private String content;
 	
-	private Integer parentId;
+	private Long parentId;
 	
 	private Long userId;
 		
 	private Long newId;
 	
+	private String thumbnail;
+	
 	private String fullName;
 	
 	private String avatar;
+	
+	private Long postId;
 	
 	private List<CommentDTO> listComment = new ArrayList<CommentDTO>();
 	
@@ -27,11 +31,11 @@ public class CommentDTO extends AbstractDTO<CommentDTO> {
 		this.content = content;
 	}
 
-	public Integer getParentId() {
+	public Long getParentId() {
 		return parentId;
 	}
 
-	public void setParentId(Integer parentId) {
+	public void setParentId(Long parentId) {
 		this.parentId = parentId;
 	}
 
@@ -75,7 +79,20 @@ public class CommentDTO extends AbstractDTO<CommentDTO> {
 		this.avatar = avatar;
 	}
 
-	
+	public String getThumbnail() {
+		return thumbnail;
+	}
 
-	
+	public void setThumbnail(String thumbnail) {
+		this.thumbnail = thumbnail;
+	}
+
+	public Long getPostId() {
+		return postId;
+	}
+
+	public void setPostId(Long postId) {
+		this.postId = postId;
+	}
+
 }

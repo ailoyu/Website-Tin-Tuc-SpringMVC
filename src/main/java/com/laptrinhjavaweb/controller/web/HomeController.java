@@ -24,6 +24,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.laptrinhjavaweb.dto.CommentDTO;
 import com.laptrinhjavaweb.dto.FriendshipDTO;
+import com.laptrinhjavaweb.dto.LikeDTO;
 import com.laptrinhjavaweb.dto.NewDTO;
 import com.laptrinhjavaweb.dto.PostDTO;
 import com.laptrinhjavaweb.dto.UserDTO;
@@ -31,6 +32,7 @@ import com.laptrinhjavaweb.dto.ViewCountDTO;
 import com.laptrinhjavaweb.service.ICategoryService;
 import com.laptrinhjavaweb.service.ICommentService;
 import com.laptrinhjavaweb.service.IFriendshipService;
+import com.laptrinhjavaweb.service.ILikeService;
 import com.laptrinhjavaweb.service.INewService;
 import com.laptrinhjavaweb.service.IPostService;
 import com.laptrinhjavaweb.service.IUserService;
@@ -297,6 +299,9 @@ public class HomeController {
 	@Autowired
 	private IFriendshipService friendshipService;
 	
+	@Autowired
+	private ILikeService likeService;
+	
 	@GetMapping(value = {"/trang-ca-nhan/{userId}", "/trang-ca-nhan", "/trang-ca-nhan/{userId}/{listFriend}" })
 	public ModelAndView trangCaNhan(@PathVariable(value = "userId", required = false) Long userId,
 									@PathVariable(value = "listFriend", required = false) String danhSachBanBe) {
@@ -329,12 +334,24 @@ public class HomeController {
 			List<UserDTO> allListFriend = userService.findByAllFriendList(requesterId);
 			mav.addObject("listFriend1", allListFriend);
 		}
-		List<PostDTO> listPost = postService.getAllPostsById(requesterId);
+		List<PostDTO> listPost = postService.getAllPostsByUserId(requesterId);
+		if(SecurityUtils.getPrincipal() != null) {
+		List<LikeDTO> likedPost = likeService.getLikedPost(SecurityUtils.getPrincipal().getId(), "LIKE");
+			for (LikeDTO likeDTO : likedPost) {
+				for (PostDTO postDTO : listPost) {
+					if(likeDTO.getPostId() == postDTO.getId()) {
+						postDTO.setLiked(true);
+					}
+				}
+			}
+		}
 		mav.addObject("listPost", listPost);
 		mav.addObject("model", dto);
 		// chữ cuối cùng trong tên
 		String[] name = dto.getFullName().split(" ");
 		mav.addObject("name", name[name.length - 1]);
+		
+		
 		mav.addObject("userName", dto.getUserName());
 		
 		return mav;

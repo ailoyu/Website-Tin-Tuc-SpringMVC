@@ -2,7 +2,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@include file="/common/taglib.jsp"%>
-<%@ taglib tagdir="/WEB-INF/tags" prefix="myTags"%>
+<%@ taglib tagdir="/WEB-INF/tags/" prefix="myTags"%>
 
 <c:url var="commentAPI" value="/api/comment" />
 <c:url var="newURL" value="/dang-nhap" />
