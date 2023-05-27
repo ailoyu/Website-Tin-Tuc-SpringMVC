@@ -29,6 +29,10 @@ public class PostConverter {
 		dto.setCreatedDate(valueOf);
 		dto.setCreatedBy(entity.getCreatedBy());
 		
+		
+		dto.setFullName(entity.getUser().getFullName());
+		dto.setAvatar(entity.getUser().getAvatar());
+		
 		return dto;
 	}
 	

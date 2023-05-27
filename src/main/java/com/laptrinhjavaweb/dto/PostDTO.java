@@ -10,6 +10,8 @@ public class PostDTO extends AbstractDTO<PostDTO> {
 	private List<CommentDTO> comments;
 	private List<LikeDTO> likes;
 	private Boolean liked;
+	private String fullName;
+	private String avatar;
 	
 	
 	public Long getUserId() {
@@ -50,6 +52,18 @@ public class PostDTO extends AbstractDTO<PostDTO> {
 	}
 	public void setLiked(Boolean liked) {
 		this.liked = liked;
+	}
+	public String getFullName() {
+		return fullName;
+	}
+	public void setFullName(String fullName) {
+		this.fullName = fullName;
+	}
+	public String getAvatar() {
+		return avatar;
+	}
+	public void setAvatar(String avatar) {
+		this.avatar = avatar;
 	}
 	
 	

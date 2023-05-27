@@ -168,7 +168,7 @@
 				</div>
 
 			</div>
-			<div class="col-md-7">
+			<div class="col-md-7" id="contentPost">
 				<%
 				if (SecurityUtils.getPrincipal() != null) {
 				%>
@@ -210,11 +210,11 @@
 						<div class="card">
 							<div class="d-flex justify-content-between p-2 px-3">
 								<div class="d-flex flex-row align-items-center">
-									<a href='<c:url value="/trang-ca-nhan/${ model.id }" />' style="color: #473C3C;">
-									<img src="${ model.avatar }" width="50"
+									<a href='<c:url value="/trang-ca-nhan/${ item.userId }" />' style="color: #473C3C;">
+									<img src="${ item.avatar }" width="50"
 										class="rounded-circle">
 									<div class="d-flex flex-column ml-2">
-										<span class="font-weight-bold">${ model.fullName }</span> 
+										<span class="font-weight-bold">${ item.fullName }</span> 
 										<small><a href="" style="color: black;"><fmt:formatDate
 											pattern="dd-MM-yyyy HH:mm" value="${item.createdDate}" /></a></small>
 									</div>
@@ -347,8 +347,12 @@
 						</div>
 					</div>
 				</div>
+				
+				
 			</c:forEach>
-
+			
+			
+<!-- 			<button onclick="loadMore()" class="btn btn-primary">Load more</button> -->
 
 			</div>
 
@@ -399,6 +403,26 @@
 
 
 	<script type="text/javascript">
+
+	function loadMore() {
+		$.ajax({
+			url: "<c:url value="/load/${model.id}" />",
+			type: "GET",
+			success: function(data) {
+				var row = "";
+				
+				$.each(data, function (i, post) {
+
+					row += '<tr><td>' + post.id + '</td><td>' + teacher.content + '</td><td>' + teacher.thumbnail + '</td></tr>';
+	            });
+				$('#contentPost').append(row);
+
+			},
+			error: function(xhr) {
+				
+			}
+		});
+	}
 	
 	$( document ).ready(function() {
 		$("div[id*='comments-']").scrollTop(function() {
@@ -597,6 +621,23 @@
 	   });	
 	
 	
+	function addPost(data) {
+		$.ajax({
+			url : '${postAPI}', // gửi tới url api
+			type : 'POST',
+			contentType : 'application/json', // ép kiểu json từ client -> server
+			data : JSON.stringify(data), // parse từ JavaScript Object -> JSON 
+			dataType : 'json', // nhận kiểu json từ server -> client
+			success : function(result) {
+				window.location.href = "${personalInfo}/${model.id}";
+			},
+			error : function(error) {
+				window.location.href = "${personalInfo}/${model.id}";
+			}
+		});
+	}
+	
+	
 		$('#addFriend').click(function(e) {
 
 			e.preventDefault(); // Nếu ko có, sẽ mặc định submit vào url hiện tại đang đứng
@@ -678,21 +719,6 @@
 			});
 		}
 		
-		function addPost(data) {
-			$.ajax({
-				url : '${postAPI}', // gửi tới url api
-				type : 'POST',
-				contentType : 'application/json', // ép kiểu json từ client -> server
-				data : JSON.stringify(data), // parse từ JavaScript Object -> JSON 
-				dataType : 'json', // nhận kiểu json từ server -> client
-				success : function(result) {
-					window.location.href = "${personalInfo}/${model.id}";
-				},
-				error : function(error) {
-					window.location.href = "${personalInfo}/${model.id}";
-				}
-			});
-		}
 		
 		$("button[id*='btnDelete-']").click(function(e) {
 			

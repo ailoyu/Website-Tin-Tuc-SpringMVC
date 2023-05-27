@@ -86,5 +86,35 @@ public class PostService implements IPostService {
 	public void delete(long id) {
 		postRespository.delete(id);
 	}
+
+	@Override
+	public List<PostDTO> getFriendPostsForNewfeeds(Long id) {
+		List<PostEntity> listEntity = postRespository.getFriendPostForNewfeeds(id);
+		List<PostDTO> listDTO = new ArrayList<>();
+		for (PostEntity postEntity : listEntity) {
+			PostDTO dto = postConverter.toDTO(postEntity);
+			
+			List<CommentPostEntity> commentPosts = postEntity.getCommentPosts();
+			List<CommentDTO> commentDTO = new ArrayList<>();
+			for (CommentPostEntity commentPostEntity : commentPosts) {
+				CommentDTO dto2 = commentPostConverter.toDTO(commentPostEntity);
+				commentDTO.add(dto2);
+			}
+			
+			List<LikeEntity> likes = postEntity.getLikes();
+			List<LikeDTO> likeDTO = new ArrayList<>();
+			for (LikeEntity likeEntity : likes) {
+				LikeDTO dto2 = likeConverter.toDTO(likeEntity);
+				UserEntity user = likeEntity.getUser();
+				dto2.setUserDTO(userConverter.toDTO(user));
+				likeDTO.add(dto2);
+			}
+			dto.setLikes(likeDTO);
+			dto.setComments(commentDTO);
+			
+			listDTO.add(dto);
+		}
+		return listDTO;
+	}
 	
 }

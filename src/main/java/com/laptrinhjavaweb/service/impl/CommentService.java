@@ -1,6 +1,5 @@
 package com.laptrinhjavaweb.service.impl;
 
-import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -54,14 +53,9 @@ public class CommentService implements ICommentService {
 		NewEntity newEntity = newRepository.findOne(newId);
 		List<CommentEntity> entities = commentRepository.findByNews(newEntity);
 		for (CommentEntity item : entities) {
-			CommentDTO newDTO = commentConverter.toDTO(item); // convert từ entity -> dto
-
-			// Set thuộc tính riêng trong comment
-			newDTO.setFullName(item.getUser().getFullName());
-			newDTO.setCreatedDate((Timestamp) item.getCreatedDate());
-			newDTO.setAvatar(item.getUser().getAvatar());
+			CommentDTO commentDTO = commentConverter.toDTO(item); // convert từ entity -> dto
 			
-			models.add(newDTO);
+			models.add(commentDTO);
 		}
 		return models;
 	}
