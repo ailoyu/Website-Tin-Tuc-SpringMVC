@@ -7,5 +7,9 @@
         <class>com.laptrinhjavaweb.entity.CategoryEntity</class>
         <class>com.laptrinhjavaweb.entity.CommentEntity</class>
         <class>com.laptrinhjavaweb.entity.ViewCountEntity</class>
+        <class>com.laptrinhjavaweb.entity.FriendshipEntity</class>
+        <class>com.laptrinhjavaweb.entity.LikeEntity</class>
+        <class>com.laptrinhjavaweb.entity.PostEntity</class>
+        <class>com.laptrinhjavaweb.entity.CommentPostEntity</class>
     </persistence-unit>
 </persistence>
