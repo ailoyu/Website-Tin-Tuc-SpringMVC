@@ -241,9 +241,12 @@
 								</div>
 								<% } } %>
 							</div>
-							<p class="text-justify">${ item.content }</p>
 							<c:if test="${ not empty item.thumbnail }">
+								<p class="text-justify">${ item.content }</p>
 								<img src="${ item.thumbnail }" class="img-fluid">
+							</c:if>
+							<c:if test="${ empty item.thumbnail }">
+								<h1 class="text-justify" style="margin-left: 5px">${ item.content }</h1>
 							</c:if>
 							<div class="p-2">
 								<hr>

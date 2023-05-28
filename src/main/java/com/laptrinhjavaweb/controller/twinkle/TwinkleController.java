@@ -54,6 +54,10 @@ public class TwinkleController {
 		
 		mav.addObject("listPost", listPost);
 		mav.addObject("userName", SecurityUtils.getPrincipal().getUsername());
+		List<UserDTO> listFriend = userService.findByAllFriendList(SecurityUtils.getPrincipal().getId());
+		mav.addObject("listFriend", listFriend);
+		UserDTO dto = userService.findById(SecurityUtils.getPrincipal().getId());
+		mav.addObject("model", dto);
 		return mav;
 	}
 	

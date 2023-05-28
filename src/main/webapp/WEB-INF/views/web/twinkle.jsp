@@ -4,6 +4,7 @@
 <%@include file="/common/taglib.jsp"%>
 <c:url var="likeAPI" value="/api/like" />
 <c:url var="postAPI" value="/api/post" />
+<c:url var="personalInfo" value="/trang-ca-nhan" />
 <c:url var="commentPostAPI" value="/api/commentPost" />
 <!DOCTYPE html>
 <html>
@@ -13,19 +14,40 @@
 </head>
 <body>
 <div class="row">
-<div class="col-md-4 col-lg-4">
+<div class="col-lg-3">
+<div class="position-fixed">
+<div class="main-box clearfix" style="margin-left: 3em">
+<div style="margin-left: auto; margin-right: auto; text-align: center">
+                <h2>${model.fullName }</h2>
+               
+                <img src="${ model.avatar }" class="rounded-circle mb-3"
+					style="width: 150px;" alt="Avatar" id="img_preview" />
+                <div class="profile-label">
+                    <span class="label label-danger">@${model.userName}</span>
+                </div>
+
+                <div class="profile-stars">
+                	<span>Super User</span>
+                    <i class="fa fa-star"></i>
+                    <i class="fa fa-star"></i>
+                    <i class="fa fa-star"></i>
+                    <i class="fa fa-star"></i>
+                    <i class="fa fa-star"></i>
+                </div>
+
+                <div class="profile-since">
+                    Member since: <fmt:formatDate pattern="dd-MM-yyyy | HH:mm"
+					value="${model.createdDate}" />
+                </div>
+
+                    <a class="btn btn-primary btn-rounded"
+					href="<c:url value='/trang-ca-nhan' />" style="color: white;">Trang cá nhân</a>
+            </div>
 </div>
-<div class="col-md-6" id="contentPost" >
-				<%
-				String userName = request.getAttribute("userName").toString();
-				%>
-				<%
-				if (SecurityUtils.getPrincipal() != null) {
-				%>
-				<%
-				if (SecurityUtils.getPrincipal().getUsername().equals(userName)) {
-				%>
-				
+</div>
+</div>
+
+<div class="col-lg-6" id="contentPost" >
 				<form id="formSubmitStatus" class="panel-activity__status">
 					<img src=""
 						class="mb-3 img-fluid" style="width: 300px; display:block; margin-left: auto; margin-right: auto;" id="img_preview1" />
@@ -33,26 +55,29 @@
                     <textarea name="content" id="content"
                     placeholder="What've you been up to, ${ name }?" 
                     rows="4" class="form-control"></textarea>
-                    <input type="hidden" name="userId" value="<%=SecurityUtils.getPrincipal().getId()%>">
+                    <input type="hidden" name="userId" value="${model.id }">
                     <div class="actions">
                             <button type="button" onclick="document.getElementById('thumbnail').click(); return false;"
                             class="btn-link" title="" data-toggle="tooltip" data-original-title="Post an Image">
                                 <i class="fa fa-image"></i>
                             </button>
                             
-                        <button type="button" id="btnPostStatus" class="btn btn-sm btn-rounded btn-info" style="margin-left: 35em">
+                        <button type="button" id="btnPostStatus" class="btn btn-sm btn-rounded btn-info" style="margin-left: 40em">
                             Post
                         </button>
                     </div>
                 </form>
                 <br>
                 <hr />
-			<% } %>
-			<% } %>
 		
 			<c:if test="${ empty listPost }">
-				<h4 align="center" style="margin-top: 3em"><strong style="color: graytext;">Hãy kết bạn thêm để có thêm xem được nhiều bài viết từ bạn bè nào!</strong></h4>
+				<h5 align="center" style="margin-top: 3em"><strong style="color: graytext;">Hãy kết bạn thêm để có thêm xem được nhiều bài viết từ bạn bè nào!</strong></h5>
+				<br>
 			</c:if>
+			
+			<div id="newPost">
+			
+			</div>
 
 			<c:forEach var="item" items="${listPost }">
 				<div class="container mt-5 mb-5">
@@ -70,12 +95,7 @@
 									</div>
 									</a>
 								</div>
-								<%
-								if (SecurityUtils.getPrincipal() != null) {
-								%>
-								<%
-								if (SecurityUtils.getPrincipal().getUsername().equals(userName)) {
-								%>
+								
 								<div class="d-flex flex-row mt-1 ellipsis">
 									<a
 									class="fa fa-ellipsis-h"
@@ -83,29 +103,29 @@
 									data-bs-toggle="dropdown" aria-expanded="false"></a>
 									<ul class="dropdown-menu">
 										<li><button class="dropdown-item" type="button" 
-										>Chỉnh sửa bài viết</button></li>
+										>Xem chi tiết bài viết</button></li>
 										<li><hr class="dropdown-divider"></li>
-										<li><button class="dropdown-item" id="btnDelete-${item.id }" value="${item.id }" type="button" 
-										>Xóa bài viết</button></li>
+										<li><button class="dropdown-item" type="button" 
+										>Ẩn bài viết</button></li>
 									</ul>
 								</div>
-								<% } } %>
 							</div>
 							<p class="text-justify">${ item.content }</p>
 							<c:if test="${ not empty item.thumbnail }">
 								<img src="${ item.thumbnail }" class="img-fluid">
+							</c:if>
+							<c:if test="${ empty item.thumbnail }">
+								<h1 class="text-justify" style="margin-left: 5px">${ item.content }</h1>
 							</c:if>
 							<div class="p-2">
 								<hr>
 								<div class="d-flex justify-content-between align-items-center">
 									<div class="d-flex flex-row icons d-flex align-items-center">
 									<form id="likeFormSubmit-${item.id }">
-									<% if(SecurityUtils.getPrincipal() != null) { %>
 										<input type="hidden" name="userId" id="userId"
-							value="<%=SecurityUtils.getPrincipal().getId()%>">
+							value="${ model.id }">
 									<input type="hidden" name="postId" id="postId"
 							value="${item.id}">
-									<% } %>
 									<c:if test="${ item.liked != true }">
 										<i id="likeButton-${item.id }" class="far fa-heart" style="color: #FF69B4;">
 										
@@ -164,13 +184,10 @@
 									
 									</div>
 								</div>
-								<%
-										if (SecurityUtils.getPrincipal() != null) {
-									%>
 									<div class="comment-input">
 									<form id="commentSubmit-${ item.id }">
 										<input type="hidden" name="userId"
-											value="<%= SecurityUtils.getPrincipal().getId() %>">
+											value="${ model.id }">
 										<input type="hidden" name="postId"
 											value="${ item.id }">
 											
@@ -187,12 +204,11 @@
 	                            <input id="thumbnail-${ item.id }" name="thumbnail" type="file" onchange="previewFile2(${item.id })" style="visibility: hidden;">
 		                        <input type="button" id="btnSubmitComment-${ item.id }" 
 		                        class="btn btn-sm btn-rounded btn-info" 
-		                        style="margin-left: 8em"
+		                        style="margin-left: 12em"
 		                        value="Post">
                   		  	</div>
 										</form>
 									</div>
-									<% } %>
 							</div>
 						</div>
 					</div>
@@ -201,6 +217,27 @@
 				
 			</c:forEach>
 			</div>
+			<div class="col-lg-3">
+			
+			<div class="position-fixed" style="overflow-y: scroll; overflow-x: hidden; height: 30em; margin-left: 1em">
+					<div class="d-flex align-items-center" >
+							<h3 style="">Danh sách bạn bè</h3>
+						</div>
+					<c:forEach var="item" items="${listFriend }">
+						<a href="<c:url value="/trang-ca-nhan/${ item.id }" />" class="list-group-item list-group-item-action border-0">
+							<div class="d-flex align-items-start">
+								<img src="${item.avatar }" class="rounded-circle mr-1" alt="Vanessa Tucker" width="40" height="40">
+								<div class="flex-grow-1 ml-3">
+									${item.fullName }
+									<div class="small"><span class="fas fa-circle chat-online"></span> Offline</div>
+								</div>
+							</div>
+						</a>
+					</c:forEach>
+					
+
+</div>
+</div>
 			</div>
 			
 			
@@ -370,7 +407,7 @@ function addComment(data, commentId) {
 			
 		},
 		error : function(error) {
-			window.location.href = "${personalInfo}/${model.id}";
+
 		}
 	});
 }
@@ -409,7 +446,7 @@ function addPost(data) {
 			window.location.href = "${personalInfo}/${model.id}";
 		},
 		error : function(error) {
-			window.location.href = "${personalInfo}/${model.id}";
+
 		}
 	});
 }

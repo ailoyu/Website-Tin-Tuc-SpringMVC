@@ -5,7 +5,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Trang chủ</title>
+<title>Twinkle</title>
 
 <!-- Bootstrap core CSS -->
 <link href="<c:url value='/template/web/vendor/bootstrap/css/bootstrap.min.css'/>" rel="stylesheet" type="text/css">
@@ -105,14 +105,10 @@ body {
 <body>
 	<!-- Header/Navigation -->
 	<%@include file="/common/web/header.jsp" %>
+	<br>
 	
-	<!-- Body -->
-	<div style="margin-left: 30px;margin-right: 30px" class="container">
     	<dec:body/>
-    </div>
 
-	<!-- Footer -->
-	<%@include file="/common/web/footer.jsp" %>
 
 	
 </body>

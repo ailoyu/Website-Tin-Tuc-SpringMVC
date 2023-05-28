@@ -7,6 +7,12 @@
 	<!-- request gửi tới /* (trang bất kỳ) -> dùng giao diện web.jsp trong decorators -->
 	</decorator>
 	
+	<!-- apply web.jsp trong folder decorators -->
+	<decorator name="twinkle" page="twinkle.jsp">
+		<pattern>/twinkle</pattern> 
+	<!-- request gửi tới /* (trang bất kỳ) -> dùng giao diện web.jsp trong decorators -->
+	</decorator>
+	
 	<!-- tất cả giao diện của admin: quan-tri -->
 	<decorator name="admin" page="admin.jsp">
 		<pattern>/quan-tri*</pattern> 
