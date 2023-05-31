@@ -309,6 +309,8 @@ function addLike(data, postId) {
 		dataType : 'json', // nhận kiểu json từ server -> client
 		success : function(result) {
 			$('#likeButton-'+postId).attr('class', 'fa fa-heart');
+			var p = $('#likeCount-'+postId).attr('data-gloss');
+			$('#likeCount-'+postId).attr('data-gloss', '<%= SecurityUtils.getPrincipal().getFullName() %>\n' + p);
 			// tăng số lượng like + 1
 			var likeCount = document.getElementById("likeCount-"+postId).innerHTML;
 			document.getElementById("likeCount-"+postId).innerHTML = parseInt(likeCount) + 1;
@@ -328,6 +330,27 @@ function deleteLike(data, postId) {
 		dataType : 'json', // nhận kiểu json từ server -> client
 		success : function(result) {
 			$('#likeButton-'+postId).attr('class', 'far fa-heart');
+			
+			
+			var p = $('#likeCount-'+postId).attr('data-gloss');
+			const myArray = p.split("\n");
+			myArray.pop();
+			
+			for(let i = 0; i <= myArray.length - 1; i++){
+				if(myArray[i] == "<%= SecurityUtils.getPrincipal().getFullName() %>"){
+					for(let j = i; j < myArray.length - 1; j++){
+						myArray[j] = myArray[j + 1]; 
+					}
+					myArray.pop();
+				}	
+			}
+			
+			const listName = myArray.map(x => x + '\n');
+			
+			
+			$('#likeCount-'+postId).attr('data-gloss', listName.join(""));
+			
+			
 			var likeCount = document.getElementById("likeCount-"+postId).innerHTML;
 			document.getElementById("likeCount-"+postId).innerHTML = parseInt(likeCount) - 1;
 		},
