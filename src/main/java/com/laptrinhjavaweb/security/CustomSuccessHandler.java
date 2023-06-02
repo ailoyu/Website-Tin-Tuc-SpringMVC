@@ -48,9 +48,9 @@ public class CustomSuccessHandler extends SimpleUrlAuthenticationSuccessHandler{
 		
 		// if role is ADMIN so redirect to controller: /quan-tri/trang-chu
 		if(isAdmin(roles) && SecurityUtils.getPrincipal().getStatus() == 1) {
-			url = "/quan-tri/trang-chu";
+			url = "/twinkle";
 		}else if(isUser(roles) && SecurityUtils.getPrincipal().getStatus() == 1) { // if role is USER so redirect to controller: /trang-chu
-			url = "/trang-chu";
+			url = "/twinkle";
 		}
 		return url;
 	}

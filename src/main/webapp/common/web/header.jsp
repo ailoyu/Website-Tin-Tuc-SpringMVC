@@ -6,8 +6,7 @@
 
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
 	<div class="container-fluid">
-		<div class="collapse navbar-collapse" id="navbarResponsive"
-			style="margin-right:;">
+		<div class="collapse navbar-collapse" id="navbarResponsive">
 			<a class="navbar-brand" href="<c:url value='/index.jsp' />">Twinkle News</a>
 			<button class="navbar-toggler" type="button" data-toggle="collapse"
 				data-target="#navbarResponsive" aria-controls="navbarResponsive"
@@ -16,8 +15,7 @@
 			</button>
 		</div>
 		
-		<div class="collapse navbar-collapse" id="navbarResponsive"
-			style="margin-right:;">
+		<div class="collapse navbar-collapse" id="navbarResponsive">
 			<% if(SecurityUtils.getPrincipal() != null){ %>
 			<a class="navbar-brand" href="<c:url value='/twinkle' />">Twinkle Social Media</a>
 			<button class="navbar-toggler" type="button" data-toggle="collapse"
@@ -25,6 +23,14 @@
 				aria-expanded="false" aria-label="Toggle navigation">
 				<span class="navbar-toggler-icon"></span>
 			</button>
+			<% } else { %>
+			<a class="navbar-brand" href="<c:url value='/dang-nhap' />">Twinkle Social Media</a>
+			<button class="navbar-toggler" type="button" data-toggle="collapse"
+				data-target="#navbarResponsive" aria-controls="navbarResponsive"
+				aria-expanded="false" aria-label="Toggle navigation">
+				<span class="navbar-toggler-icon"></span>
+			</button>
+			
 			<% } %>
 		</div>
 		

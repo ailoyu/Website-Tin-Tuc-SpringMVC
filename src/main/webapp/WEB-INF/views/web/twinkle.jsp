@@ -13,6 +13,7 @@
 <title>Insert title here</title>
 </head>
 <body>
+<div style="overflow-y: scroll; overflow-x: hidden;">
 <div class="row">
 <div class="col-lg-3">
 <div class="position-fixed">
@@ -90,7 +91,7 @@
 										class="rounded-circle">
 									<div class="d-flex flex-column ml-2">
 										<span class="font-weight-bold">${ item.fullName }</span> 
-										<small><a href="" style="color: black;"><fmt:formatDate
+										<small><a href='<c:url value="/trang-ca-nhan/${ item.userId }" />' style="color: black;"><fmt:formatDate
 											pattern="dd-MM-yyyy HH:mm" value="${item.createdDate}" /></a></small>
 									</div>
 									</a>
@@ -238,6 +239,7 @@
 
 </div>
 </div>
+			</div>
 			</div>
 			
 			
