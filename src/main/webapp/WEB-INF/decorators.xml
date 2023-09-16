@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<decorators defaultdir="/decorators"> <!-- trỏ vô master layout trong folder /decorators  -->
+	
+	<!-- apply web.jsp trong folder decorators -->
+	<decorator name="web" page="web.jsp">
+		<pattern>/*</pattern> 
+	<!-- request gửi tới /* (trang bất kỳ) -> dùng giao diện web.jsp trong decorators -->
+	</decorator>
+	
+	<!-- apply web.jsp trong folder decorators -->
+	<decorator name="twinkle" page="twinkle.jsp">
+		<pattern>/twinkle</pattern> 
+	<!-- request gửi tới /* (trang bất kỳ) -> dùng giao diện web.jsp trong decorators -->
+	</decorator>
+	
+	<!-- tất cả giao diện của admin: quan-tri -->
+	<decorator name="admin" page="admin.jsp">
+		<pattern>/quan-tri*</pattern> 
+	<!-- request gửi tới /quan-tri -> dùng giao diện admin.jsp trong decorators
+			 cho toàn bộ file jsp trong /quan-tri -->
+	</decorator>
+	
+	<!-- Giao diện login -->
+	<decorator name="login" page="login.jsp">
+        <pattern>/dang-nhap</pattern>
+    </decorator>
+    
+    <decorator name="validation" page="validation.jsp">
+        <pattern>/thong-bao</pattern>
+        <pattern>/xac-thuc*</pattern>
+    </decorator>
+	
+
+</decorators>
