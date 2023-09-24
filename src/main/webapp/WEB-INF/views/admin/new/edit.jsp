@@ -7,6 +7,8 @@
 <head>
     <title>Chỉnh sửa bài viết</title>
 </head>
+<%--<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">--%>
+
 <body>
 <div class="main-content"> 
 	<div class="main-content-inner">
@@ -81,7 +83,9 @@
 										<form:textarea path="content" id="content" rows="5" cols="10" cssClass="form-control"/>
 <%-- 										<textarea rows="" cols="" id="content" name="content" style="width: 816px;height: 196px">${model.content }</textarea> --%>
 										</div>
+
 									</div>
+
 									<form:hidden path="id" id="newId"/><!-- id của bài viết -->
 									<div class="clearfix form-actions">
 										<div class="col-md-offset-3 col-md-9">
@@ -105,6 +109,7 @@
 												<i class="ace-icon fa fa-undo bigger-110"></i>
 												Hủy
 												</button>
+
 										</div>
 										
 									</div>
@@ -144,6 +149,7 @@
 	}
 	
 		$('#btnAddOrUpdateNew').click(function (e) {
+			// $('#loading').addClass('spinner-border');
 		       e.preventDefault(); 	// Nếu ko có, sẽ mặc định submit vào url hiện tại đang đứng
 		       						// cần truyền vào url: /api/new
 

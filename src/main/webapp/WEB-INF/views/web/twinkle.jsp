@@ -53,20 +53,28 @@
 					<img src=""
 						class="mb-3 img-fluid" style="width: 300px; display:block; margin-left: auto; margin-right: auto;" id="img_preview1" />
 					<input id="thumbnail" name="thumbnail" type="file" onchange="previewFile()" style="visibility: hidden;">
+					<div role="status" id="loading1" style="margin-left: 33.5em">
+						<span class="sr-only">Loading...</span>
+					</div>
                     <textarea name="content" id="content"
                     placeholder="What've you been up to, ${ name }?" 
                     rows="4" class="form-control"></textarea>
                     <input type="hidden" name="userId" value="${model.id }">
+
                     <div class="actions">
                             <button type="button" onclick="document.getElementById('thumbnail').click(); return false;"
                             class="btn-link" title="" data-toggle="tooltip" data-original-title="Post an Image">
                                 <i class="fa fa-image"></i>
                             </button>
-                            
+
+                            <div>
                         <button type="button" id="btnPostStatus" class="btn btn-sm btn-rounded btn-info" style="margin-left: 40em">
                             Post
                         </button>
-                    </div>
+
+					</div>
+
+					</div>
                 </form>
                 <br>
                 <hr />
@@ -191,8 +199,12 @@
 											value="${ model.id }">
 										<input type="hidden" name="postId"
 											value="${ item.id }">
-											
+											<div>
 										<img src=""	class="mb-3 img-fluid" style="width: 100px; margin-right: 30em;" id="img_preview-${item.id }" />
+										<div class="" role="status" id="loading-${item.id}" style="margin-left: 33.5em">
+											<span class="sr-only">Loading...</span>
+										</div>
+
 										<textarea id="content1-${ item.id }" name="content" class="form-control" placeholder="Nhập bình luận ở đây..."></textarea>
 										<div class="fonts">
 								
@@ -366,6 +378,9 @@ $("input[id*='btnSubmitComment-']").click(function(e) {
 	e.preventDefault(); // Nếu ko có, sẽ mặc định submit vào url hiện tại đang đứng
 	let commentId = $(this).prop("id").split("-")[1]
 
+	$('#loading-'+commentId).addClass('spinner-border');
+
+
 	var formData = $('#commentSubmit-' + commentId).serializeArray(); // các dữ liệu dc nhập (thay thế ở trên)
 	var data = {};
 	
@@ -391,6 +406,8 @@ function addComment(data, commentId) {
 		data : JSON.stringify(data), // parse từ JavaScript Object -> JSON 
 		dataType : 'json', // nhận kiểu json từ server -> client
 		success : function(result) {
+			$('#loading-'+commentId).removeClass('spinner-border');
+
 			<% if(SecurityUtils.getPrincipal() != null){ %>
 			$( document ).ready(function() {
 				$("div[id*='comments-']").scrollTop(function() {
@@ -438,6 +455,8 @@ function addComment(data, commentId) {
 }
 
 $('#btnPostStatus').click(function (e) {
+	$('#loading1').addClass('spinner-border');
+
        e.preventDefault(); 	// Nếu ko có, sẽ mặc định submit vào url hiện tại đang đứng
        						// cần truyền vào url: /api/new
 

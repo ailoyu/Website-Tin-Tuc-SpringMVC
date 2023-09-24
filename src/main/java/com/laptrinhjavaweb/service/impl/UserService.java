@@ -104,6 +104,28 @@ public class UserService implements IUserService {
 
 	}
 
+	@Override
+	public UserDTO updatePassword(UserDTO oldUserDTO) {
+		UserEntity entity = userRepository.findOne(oldUserDTO.getId());
+		if(entity.getChangePasswordStatus() == null || entity.getChangePasswordStatus() == false) { // thay đổi mật khẩu (Sau khi đăng nhập)
+			if (oldUserDTO.getPassword() != null && oldUserDTO.getNewPassword() != null) {
+				boolean checkOldPassword = passwordEncoder.passwordEncoder().matches(oldUserDTO.getPassword(), entity.getPassword());
+				boolean checkNewPasswordWithOld = passwordEncoder.passwordEncoder().matches(oldUserDTO.getNewPassword(),
+						entity.getPassword());
+				if (checkOldPassword && !checkNewPasswordWithOld) {
+					entity.setPassword(passwordEncoder.passwordEncoder().encode(oldUserDTO.getNewPassword()));
+					return userConverter.toDTO(userRepository.save(entity));
+				} else {
+					return null;
+				}
+			}
+		}  else if (entity.getChangePasswordStatus() == true) { // thay đổi mật khẩu (Quên mật khẩu)
+			entity.setPassword(passwordEncoder.passwordEncoder().encode(oldUserDTO.getNewPassword()));
+			return userConverter.toDTO(userRepository.save(entity));
+		}
+		return null;
+	}
+
 	public void sendEmailToUser(UserEntity user, String content) {
 		// Gửi email cho khách hàng
 		DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss");
@@ -201,27 +223,7 @@ public class UserService implements IUserService {
 
 
 
-	@Override
-	public UserDTO updatePassword(UserDTO oldUserDTO) {
-		UserEntity entity = userRepository.findOne(oldUserDTO.getId());
-		if(entity.getChangePasswordStatus() == null || entity.getChangePasswordStatus() == false) { // thay đổi mật khẩu (Sau khi đăng nhập)
-			if (oldUserDTO.getPassword() != null && oldUserDTO.getNewPassword() != null) {
-				boolean checkOldPassword = passwordEncoder.passwordEncoder().matches(oldUserDTO.getPassword(), entity.getPassword());
-				boolean checkNewPasswordWithOld = passwordEncoder.passwordEncoder().matches(oldUserDTO.getNewPassword(),
-						entity.getPassword());
-				if (checkOldPassword && !checkNewPasswordWithOld) {
-					entity.setPassword(passwordEncoder.passwordEncoder().encode(oldUserDTO.getNewPassword()));
-					return userConverter.toDTO(userRepository.save(entity));
-				} else {
-					return null;
-				}
-			}
-		}  else if (entity.getChangePasswordStatus() == true) { // thay đổi mật khẩu (Quên mật khẩu)
-			entity.setPassword(passwordEncoder.passwordEncoder().encode(oldUserDTO.getNewPassword()));
-			return userConverter.toDTO(userRepository.save(entity));
-		}
-		return null;
-	}
+	
 
 	@Override
 	public UserDTO findOneByEmailAndUserName(String email, String userName) {
